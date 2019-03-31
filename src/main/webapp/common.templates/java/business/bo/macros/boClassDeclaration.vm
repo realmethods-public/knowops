@@ -1,0 +1,20 @@
+#macro ( getBOClassDecl )
+#set( $name = $classObject.getName() )
+#set( $parentName = "" )
+#set( $implements = "" )
+#set( $interfaces = "" )
+#if( $classObject.hasParent() == true )    
+	#set( $parentName = "${parentName}${classObject.getParentName()}" )   
+#else ## no parent, so come directly off of the Base
+	#set( $parentName = "Base" )
+#end
+## output the parent name
+public class ${name} extends $parentName
+	#if( $classObject.getInterfaces().size() > 0 )    
+		#set( $noPrefix = "" )
+		#set( $noSuffix = "" )    
+		#set( $interfaces = $classObject.getInterfacesAsString( $noPrefix, $noSuffix ) )
+		implements $implements $interfaces	
+	#end## $classObject.getInterfaces().size() > 0
+	{
+#end

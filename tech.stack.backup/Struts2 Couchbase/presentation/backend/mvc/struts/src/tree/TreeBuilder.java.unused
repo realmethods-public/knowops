@@ -1,0 +1,171 @@
+#header()
+package ${aib.getRootPackageName()}.tree;
+
+#set( $imports = [ "#getBOPackageName()", "#getDelegatePackageName()", "#getPrimaryKeyPackageName()"] )
+#importStatements( $imports )
+
+import com.framework.common.*;
+
+import java.util.*;
+
+/**
+	By default, this tree builder only nests 3 levels deep in the hierarchy (parent-->multiple association-->child association)
+**/
+public class TreeBuilder
+    extends FrameworkBaseObject
+{
+    public TreeBuilder()
+    {
+    }
+
+    public TreeModel buildTree()
+    {
+        TreeModel rootTreeModel = new TreeModel();
+
+        System.out.println("Building the Tree...");
+
+		String id = "tree.root.node";
+        String name = "Lists";
+		String namespace = "Tree";
+        String parentID = null;
+        String extraArgs = null;
+
+        rootTreeModel = new TreeModel(id, name, namespace, "root", parentID, extraArgs, new ArrayList<TreeModel>());
+        
+		try
+        {
+#foreach( $class in $aib.getClassesToGenerate() )
+	##if ($class.isRootInTree() == true )	## can the user see this class in the UI
+		#set( $className = $class.getName() )
+			id = "id=${className}.list";
+            name = "${className}";
+            namespace = "${className}";
+            parentID = null;
+            extraArgs = "rm.selectedTab=" + "viewAll";
+			actionName="viewAll";
+			ArrayList<$className> collection${className} = ${className}BusinessDelegate.get${className}Instance().getAll${className}();
+			Iterator<$className> iter${className} = collection${className}.iterator();
+			$className ${className}BO = null;
+			TreeModel ${className}TreeModel = new TreeModel(id, name, namespace, actionName, parentID, extraArgs);
+			
+			while( iter${className}.hasNext() )
+			{
+				${className}BO = iter${className}.next();
+				
+				System.out.println( "${className}BO is " + ${className}BO );
+				
+				if ( ${className}BO != null )
+				{
+					${className}TreeModel.getChildren().add( buildTreeFor$className( ${className}BO, id ) );
+				}
+			}
+			
+			${className}TreeModel.sortChildren();
+			
+			// apply to the root model
+			rootTreeModel.getChildren().add( ${className}TreeModel );
+			//*************************//
+			
+	##end #if ($class.isRootInTree() == true )	## can the user see this class in the UI
+#end ##foreach( $class in $aib.getClassesToGenerate() )
+		}
+        catch (Throwable exc)
+        {
+            exc.printStackTrace();
+            System.out.println("TreeBuilder.buildTree() exception - " + exc);
+        }
+
+		rootTreeModel.sortChildren();
+		
+        return ( rootTreeModel );
+    }
+
+#foreach( $class in $aib.getClassesToGenerate() )
+	##if ($class.isRootInTree() == true  )	## can the user see this class in the UI
+		#set( $className = $class.getName() )
+	protected TreeModel buildTreeFor$className( ${className} ${className}BO, String parentID )
+	{
+	    String id;
+        String name;
+        String namespace;
+        String extraArgs;
+		TreeModel treeModel;
+	
+        id = ${className}BO.getIdentity();
+        name = ${className}BO.getAttributesByNameUserIdentifiesByAsString();
+        namespace = ${className}BO.getObjectType();
+        extraArgs = "rm.selectedTab=${className}.profile.tab.id";
+		treeModel = new TreeModel(id, name, namespace, "showTab", parentID, extraArgs);
+
+		#foreach( $multiAssociation in $class.getMultipleAssociations() ) ## only deal with multiAssociations
+			#if ( $multiAssociation.isListable() == true ) ## user can see as a list
+				#set( $roleName = $multiAssociation.getRoleName() )
+				#set( $associationType = $multiAssociation.getType() )
+		
+		List<$associationType> ${roleName}Collection = ${className}BO.get${roleName}();
+		if ( ${roleName}Collection != null )
+		{
+    		// iterate through each $associationType of the $roleName association
+    		// and add each child to the tree
+		
+    		Iterator<$associationType> iter${roleName} = ${roleName}Collection.iterator();
+    		$associationType child${roleName} = null;
+    		TreeModel ${roleName}Model= null;
+			
+			extraArgs = "rm.selectedTab=" + "${className}.${roleName}.tab.id";
+
+			${roleName}Model = new TreeModel(id/*id*/, 
+    				"${roleName}"/*name*/, 
+    				"${className}"/*namespace*/, 
+    				"showTab", 
+    				id, 
+    				extraArgs);
+    				
+    		treeModel.getChildren().add( ${roleName}Model );
+    			
+
+    		while( iter${roleName}.hasNext() )
+    		{
+    			child${roleName} = iter${roleName}.next();
+
+    			${roleName}Model.getChildren().add( addTreeNodeFor${roleName}( ${className}BO, child${roleName} ) );
+            }
+		}
+			#end
+		#end
+		
+		treeModel.sortChildren();
+		
+        return (treeModel);
+    }
+	##end #if ($class.isRootInTree() == true  )	## can the user see this class in the UI
+#end
+
+
+#foreach( $class in $aib.getClassesToGenerate() )
+	##if ($class.isRootInTree() == true && $class.hasUIListableMultiAssociation() )	## can the user see this class in the UI
+		#set( $className = $class.getName() )
+		#foreach( $multiAssociation in $class.getMultipleAssociations() ) ## only deal with multiAssociations
+			#if ( $multiAssociation.isListable() == true ) ## user can see as a list
+				#set( $roleName = $multiAssociation.getRoleName() )
+				#set( $associationType = $multiAssociation.getType() )
+    protected TreeModel addTreeNodeFor${roleName}( $className parent, $associationType child )
+    {
+        String id = child.getIdentity();
+        String name = child.getAttributesByNameUserIdentifiesByAsString();
+        String namespace = child.getObjectType();
+        String parentID = parent.getIdentity();
+        String extraArgs = "rm.selectedTab=" + "${className}.profile.tab.id";
+
+        TreeModel treeModel = new TreeModel(id, name, namespace, "showTab", parentID, extraArgs);
+
+        return (treeModel);
+    }
+			#end			
+		##end ##if ($class.isRootInTree() == true && $class.hasUIListableMultiAssociation() )	## can the user see this class in the UI
+	#end 
+#end
+
+    // attributes
+    protected String actionName = "showTab";
+}

@@ -1,0 +1,15 @@
+#macro( getEquals $useAssociations )
+    if (this == object) 
+        return true;
+        
+	if ( object == null )
+		return false;
+		
+    if (!(object instanceof ${classObject.getName()})) 
+        return false;
+        
+	${classObject.getName()} bo = (${classObject.getName()})object;
+	
+	return( getFrameworkPrimaryKey().equals( bo.getFrameworkPrimaryKey() ) ); 
+	
+#end

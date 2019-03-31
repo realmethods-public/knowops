@@ -1,0 +1,96 @@
+#macro( outputDataValidators )
+#set( $includePrimaryKeys = false )
+#set( $attributes = ${classObject.getAttributesOrdered( $includePrimaryKeys )} )
+#set( $size = $attributes.size() )
+#set( $validator_required = "Validators.required" )
+#foreach( $attribute in $attributes )
+#set( $name = $attribute.getName() )
+####################################################################
+## if from an association, use the roleName and do not apply a validator
+#################################################################### 
+#if ( $attribute.isFromAssociation() == true )
+#set( $validator_required = "" )
+#set( $name = $attributes.getAssociation().getRoleName() )
+#end##if ( $attribute.isFromAssociation() == true )
+#if( $velocityCount < $size )
+      ${name}: ['', ${validator_required}],
+#else
+      ${name}: ['', ${validator_required}]
+#end##if( $velocityCount < $size )
+#end##foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )            
+#end##macro( outputDataValidators() )
+
+#macro( attributeStructDecl $class ) 
+#set( $includePrimaryKeys = false )
+#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys )} )
+#set( $size = $attributes.size() )
+#foreach( $attribute in $attributes )
+#set( $name = $attribute.getName() )
+#if( $attribute.isFromAssociation() == false )
+#set( $value = $attribute.getName() )
+#else
+#set( $roleName = ${attribute.getAssociation().getRoleName()} ) 
+#set( $value = "${roleName} != null && ${roleName}.length > 0 ? ${roleName} : null" )
+#end##if( $attribute.isFromAssociation() == false )
+#if( $velocityCount < $size )
+      		${name}: ${value},
+#else
+			${name}: ${value}
+#end##if( $velocityCount < $size )
+#end##foreach ( $attribute in $classObject.getAttributesOrdered( $includePrimaryKeys ) )
+#end##macro( attributeStructDecl $class )
+
+#macro( attributeTypeDeclaration $attribute $parentClass $outputType )
+#set( $type = $attribute.getType() )
+######################################################################
+## need to coerce a model type into a mongoose supported type
+######################################################################
+######################################################################
+## handle associations and non-associations differently
+######################################################################
+#if ( $attribute.isFromAssociation() == false )
+######################################################################
+## handle enums and non-enums differently
+######################################################################
+#if ( $attribute.isFromEnumerator() == false )
+#if( $type.equalsIgnoreCase("string") )
+#set( $type = "String" )
+#elseif( $type.equalsIgnoreCase("float") )
+#set( $type = "Number" )
+#elseif( $type.equalsIgnoreCase("boolean") )
+#set( $type = "Boolean" )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $type = "String" )
+#elseif( $type.equalsIgnoreCase("java.sql.Date") || $type.equalsIgnoreCase("Date") )
+#set( $type = "Date" )
+#elseif( $type.equalsIgnoreCase("int") || $type.equalsIgnoreCase("integer") )
+#set( $type = "Number" )
+#elseif( $type.equalsIgnoreCase("double") )
+#set( $type = "Number" )
+#elseif( $type.equalsIgnoreCase("short") )
+#set( $type = "Number" )
+#else
+#set( $type = "String" )
+#end##if( $type.equalsIgnoreCase("string") )
+#else ## attribute is an enumeration
+#set( $type = "String" )
+#end##if ( $attribute.isFromEnumerator() == false )
+#else## attribute is from an association
+######################################################################
+## handle attribute as a single association
+######################################################################
+#if ( $attribute.isFromSingleValueAssociation() == true )
+#set( $type = "Schema.Types.ObjectId" )
+######################################################################
+## handle attribute as a multiple association
+######################################################################
+#else ## attribute is from a multiple assoication
+#set( $type = "[{ type: Schema.Types.ObjectId, ref: ${esc.singleQuote}${attribute.getAssociation().getType()}${esc.singleQuote} }]" )
+#end##if ( $attribution.isFromSingleValueAssociation() == true )
+#end##if ( $attribute.isFromAssociation() == false )
+#if ( ${outputType} == true )
+	type : ${type}
+#else
+${type}
+#end##if ( ${outputType} == true )
+#end##macro ( getAttributeDeclaration $attribute)

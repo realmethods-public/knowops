@@ -1,0 +1,29 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!--This file must be located either in the same location as the framework.license file, or in the web-inf\properties director of
+a deployed war file.  The subsequent referrenced files will be loaded relative to the location of this config file.-->
+
+<config-files> 
+
+    <framework-log4j-file name="log4j.xml"/>
+ 
+    <app-config-files>
+<!--    
+		<app-config-file name="framework" file="framework.xml" handler="com.cloudmigrate.framework.common.properties.FrameworkXMLPropertiesHandler"/>
+        <app-config-file name="esb" file="esb.xml" handler="com.cloudmigrate.framework.common.properties.ESBPropertiesHandler"/>
+        <app-config-file name="security" file="security.xml" handler="com.cloudmigrate.framework.common.properties.SecurityXMLPropertiesHandler"/>
+        <app-config-file name="task" file="task.xml" handler="com.cloudmigrate.framework.common.properties.TaskXMLPropertiesHandler"/>
+-->
+    </app-config-files>
+
+</config-files>

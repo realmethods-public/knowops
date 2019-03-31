@@ -1,0 +1,13 @@
+#macro( getEnumIsMethods )
+#set( $attributes = $classObject.getAttributesOrdered(false) )
+#foreach( $attribute in $attributes )
+#getEnumIsMethodsHelper( $attribute )
+#end    
+#end
+
+#macro( getEnumIsMethodsHelper $attribute )
+    public boolean is${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}()
+    {
+        return( value != null && value.toString().equalsIgnoreCase( ${attribute.getDefaultValue()}.toString() ) );
+    }        
+#end

@@ -1,0 +1,35 @@
+image: node:8
+
+services:
+- mongo
+  
+variables:
+  DEFAULT_HOST_ADDRESS: "mongo"
+  DEFAULT_HOST_PORT: "27017"
+  APP_NAME: "angular7demo" 
+  APP_ROOT_DIR: "appRoot"
+  FULL_APP_DIR: "$CI_PROJECT_DIR/appRoot/angular7demo"
+  
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
+  
+stages:
+  - build
+
+before_script:
+    - npm install -g @angular/cli
+    - mkdir -p $APP_ROOT_DIR
+    - cd $APP_ROOT_DIR
+    - ng new $APP_NAME --defaults
+    - ls $CI_PROJECT_DIR
+    - cp -r $CI_PROJECT_DIR/$APP_NAME/. $FULL_APP_DIR
+    - cd $FULL_APP_DIR
+    - npm install --prod
+    - npm run setup
+
+build:
+  stage: build
+  script: 
+    - ng build

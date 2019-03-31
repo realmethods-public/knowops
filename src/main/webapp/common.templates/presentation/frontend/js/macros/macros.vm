@@ -1,0 +1,694 @@
+#################################################
+## Vendor specific header declaration
+#################################################
+#macro( jsHeader )
+    <%@ include file="/jsp/header.jsp"%>
+#end ## macro( jsHeader )
+
+#################################################
+## Vendor specific footer declaration
+#################################################
+#macro( jsFooter )
+	<%@ include file="/jsp/footer.jsp"%>
+#end ## macro( jsFooter )
+ 
+#################################################
+## Vendor specific body declaration
+#################################################
+#macro( jsBodyDeclaration )
+
+<body>
+
+##############################
+## Vender specific Header
+##############################
+<p>
+
+<div id="mainSection" >
+  <center>
+    <form action="logon.action">
+      <div class="form-group" style="width:300px">
+        <table>
+          <tr>
+            <td>
+      	      <label for="user.id" style="color:black">User Id:</label>
+      	    </td>
+      	    <td>
+  	          <input type="text" class="form-control" id="user.id" style="width:100%">
+  	        </td>
+  	      </tr>
+  	      <tr>
+  	        <td>
+  	  	      <label for="password" style="color:black">Password:</label>
+  	  	    </td>
+  	  	    <td>
+  	  	      <input type="password" class="form-control" id="password" style="width:100%">
+  	  	    </td>
+  	  	  </tr>
+  	    </table>
+  	    <button id="appGenBttnId' type="submit" class="btn btn-default btn-sm">
+	      <span style="color:black">Log On</span>
+	    </button>
+  	  </div>  	
+  	</form>
+  </center>
+	
+</div>
+
+<p>
+
+##############################
+## Vender specific inspector
+## window declaration
+##############################
+#jsInspectionViewDeclaration()
+
+##############################
+## Vender specific global
+## loading indicator div
+##############################
+#jsLoadingIndicatorDeclaration()
+
+</body>
+#end ## macro( jsBodyDeclaration )
+
+#################################################
+## Vendor specific head declaration
+#################################################
+#macro( jsHeadDeclaration )
+
+<head>
+
+	#jsMetaDeclaration()
+	#jsCSSDeclaration()
+	#jsScriptDeclaration()
+
+</head>
+
+#end ## macro( jsHeadDeclaration )
+
+#################################################
+## Vendor specific head meta declarations
+#################################################
+#macro( jsMetaDeclaration )
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+#end
+
+
+#################################################
+## Vendor specific head meta declarations
+#################################################
+#macro( jsScriptDeclaration )	
+	<!-- 3rd part javascript functions, etc -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/js/bootstrap-dialog.min.js"></script>
+ 	
+ 	<!-- app specific javascript functions -->
+ 	<script src="/js/common.js"></script>
+ 	 
+#end
+
+#################################################
+## Vendor specific head css declarations
+#################################################
+#macro( jsCSSDeclaration )
+	<!-- 3rd party style sheets -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet" />	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Libre Franklin" rel="stylesheet" type="text/css"/>
+	<!-- app specific style sheets -->
+	<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+	
+#end
+
+#################################################
+## Vendor specific homepage definition that
+## leverages a tree style metaphor, with a tree
+## on the left and a content area to render tree
+## selection
+#################################################
+#macro( jsTreeStyleHomepageDefinition )
+
+	<!-- home page div -->
+	<div id="homepage">
+		<!-- center section as a frame -->
+		<frameset cols="20%,80%">
+  			<frame frameborder="0" name="tree" src="${pageContext.request.contextPath}/jsp/tree.jsp">
+  			<frame frameborder="0" name="main_panel" src="${pageContext.request.contextPath}/jsp/treeSelectPanel.jsp">
+		</frameset>
+		
+	</div> <!-- homepage -->
+
+#end
+
+################################################
+## Vendor Specific Toolbar Declaration
+################################################
+#macro( jsToolbarDefinition )
+
+<script type="text/javascript">
+
+	function doPrint()
+	{
+		window.print();
+	}
+
+</script>
+
+<!-  simple div providing the toolbar section -->
+
+<div id="toolbar">
+
+	<img align="center" src="${pageContext.request.contextPath}/img/printer.png" 
+				border="0" alt="print" onclick="print()" style="width:32px;height:32px"/>
+        
+	<img align="center" src="${pageContext.request.contextPath}/img/logout.png" 
+			border="0" alt="logoff" onclick="localAction('logoff.action')" style="width:32px;height:32px"/>
+	
+</div>
+
+#end ## macro( jsToolbarDefinition )
+
+
+################################################
+## Vendor Specific Profile Form Initialization
+################################################
+#macro( jsProfileViewInitiate )
+
+#set( $className = $classObject.getName() )
+#set( $formResultDivID = "${className}FormSaveResultId" )
+
+<script type="text/javascript">
+ 	jQuery.subscribe('before', function(event,data) {
+        jQuery('#${formResultDivID}').html('saving...');
+    });
+     jQuery.subscribe('complete', function(event,data) {
+        jQuery('#${formResultDivID}').html('<span style=\'font-size:6;color:green\'>saving complete');
+    });
+     jQuery.subscribe('error', function(event,data) {
+         jQuery('#${formResultDivID}').html('<span style=\'font-size:6;color:red\'>error during saving');
+    });
+</script>
+
+#end ##macro( jsProfileViewInitiate )
+
+############################################
+## vendor specific tab view declaration
+## whereby roles are treated different than
+## a direct class tab view
+############################################
+#macro( jsProfileViewDeclaration )
+
+#set( $className = $classObject.getName() )
+#set( $roleName = $currentAssociation.getRoleName() )
+#set( $lowercaseName = $Utils.lowercaseFirstLetter( $className ) )
+
+#set( $includePKs = true )
+#set( $attributeCollections = $classObject.getAttributesOrderedAsCollectionsInHierarchy( $includePKs ) )
+#set( $pkAttributes = $attributeCollections.get(0) )
+#set( $directAttributes = $attributeCollections.get(1) )
+#set( $compositeAttributes = $attributeCollections.get(2) )
+#set( $singleAssociations = $classObject.getSingleAssociationsWithSourceRole() )
+#set( $readOnly = false )
+
+#if( $aib.usingGoogleAppEngineAndJDO() == true || $aib.usingGoogleAppEngineAndJPA() == true )
+	#set( $pkExpression = "${lowercaseName}.encodedKey" ) 
+#else
+    #set( $pk = ${classObject.getFirstPrimaryKey()} )		
+    #set( $pkExpression = "${lowercaseName}.${pk.getName()}" ) 
+#end
+
+<sj:div id="${className}ProfileFormDiv">
+	<s:form id="${className}ProfileFormId" method="post" theme="xhtml" target="_blank" action="update" namespace="/${className}" >  		  	
+
+########################################################
+## First output the direct attributes of the class
+########################################################
+
+<!-- Direct Attributes -->          	
+#set( $parentPrefix = "" )
+#generateFormFields_Struts( $directAttributes $parentPrefix )
+<s:hidden name="${pkExpression}" />
+
+##################################################################
+## Next, output the composites from single associations as fields
+##################################################################
+
+<!-- Composites -->          	
+## Next, output the Composites
+#foreach( $composite in $compositeAttributes)
+	#if ( $composite.isFromSingleValueAssociation() == true )
+		<tr>		
+		  <td bgcolor="#0000ff" class="compositeLabel" colspan="2" align="left">
+		  	<b><font color="#ffffff">${composite.getDisplayName()}</font></b>
+		  </td>
+		    #set( $parentPrefix = "${Utils.lowercaseFirstLetter( ${composite.getName()} )}" )
+		    #generateFormFields_Struts( $composite.getAttributes() $parentPrefix )
+		</tr>
+	#end ##if ( $composite.isFromAssociation() == true )
+#end  		  	
+
+##################################################################
+## Next, output the single association composites as fields
+##################################################################
+
+<!-- Single Associations-->          	
+## Next, output the singleAssociations
+#set( $pk = ${classObject.getFirstPrimaryKey()} )
+
+	    <s:if test="${pkExpression} != null">	
+#foreach( $singleAssociation in $singleAssociations )
+	#set( $classTypeObject = ${aib.getClassObject(${singleAssociation.getType()})})
+	#set( $pk = ${classTypeObject.getAllPrimaryKeysInHierarchy().iterator().next()} )
+	#set( $roleName = $singleAssociation.getRoleName() )	
+	#set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
+	#set( $sourceRoleName = $singleAssociation.getSourceRole() )
+	#set( $sourceRoleName = $Utils.lowercaseFirstLetter( $sourceRoleName ) )
+	
+		    <s:select cssClass="validate-selection" disabled="false" 	
+				label="${singleAssociation.getRoleName()}"
+   				name="${lowercaseName}.${lowercaseRoleName}ID"
+   				list="${classTypeObject}.${sourceRoleName}"
+   				
+#if( $aib.usingGoogleAppEngineAndJDO() == true || $aib.usingGoogleAppEngineAndJPA() == true )
+				listKey="encodedKey"
+#else			
+				listKey=${pk.getName()}
+#end					
+   				listValue="attributesByNameUserIdentifiesByAsString"
+				multiple="false"
+   				size="1"
+   				headerKey="-1" headerValue="---"
+   				required="false"/>
+#end  		  	
+		</s:if>
+
+		<div class="type-button">
+			<sj:submit value="Save" targets="${className}FormSaveResult" effect="slide" effectMode="blind"
+		    	onEffectCompleteTopics="hideTarget" indicator="indicator" 
+		    	button="true" onBeforeTopics="before" onCompleteTopics="complete" onErrorTopics="error"
+			/>
+			<!--<s:submit value="Reset" onclick="this.form.reset();" effect="slide" effectMode="blind"
+		    	onEffectCompleteTopics="hideTarget" indicator="indicator" button="true" />
+		    -->
+		</div>
+    </s:form>
+</sj:div>
+
+########################################################
+## a simple div used as a placeholder for displaying
+## form related status messaging
+########################################################
+<sj:div id="${className}FormSaveResultId">
+</sj:div>
+
+#end ##macro( jsProfileViewInitiate )
+
+
+######################################
+## Vendor Specific Grid Initialization
+######################################
+#macro( jsGridViewInitiate )
+
+#set( $className = $classObject.getName() )
+#set( $pkName = ${classObject.getFirstPrimaryKey().getName()} )
+	
+<script type="text/javascript">
+	jQuery.subscribe('showcolumns', function(event,data) {
+        jQuery("#${gridListId}").jqGrid('setColumns',{});
+  	});
+  	jQuery.subscribe('inspect${className}FromAll', function(event,data) {    
+	  	var grid = event.originalEvent.grid; 
+
+	  	if ( grid == null )
+	  		grid = jQuery("#${gridListId}");
+	  	
+		var sel_id = grid.jqGrid('getGridParam', 'selrow'); 
+		if ( sel_id )
+		{
+			var objectId = grid.jqGrid('getCell', sel_id, '${pkName}'); 
+		  	var url = "${pageContext.request.contextPath}/${className}/showTab.action?${pkName}=" + objectId;
+			$("#treeTargetContentPane").load(url);
+		}
+  	});  	
+</script>
+#end ## macro( jsGridViewInitiate )
+
+#########################################################
+## Vendor Specific Grid Initialization
+## For Role Display...here its treated different
+## than direct viewing of a class
+#########################################################
+#macro( jsRoleGridViewInitiate $className $pkName $childPKFieldName )
+
+#set( $className = $classObject.getName() )
+#set( $lowercaseName = $Utils.lowercaseFirstLetter( $className ) )
+#set( $attributes = $currentAssociation.getAttributes() )
+#set( $collectionName = $currentAssociation.getRoleName() )
+#set( $listName = $Utils.lowercaseFirstLetter( $collectionName ) )
+#set( $childType = $currentAssociation.getType() )
+#set( $childClassObject = $aib.getClassObject( $childType) )
+#set( $lowercaseChildName = $Utils.lowercaseFirstLetter( $childClassObject ) )
+#set( $roleName = $currentAssociation.getRoleName() )
+#set( $childClassObject = $aib.getClassObject( $childType) )
+#set( $childPKFieldName = $childClassObject.getAllPrimaryKeysInHierarchy().iterator().next().getName() )
+
+<script type="text/javascript">
+  	jQuery.subscribe('refresh${className}${roleName}Grid', function(event,data) {    
+	  	var grid = event.originalEvent.grid; 
+	  	
+	  	if ( grid == null )
+	  		grid = jQuery("#${gridListId}");
+  	
+		grid.trigger("reloadGrid");
+  	});
+  	
+  	jQuery.subscribe('inspect${childType}', function(event,data) {    
+	  	var grid = event.originalEvent.grid; 
+	  	
+	  	if ( grid == null )
+	  		grid = jQuery("#${gridListId}");
+	  		
+		var sel_id = grid.jqGrid('getGridParam', 'selrow'); 
+		if ( sel_id )
+		{
+			var objectId = grid.jqGrid('getCell', sel_id, '${childPKFieldName}'); 
+
+#set( $hasMultiAssociations = $childClassObject.hasUIListableMultiAssociation() )
+#set( $action = "showTab" )
+
+#if ( $hasMultiAssociations == false )
+#set( $action = "profile" )
+#end
+
+		  	var url = "${pageContext.request.contextPath}/${childClassObject}/${action}.action?${childPKFieldName}=" + objectId;
+#if ( $hasMultiAssociations == true )		  	
+		  	pushUrlToDiv( $("#treeTargetContentPane"), url );
+#else		  	
+		  	inspectInDialog( "Inspect ${className}", url, true, "${className}${roleName}GridReloadTopic", 500, 800 );
+#end	  				
+		}
+  	});
+</script>
+
+#end ## macro(jsRoleGridViewInitiate)
+
+######################################
+## Vendor Specific Grid Declaration
+######################################
+#macro( jsGridDeclaration )
+
+#set( $className = $classObject.getName() )
+
+<sjg:grid
+    id="${className}ListId" caption="All ${className}" dataType="json"
+    href="%{${className}ListUrl}" onDblClickRowTopics="inspect${className}FromAll"
+    pager="true" gridModel="gridModel" navigator="true" navigatorAdd="false" navigatorView="true"
+	navigatorDelete="true" navigatorDeleteOptions="{height:150,reloadAfterSubmit:true}"
+	navigatorEdit="false" rowList="10,15,20" rowNum="15" rownumbers="true" autowidth="true" editurl="%{editurl}"
+    editinline="true" height="200" viewrecords="true" navigatorRefresh="true"
+    navigatorSearch="false"
+    navigatorExtraButtons="{
+		seperator: { 
+			title : 'seperator'  
+		}, 
+		inspect${className}FromAll : { 
+    		title : 'inspect', 
+    		icon: 'ui-icon-search', 
+    		topic: 'inspect${className}FromAll'
+		},				
+		hide : { 
+    		title : 'Show/Hide', 
+    		icon: 'ui-icon-wrench', 
+    		topic: 'showcolumns'
+		}
+	}"	    
+>
+
+############################################
+## output the grid column declarations
+############################################
+
+#jsGridColumnDeclarations()
+
+</sjg:grid>
+
+#end ## macro( jsGridDeclarations  )
+
+################################################
+## Vendor specific grid declarations to handle
+## a class role. Here it is treated differently
+## from the class itself, but it may not be
+## necessary by design 
+################################################
+#macro( jsRoleGridDeclaration )
+
+#set( $className = $classObject.getName() )
+#set( $lowercaseName = $Utils.lowercaseFirstLetter( $className ) )
+#set( $attributes = $currentAssociation.getAttributes() )
+#set( $collectionName = $currentAssociation.getRoleName() )
+#set( $listName = $Utils.lowercaseFirstLetter( $collectionName ) )
+#set( $childType = $currentAssociation.getType() )
+#set( $childClassObject = $aib.getClassObject( $childType) )
+#set( $lowercaseChildName = $Utils.lowercaseFirstLetter( $childClassObject ) )
+#set( $roleName = $currentAssociation.getRoleName() )
+#set( $childClassObject = $aib.getClassObject( $childType) )
+#set( $childPKFieldName = $childClassObject.getAllPrimaryKeysInHierarchy().iterator().next().getName() )
+
+
+<sjg:grid
+    id="${gridListId}" reloadTopics="${className}${roleName}GridReloadTopic"
+    caption="" dataType="json" href="%{${className}${roleName}ListUrl}"
+    onEditInlineAfterSaveTopics="refresh${roleName}For${className}Grid"
+    pager="true" onDblClickRowTopics="inspect${childType}" gridModel="${Utils.lowercaseFirstLetter( $roleName )}"
+    navigator="true" navigatorAdd="true"
+    navigatorAddOptions="{width:500,addCaption:'Add ${childType}',reloadAfterSubmit:true,closeAfterAdd:true}"
+	navigatorView="false" navigatorDelete="true" navigatorDeleteOptions="{height:150,reloadAfterSubmit:true}"
+	navigatorEdit="false" navigatorEditOptions="{width:500,editCaption:'Edit ${childType}',closeAfterEdit:true}"    
+    rowNum="50" rownumbers="true" autowidth="true" editurl="%{edit${className}${roleName}Url}" editinline="false"
+	height="300" pagerButtons="false" pagerInput="false" viewrecords="false" navigatorRefresh="true" navigatorSearch="false"
+    navigatorExtraButtons="{
+		seperator: { 
+			title : 'seperator'  
+		}, 
+		inspect${childType} : { 
+    		title : 'inspect $childType', 
+    		icon: 'ui-icon-search', 
+    		topic: 'inspect${childType}'
+		},		
+	}"	    
+
+############################################
+## output the grid column declarations
+############################################
+
+#jsGridColumnDeclarations()
+    
+>
+#end ## macro( jsRoleGridDeclaration )
+
+######################################
+## Vendor Specific Column Declarations
+######################################
+
+#macro( jsGridOutputColModel  )
+
+	#set( $className = $classObject.getName() )
+	#set( $lowercaseName = $Utils.lowercaseFirstLetter( $className ) )
+	#set( $attributes = $classObject.getAttributes() )
+	
+	#set( $attributeCollections = $classObject.getAttributesOrderedAsCollectionsInHierarchy( true ) )
+	#set( $pkAttributes = $attributeCollections.get(0) )
+	#set( $directAttributes = $attributeCollections.get(1) )
+	#set( $compositeAttributes = $attributeCollections.get(2) )
+
+	############################################
+	## output the primary key fields, hidden
+	## by default
+	############################################
+	
+	#set( $colModel = "" )
+	
+	#foreach( $pk in $pkAttributes )
+		#set( $modifiedName = ${Utils.noWhiteSpaceNoDots( ${pk.getName()} )} )
+		#set( $name = ${Utils.lowercaseFirstLetter( ${pk.getName()} )} )
+		#set( $phrase = ${Utils.turnIntoPhrase( ${pk.getName()} )} )
+{name:'${modifiedName}',index:'${name}'},label:'${phrase}',hidden:true},
+	#end
+		
+
+	############################################
+	## output the declared attributes declared
+	## as able to be user viewable
+	############################################
+	
+	#foreach( $attribute in $directAttributes )
+		#if ( $attribute.isUserViewable() == true && $attribute.isFromAssociation() == false )
+#jsGridOutputColModelHelper( $attribute.getName(), $attribute ),
+	    #end
+	#end	 
+
+	#################################################################
+	## output user viewable composites, which are children of this
+	## parent from a single association
+	#################################################################
+
+	<!-- composite attributes -->
+	
+	#foreach( $attribute in $compositeAttributes )
+		#set( $name = $attribute.getName() ) {
+		#if ( $attribute.isUserViewable() == true && $attribute.isFromSingleValueAssociation() == true ) 
+			#set( $parentPrefix = "${Utils.lowercaseFirstLetter( ${attribute.getName()} )}" )
+	
+			#foreach( $composite in $attribute.getAttributes() )
+#jsGridOutputColModelHelper( "${parentPrefix}.${name}", $attribute ),
+			#end ## #foreach( $composite in $attribute.getAttributes() )
+			
+		#end ## #if ( $attribute.isUserViewable() == true && $attribute.isFromSingleValueAssociation() == true )
+		
+	#end ## foreach( $attribute in $compositeAttributes )
+
+## output
+
+#end ## #macro( jsGridOutputColModel )
+
+
+#macro( jsGridOutputColModelHelper $name $attribute )
+
+	#set( $name = ${Utils.lowercaseFirstLetter( ${attribute.getName()} )} )
+	#set( $cleanName = ${Utils.noWhiteSpaceNoDots( ${name} )} )
+	#set( $phrase = ${Utils.turnIntoPhrase( ${name} )} )
+	#set( $editType = "" )
+	#set( $editRules = "" )
+	#set( $editOptions = "" )
+	
+	##############################################
+	## make editable only if declared as user modifiable
+	##############################################
+
+    #if ( $attribute.isUserModifiable() == true )
+		#set( $editable = "true" )
+	#else
+		#set( $editable = "false" )
+	#end
+
+	##############################################
+	## make required if it cannot be null
+	##############################################
+	
+    #if ( $attribute.canBeNull() == false )
+    	#set( $requiredFlag = "true" )
+    #else
+    	#set( $requiredFlag = "false" )
+    #end
+	    
+	##############################################
+	## examine attribute to determine col type
+	##############################################
+	    
+    #if ( $attribute.isNumericRelated() == true )               
+    	#set( $editRules = "editrules:'{number: true, required: ${requiredFlag}}'" )
+    #elseif ( $attribute.isDateTimeRelated() == true )
+     	#set( $editRules = "editrules:'{date: true, required: ${requiredFlag}}'" ) 
+    #elseif ( $attribute.isFromEnumerator() == true )
+    	#set( $editRules = "edittype:select" )
+	    #set( $editoptions = "editoptions:{ value:'${attribute.getEnumClassObject().getValues()}' }" )
+	#elseif ( $attribute.isBoolean() == true )
+	    #set( $editType = "edittype:'checkbox'" )	    
+    #else
+   	    #set( $editType = "edittype:'text'" )
+    #end
+
+{name:'${cleanName}',index:'${cleanName}'},label:'${phrase}',hidden:false,${editType},${editRules},${editOptions}},
+
+#end ## #macro( jsGridOutputColModelHelper )
+
+######################################
+## Vendor Specific Tab Initialization
+######################################
+#macro ( jsTabViewInitiate )
+
+#set( $className = $classObject.getName() )
+#set( $tabId = "${className}TopTabId" )
+
+<script type="text/javascript">
+
+jQuery.subscribe('tabcomplete', function(event, ui) {
+		jQuery('#${tabId}').tabs( "option", "selected", <%=request.getParameter("selectedTab")%>);
+	});
+	
+</script>
+
+#end ## macro ( jsTabViewInitiate )
+
+############################################
+## vendor specific tab view declaration
+## whereby roles are treated different than
+## a direct class tab view
+############################################
+#macro( jsTabViewDeclaration )
+
+#set( $className = $classObject.getName() )
+#set( $tabId = "${className}TopTabId" )
+#set( $pkName = ${classObject.getFirstPrimaryKey().getName()} )
+#set( $lowerClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
+
+<sj:tabbedpanel id="${tabId}" onCompleteTopics="tabcomplete" onChangeTopics="tabchange">
+	
+	<!-- profile tab -->
+	<s:url var="${lowerClassName}ProfileUrl" action="profile" namespace="${className}">	
+		<s:param name="${pkName}"><%=request.getParameter("${pkName}")%></s:param>		
+	</s:url>
+	<sj:tab id="${lowerClassName}ProfileTabId" href="%{${lowerClassName}ProfileUrl}" label="Profile" />
+
+	#######################################################################
+	## iterate through the single-associations that can be seen by the user 
+	## via the UI and do not have a source role since those are embedded as 
+	## a combo box bound to a list
+	#######################################################################
+
+#foreach( $singleAssociation in $classObject.getSingleAssociationsWithoutSourceRole() )
+	#if ( $singleAssociation.isListable() == true && $singleAssociation.isComposite() == false )
+		#set( $roleName = $singleAssociation.getRoleName() )
+		#set( $associationClassType = $singleAssociation.getType() )
+		#set( $childClassObject = $aib.getClassObject( $associationClassType) )
+		#set( $childKeyFieldName = $childClassObject.getAllPrimaryKeysInHierarchy().iterator().next().getName() )		
+		#set( $ownerName = $className )
+		#set( $param = "${${lowerClassName}.${Utils.lowercaseFirstLetter( ${roleName} )}.${childKeyFieldName}}" )
+	<!-- ${roleName}Tab -->
+	<s:url var="${lowerClassName}${roleName}Url" action="profile" namespace="${associationClassType}">
+		<s:param name="${childKeyFieldName}">${param}</s:param>	
+	</s:url>
+	
+	<sj:tab id="${lowerClassName}${roleName}TabId" href="%{${lowerClassName}${roleName}Url}" label="${roleName}"/>
+	#end 
+#end
+
+#######################################################################
+## iterate through the multi-associations that can be seen 
+## by the user via the UI
+#######################################################################
+
+#foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+	#if ( $multiAssociation.isListable() == true )
+		#set( $roleName = $multiAssociation.getRoleName() )
+
+	<!-- ${roleName}Tab -->
+	<s:url var="${lowerClassName}${roleName}Url" action="${roleName}List" namespace="${className}">
+		<s:param name="${pkName}"><%=request.getParameter("${pkName}")%></s:param>		
+	</s:url>
+
+	<sj:tab id="${lowerClassName}${roleName}TabId" href="%{${lowerClassName}${roleName}Url}" label="${roleName}"/>
+
+	#end 
+#end
+
+</sj:tabbedpanel>
+
+#end ## macro( jsTabViewDeclaration )

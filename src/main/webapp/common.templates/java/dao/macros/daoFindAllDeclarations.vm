@@ -1,0 +1,10 @@
+#macro( outputDAOFindAllDecl $method )
+## output method signature
+#set( $static = "" )
+#if( $method.isStatic() )
+#set( $static = "static " )
+#end## $method.isStatic()         
+## output declaration
+	${static}${method.getVisibility()} ${method.getReturnType()} ${method.getName()}( $method.getAsDeclaration() )
+	throws FrameworkDAOException
+#end

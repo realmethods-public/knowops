@@ -1,0 +1,123 @@
+#*
+For the purpose of code generation, returns a String representation 
+for the get and set methods as related to this attribute.  
+ 
+$attribute				Attribute
+$forVO			boolean
+$throwRemoteException	boolean
+$name					String
+*#
+#macro( getAttributeAccessorMethods $attribute $forVO $throwRemoteException $name )
+#set( $asArgument = $name )
+#set( $asArgCaps = $Utils.capitalizeFirstLetter( $asArgument ) )
+## first, create the get method        
+   /**
+
+#if( $forVO == true )
+	#set( $type = $attribute.getType() )
+#else
+	#set( $type = "String" )
+#end## forVO == true
+
+#if( $forVO == true )
+    * Returns the $attribute.getName()
+#else
+	* Returns the $asArgCaps
+#end  ## forVO == true        
+
+#set( $return = "* @return " )
+
+#if( $forVO == true )
+	#set( $return = "${return}${type}" )
+#else
+	#set( $return = "${return}String" )
+#end## forVO == true
+	$return	
+	*/                    		    	    	    
+
+#set( $exception = "" )			    
+#if( $throwRemoteException == true )
+	#set( $exception = " throws java.rmi.RemoteException" )
+#end	    
+	public $type get${asArgCaps}() $exception	    	   
+	{
+#set( $return = "return this." )
+
+#if( $forVO == true )
+	#set( $return = "${return}${asArgument}" )
+#else
+	#set( $return = "${return}${asArgCaps}" )
+#end## forVO == true
+		$return;		
+	}
+
+## lastly, create the set method for a non-final attribute
+#if( $attribute.isFinal() == false )        
+	/**
+    #if( $forVO == true )
+		#set( $var = $asArgument )
+    #else
+		#set( $var = $asArgCaps )
+	#end## $forVO == true
+      	* Assigns the $var
+    	* @param $asArgument	$type
+    	*/
+    	public void set${asArgCaps}( $type $asArgument )
+    	{
+    		this.${var} = ${asArgument};
+    	}	
+#end## $attribute.isFinal() == false
+#end
+###macro( getAttributeAccessorMethods $attribute $forVO $throwRemoteException $name )
+
+
+#*
+ For the purpose of code generation, outputs a representation 
+ for the get and set methods as related to this attribute.  
+
+ $attribute				AttributeObject of interest
+ $forVO			presentation tier type (rM or Struts)
+ $throwRemoteException	true or false
+*#    
+#macro( attributeAccessorMethods $forVO $attribute $throwRemoteException )
+## first, create the get method        
+#set( $name = $attribute.getName() )
+#set( $arg = $attribute.getAsArgument() )
+#set( $argCapFirst = $Utils.capitalizeFirstLetter( $arg ) )
+#set( $throwsDecl = "throws java.rmi.RemoteException" )
+#set( $formattedArg = $attribute.getArgument() )        
+
+#if( $forVO == true )
+	#set( $type = $attribute.getType() )
+#else
+	#set( $type = "String" )
+#end## forVO == true
+
+#if( $forVO == false )        
+	#set( $name = $Utils.capitalizeFirstLetter( $arg ) )
+	#set( $formattedArg = $Utils.capitalizeFirstLetter( $arg ) )
+#end## forVO == false
+#if( $throwRemoteException == false )
+	#set( $throwsDecl = "" )
+#end## $throwRemoteException == false
+   /**
+    * Returns the $name
+ 	*
+	* @return	$type
+    */                    	
+    public $type get${argCapFirst}() $throwsDecl
+    {
+		return this.${formattedArg};
+    }
+        ## last, create the set method for a non-final attribute
+#if( $attribute.isFinal() == false )	        
+	/**
+	 * Assigns the $formattedArg
+	 * @param	$arg	
+     */			                
+    public void set${argCapFirst}( $type $arg )
+    {
+    	this.formattedArg = $arg; 
+    }	        
+#end## $attribute.isFinal() == false
+#end###macro( attributeAccessorMethods $forVO $attribute $throwRemoteException )

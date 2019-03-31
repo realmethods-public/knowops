@@ -1,0 +1,71 @@
+#macro( delegateTransferObjectMethodsForAxis )
+### need a persist and get method for each UIClass that has this its main
+#foreach( $uiClass in $aib.getUIComponentsToGenerate() )
+#if( $uiClass.isMainAssociation( $classObject.getName() ) && $uiClass.isTabPage() == false )
+   /**
+    * Persist the components of the ${uiClass.getName()}TO.
+    * @param	to    ${uiClass.getName()}TO
+    * @return	${uiClass.getName()}TO	
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO persist${uiClass.getName()}TO( ${uiClass.getName()}TO to ) 
+    throws ProcessingException
+    {
+        try
+        {
+            ArrayList parameters = new ArrayList();
+            parameters.add( to );
+            
+            // make the SOAP call
+            to  = (${uiClass.getName()}TO)send( "persist${uiClass.getName()}TO", parameters, "${uiClass.getName()}Service" );
+            
+            if ( to == null )
+            {
+                throw new Exception( " ${name}BusinessDelegate:persist${uiClass.getName()}TO(..) failed." );
+            }
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:persist${uiClass.getName()}TO(..) - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+                
+        return( to );
+    }
+
+   /**
+    * Return the ${classObject.getName()}TO
+    * @return    ${classObject.getName()} Transfer Object
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO get${uiClass.getName()}TO( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException
+    {
+        ${uiClass.getName()}TO returnTO = null;
+        
+        try
+        {
+            ArrayList parameters = new ArrayList();
+            parameters.add( key );
+            
+            // make the SOAP call
+            returnTO  = (${uiClass.getName()}TO)send( "get${uiClass.getName()}TO", parameters, "${uiClass.getName()}Service");
+            
+            if ( returnTO == null )
+            {
+                throw new Exception( "${name}BusinessDelegate:get${uiClass.getName()}TO(..) returned a null value.");
+            }
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = " ${name}BusinessDelegate:get${uiClass.getName()}TO(..) - Could not find ${name} by ${name}PrimaryKey due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+
+        return returnTO;
+    }
+#end ##if( $uiClass.isMainAssociation( $classObject.getName() )
+#end ##foreach( $class in $aib.getUIComponentsToGenerate() )
+#end

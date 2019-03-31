@@ -1,0 +1,14 @@
+#macro ( getHibernateDAOFindAll )
+#set( $children = $classObject.getChildren() )
+#if ( $children.size() > 0 )
+		buf.append( " where class_name in ( '${aib.getRootPackageName(true)}.#getBOPackageName().${classObject.getName()}'" );
+// Note:
+// if part of a hiearchy, Hibernate needs the following class
+// distinguishing where clause, class_name is the name of the discriminator column
+#foreach( $child in $children )
+		buf.append( ", " );
+		buf.append( "'$aib.getRootPackageName(true).#getBOPackageName().${child.getName()}'" );
+#end ##foreach( $child in $children )
+		buf.append( " ) " );
+#end ##if ( $children.size() > 0 )
+#end

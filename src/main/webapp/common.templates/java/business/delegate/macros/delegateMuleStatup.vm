@@ -1,0 +1,11 @@
+#macro( delegateMuleStartup )
+#if ( $aib.usingEmbeddedESB() )
+   /** 
+    * Static block used to initialize the Mule ESB
+    */
+    {
+        MuleXmlConfigurationBuilder builder = new MuleXmlConfigurationBuilder();
+        UMOManager manager = builder.configure("mule-main-config.xml,mule-components.xml);
+    }
+#end ##if ( $aib.usingEmbeddedESB() )
+#end

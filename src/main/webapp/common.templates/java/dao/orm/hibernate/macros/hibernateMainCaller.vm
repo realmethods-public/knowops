@@ -1,0 +1,11 @@
+#macro( hibernate $class $columnPrefix )
+## output all non association types
+## e.g. - String, Long, <enumerated types>, etc..
+#nonAssociations( $class $columnPrefix )
+## output associations
+#associations( $class )
+## output components
+#components( $class )
+## output all subclasses
+#subclass( $class )
+#end

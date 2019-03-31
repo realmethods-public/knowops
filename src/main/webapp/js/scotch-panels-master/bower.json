@@ -1,0 +1,33 @@
+#-------------------------------------------------------------------------------
+# realMethods Confidential
+# 
+# 2018 realMethods, Inc.
+# All Rights Reserved.
+# 
+# This file is subject to the terms and conditions defined in
+# file 'license.txt', which is part of this source code package.
+#  
+# Contributors :
+#       realMethods Inc - General Release
+#-------------------------------------------------------------------------------
+{
+  "name": "scotch-panels",
+  "version": "1.0.3",
+  "authors": [
+    "Nick Cerminara <nick@scotch.io>"
+  ],
+  "homepage": "https://github.com:scotch-io/scotch-panels",
+  "main": [
+    "./dist/scotchPanels.min.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.2"
+  }
+}

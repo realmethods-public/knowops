@@ -1,0 +1,338 @@
+#macro( getHibernateCRUDMethods )
+#if ( $aib.hasIdentity( $classObject ) == true )		
+
+// overloaded helpers from FrameworkDatabaseDAO
+
+    /**
+     * Inserts a new value object into the persistent store.
+     * Delegates internally to create${classObject.getName()}
+     * @param       vo
+     * @return      newly persisted IFrameworkValueObject
+     * @exception   FrameworkDAOException
+     */
+    public IFrameworkValueObject create(IFrameworkValueObject vo) 
+    throws FrameworkDAOException
+    {
+    	vo = preCreate( vo );
+    	
+		vo = create${classObject.getName()}((${classObject.getName()})vo );
+		
+		vo = postCreate( vo );
+		
+		return( vo );
+    }
+
+	/**
+	 * Retrieves the model from the persistent store, using the provided primary key. 
+	 * If no match is found, a null IFrameworkValueObject is returned.
+	 * <p>
+	 * @param       pk  	identifier of entity to locate from the persistent store   
+	 * @return      IFrameworkValueObject
+	 * @exception   FrameworkDAOException
+	 */
+	public IFrameworkValueObject find( FrameworkPrimaryKey pk ) 
+	throws FrameworkDAOException
+	{	
+		preFind( pk );
+		
+		IFrameworkValueObject vo = find${classObject.getName()}((${classObject.getName()}PrimaryKey) pk);
+		
+		vo = postFind( vo );
+		
+        return ( vo );
+    }
+
+    /**
+     * Saves the provided value object to the persistent store.
+     * Delegates internally from save${classObject.getName()}
+     * @param       vo							entity to store
+     * @return      IFrameworkValueObject		stored entity
+     * @exception   FrameworkDAOException 
+     * @exception   VersionUpdateException		ignored for Hibernate usage
+     */
+    public IFrameworkValueObject save(IFrameworkValueObject vo) 
+    throws FrameworkDAOException, VersionUpdateException
+    {
+    	vo = preSave( vo );
+    	
+        vo = save${classObject.getName()}((${classObject.getName()}) vo);  
+        
+        vo = postSave( vo );
+              
+        return( vo );
+    }
+
+   /**
+    * Removes the associated businessObject the persistent store.
+    * Delegates internally to delegate${classObject.getName()}
+    * @param        key		FrameworkPrimarykey
+    * @return		T/F success of delete operation
+    */
+    public boolean delete( FrameworkPrimaryKey key )
+    {
+        boolean deleted = true;
+
+        try
+        {
+        	preDelete( key );
+            delete${classObject.getName()}((${classObject.getName()}PrimaryKey) key);
+        }
+        catch (Throwable exc)
+        {
+            deleted = false;
+        }
+        
+        postDelete( key );
+
+        return (deleted);
+    }
+
+    /**
+     * returns a Collection of all ${classObject.getName()}s
+     * @return		ArrayList<${classObject.getName()}>
+     * @exception   FrameworkDAOException
+     */
+    public ArrayList<${classObject.getName()}> findAll${classObject.getName()}()
+    throws FrameworkDAOException
+    {
+    	preFindAll${classObject.getName()}();
+    	
+		ArrayList<${classObject.getName()}> list = new ArrayList<${classObject.getName()}>();
+		Query query 	= null;		
+		StringBuffer buf = new StringBuffer( "from ${aib.getRootPackageName(true)}.#getBOPackageName().${classObject.getName()}" );
+
+		try
+		{
+			Session session = currentSession();
+
+	 		query = session.createQuery( buf.toString() );
+	 		
+			if ( query != null )
+				list = (ArrayList<${classObject.getName()}>)query.list();
+	 			
+		}
+		catch( Throwable exc )
+		{
+			exc.printStackTrace();		
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.findAll${classObject.getName()} failed - " + exc );		
+		}		
+		finally
+		{
+			try
+			{
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.findAll${classObject.getName()} - Hibernate failed to close the Session - " + exc );
+			}		
+		}
+		
+		if ( list.size() <= 0 )
+		{
+			FrameworkDefaultLogger.info( "${classObject.getName()}DAO:findAll${classObject.getName()}s() - List is empty.");
+		}
+        
+        list = postFindAll${classObject.getName()}( list );
+        
+		return( list );		        
+    }
+	
+//*****************************************************
+// Protected/Private Methods
+//*****************************************************
+
+    /**
+     * Inserts a new ${classObject.Name} into the persistent store.
+     * @param       businessObject
+     * @return      newly persisted ${classObject.getName()}
+     * @exception   FrameworkDAOException
+     */
+    protected ${classObject.getName()} create${classObject.getName()}( ${classObject.getName()} businessObject )
+    throws FrameworkDAOException
+    {
+	    Transaction tx 	= null;
+		Session session	= null;
+		
+    	try
+    	{    				
+			session	= currentSession();
+			tx 		= currentTransaction( session );
+	
+			session.save( businessObject );
+			commitTransaction( tx );	
+			
+			// call sub-class post create process
+			postCreate( businessObject );
+		}
+		catch( Throwable exc )
+		{
+			try
+			{
+				if ( tx != null )
+					rollbackTransaction( tx );				
+			}
+			catch( Throwable exc1 )
+			{
+				logInfoMessage( "${classObject.getName()}DAO.create${classObject.getName()} - Hibernate failed to rollback - " + exc1 );
+			}
+			exc.printStackTrace();			
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.create${classObject.getName()} failed - " + exc );
+		}		
+		finally
+		{
+			try
+			{
+				session.flush();
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.create${classObject.getName()} - Hibernate failed to close the Session - " + exc );
+			}
+		}		
+		
+        // return the businessObject
+        return(  businessObject );
+    }
+    
+    /**
+     * Stores the provided ${classObject.getName()} to the persistent store.
+     *
+     * @param       businessObject
+     * @return      ${classObject.getName()}	stored entity
+     * @exception   FrameworkDAOException 
+     * @exception   VersionUpdateException
+     */
+    protected ${classObject.getName()} save${classObject.getName()}( ${classObject.getName()} businessObject )
+    throws FrameworkDAOException, VersionUpdateException
+    {
+		Transaction tx 	= null;
+		Session session = null;
+		
+    	try
+    	{
+			session = currentSession();
+			tx		= currentTransaction( session );
+	
+			session.update( businessObject );
+			commitTransaction( tx );	
+			
+			postSave( businessObject );
+		}
+		catch( Throwable exc )
+		{
+			try
+			{
+				if ( tx != null )
+					rollbackTransaction( tx );
+			}
+			catch( Throwable exc1 )
+			{
+				logInfoMessage( "${classObject.getName()}DAO.save${classObject.getName()} - Hibernate failed to rollback - " + exc1 );
+			}
+			exc.printStackTrace();			
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.save${classObject.getName()} failed - " + exc );		
+		}		
+		finally
+		{
+			try
+			{
+				session.flush();
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.save${classObject.getName()} - Hibernate failed to close the Session - " + exc );
+			}
+		}		    
+        return( businessObject );
+    }
+    
+    /**
+    * Removes a ${classObject.getName()} from the persistent store.
+    *
+    * @param        pk		identity of object to remove
+    * @exception    FrameworkDAOException
+    */
+    protected void delete${classObject.getName()}( ${classObject.getName()}PrimaryKey pk ) 
+    throws FrameworkDAOException 
+    {
+	    Transaction tx 	= null;
+	    Session session = null;
+	    
+    	try
+    	{    	
+			${classObject.getName()} bo = find${classObject.getName()}(pk);    	
+			
+			session = currentSession();
+			tx		= currentTransaction( session );						
+			session.delete( bo );
+			commitTransaction( tx );
+			
+			postDelete( bo );
+		}
+		catch( Throwable exc )
+		{
+			try
+			{
+				if ( tx != null )
+					rollbackTransaction( tx );				
+			}
+			catch( Throwable exc1 )
+			{
+				logInfoMessage( "${classObject.getName()}DAO.delete${classObject.getName()} - Hibernate failed to rollback - " + exc1 );
+			}
+			exc.printStackTrace();			
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.delete${classObject.getName()} failed - " + exc );					
+		}		
+		finally
+		{
+			try
+			{
+				session.flush();
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.delete${classObject.getName()} - Hibernate failed to close the Session - " + exc );
+			}
+		}
+    }
+
+	/**
+	 * Called before the core functionality within findAll${classObject.getName()}.
+	 * Overload as necessary
+	 */
+	protected void preFindAll${classObject.getName()}()
+	{
+		// do nothing
+	}
+	
+	/**
+	 * Called after the findAll${classObject.getName()}( list ).
+	 * Overload as necessary
+	 * @param		ArrayList		${classObject.getName()}
+	 * @return		ArrayList
+	 */
+	protected ArrayList<${classObject.getName()}> postFindAll${classObject.getName()}( ArrayList<${classObject.getName()}> bos )
+	{
+		//bos = (Collection<${classObject.getName()}>)super.postFindAll( bos );
+		// do nothing
+		return( bos );
+	}
+	
+#end ##if ( $aib.hasIdentity( $classObject ) == true )		
+#end
+
+#macro( getHibernateFindFromClause )
+#set( $pks = $classObject.getAllPrimaryKeysInHierarchy() )
+#set( $numKeys = $pks.size() )			
+#foreach( $key in $pks )
+#set( $upperCaseArg = $Utils.capitalizeFirstLetter( $key.getAsArgument() ) )
+			fromClause.append( "${classObject.getName().toLowerCase()}.${key.getAsArgument()} = " + pk.get${upperCaseArg}().toString() );
+#if( $velocityCount < $numKeys )
+			fromClause.append( " and " );
+#end
+#end	
+#end

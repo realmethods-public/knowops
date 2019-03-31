@@ -1,0 +1,31 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#### CI CONFIG
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+env:
+  - DATABASE_USERNAME=shippable DATABASE_PASSWORD= DATABASE_DIALECT=org.hibernate.dialect.MySQL8Dialect DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
+##  - secure: add an encrypted string using your AWS access and secrety keys, in order to deploy the lambda functions to AWS.
+
+build:
+  cache: true
+  ci:
+#### make use of the AWS S3/Lambda Maven Plugin to deploy the functions
+    - mysql -e "CREATE USER shippable@localhost IDENTIFIED BY ''; GRANT ALL ON *.* TO shippable@localhost; FLUSH PRIVILEGES;"
+    - printenv
+    - mvn test -f pom-restful-api.xml 
+    - mkdir -p shippable/testresults
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} shippable/testresults/ \;    
+    - mvn package lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY
+      
+services:
+  - mysql    
+      
+#### END CI CONFIG

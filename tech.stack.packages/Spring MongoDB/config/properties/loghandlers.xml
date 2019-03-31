@@ -1,0 +1,49 @@
+<!--
+    Copyright (c) 2017 
+   
+    This file is part of cloudMigrate.
+   
+        cloudMigrate is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+   
+        cloudMigrate is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+   
+        You should have received a copy of the GNU General Public License
+        along with cloudMigrate.  If not, see <http://www.gnu.org/licenses/>.
+        
+    Contributors:
+        cloudMigrate Inc - initial API and implementation
+ -->
+<!-- Logging Handler Definitions
+
+    related parameters:
+        synchronous (true or false)
+        The following can contain any number of comma delimeted entries:
+
+        debug - (Log4J logger name, MQ Conn. Pool Name, JMS Conn. Pool Name, SYSTEM_OUT)
+        info - (Log4J logger name, MQ Conn. Pool Name, JMS Conn. Pool Name, SYSTEM_OUT)
+        warning - (Log4J logger name, MQ Conn. Pool Name, JMS Conn. Pool Name, SYSTEM_OUT)
+        error - (Log4J logger name, MQ Conn. Pool Name, JMS Conn. Pool Name, SYSTEM_OUT)
+        datetimestampFormat - follows java.text.SimpleDateFormat
+-->
+
+<logHandlers>
+
+    <!--This is the default log handler used by the application.  
+        The framework internally uses a dedicated Log4J logger defined in lo4j.xml-->
+        <logHandler name="FrameworkDefaultLog"
+            synchronous="true"
+            debug="SYSTEM_OUT, eureka"
+            info="SYSTEM_OUT, eureka"
+	        warn="SYSTEM_OUT, eureka"
+	        error="SYSTEM_OUT, eureka"
+	        dateTimeStampFormat="yyyy.mm.dd-hh:mm:ss"
+        />
+        <!-- add your own custom log handler(s) here -->
+
+</logHandlers>

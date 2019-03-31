@@ -1,0 +1,50 @@
+#*
+ Returns the text required for output of the copy() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyString $attribute )
+#if( $attribute.isFinal() == false )
+#if ( $attribute.isFromAssociation() == false )
+        this.${attribute.getAsArgument()} = object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}();
+#else
+#if ( $attribute.isFromMultiValueAssociation() == true )
+#set( $assocType = $attribute.getAssociation().getType() )    
+        if ( object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}() != null )
+        {
+    		this.${attribute.getAsArgument()} = ${attribute.getDefaultValue()};
+    		${assocType} tmp = null;
+        	for ( ${assocType} listEntry : object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}() )
+        	{
+        		tmp = new ${assocType}();
+        		tmp.copyShallow( listEntry );
+        		this.${attribute.getAsArgument()}.add( tmp );
+        	}
+        }
+        else
+        	this.${attribute.getAsArgument()} = null;
+#else
+    	if ( object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}() != null)
+    	{
+    		this.${attribute.getAsArgument()} = ${attribute.getDefaultValue()};
+    		this.${attribute.getAsArgument()}.copyShallow( object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}() );
+    	}
+    	else
+    		this.${attribute.getAsArgument()} = null;
+#end
+#end
+#end
+#end
+
+#*
+ Returns the text required for output of the copyInto() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyIntoString $attribute )
+#if( $attribute.isFinal() == false )
+        ((${classObject.getName()}) bo).set${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}( this.${attribute.getAsArgument()} );
+#end
+#end

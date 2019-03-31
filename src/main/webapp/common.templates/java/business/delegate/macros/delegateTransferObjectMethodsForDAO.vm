@@ -1,0 +1,66 @@
+#macro( delegateTransferObjectMethodsForDAO )
+## need a persist and get method for each UIClass that has this its main
+#*
+#foreach( $uiClass in $aib.getUIComponentsToGenerate() )
+#if( $uiClass.isMainAssociation( $classObject.getName() ) && $uiClass.isTabPage() == false )
+   /**
+    * Persist the components of the ${uiClass.getName()}TO.
+    * @param	to    ${uiClass.getName()}TO
+    * @return	${uiClass.getName()}TO	
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO persist${uiClass.getName()}TO( ${uiClass.getName()}TO to ) 
+    throws ProcessingException
+    {
+        // Persist the components of the ${classObject.getName()}TO 
+        try
+        {
+			${classObject.getName()}DAO dao = get${classObject.getName()}DAO();
+		
+    	    // delegate the request to the ${classObject.getName()}DAO directly
+        	to = dao.persist${uiClass.getName()}TO( to );
+        	release${classObject.getName()}DAO( dao );
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:persist${classObject.getName()}TO(..) - Could not retrieve the ${classObject.getName()}TO for transfer object " + to + " due to - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        return( to );
+    }
+
+   /**
+    * Return the ${classObject.getName()}TO
+    * @return    ${classObject.getName()} Transfer Object
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO get${uiClass.getName()}TO( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException
+    {
+        // Retrieve the home interface for the ${uiClass.getName()}TOAssemblerSessionRemote 
+        ${uiClass.getName()}TO to = null;
+
+        // Retrieve the ${uiClass.getName()}TO 
+        try
+        {
+			${classObject.getName()}DAO dao = get${classObject.getName()}DAO();
+		
+    	    // delegate the request to the ${classObject.getName()}DAO directly
+            to = dao.find${uiClass.getName()}TO( key );
+        	release${classObject.getName()}DAO( dao );        
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:get${uiClass.getName()}TO(..) - Could not retrieve the ${classObject.getName()}TO for key " + key + " due to - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        return( to );
+    }
+#end ##if( $uiClass.isMainAssociation( $classObject.getName() )
+#end ##foreach( $class in $aib.getUIComponentsToGenerate() )
+*#
+#end

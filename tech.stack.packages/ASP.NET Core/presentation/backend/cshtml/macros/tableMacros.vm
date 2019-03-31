@@ -1,0 +1,6 @@
+#macro( generateTable $attributes $listOfObjects $objectAttributeNames $addOnly )
+<table class="default" width=100% valign=center halign=center>
+#generateTableHeader( $attributes $addOnly )
+#generateTableBody( $attributes $listOfObjects $objectAttributeNames $addOnly )
+</table>
+#end

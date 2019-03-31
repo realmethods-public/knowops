@@ -1,0 +1,22 @@
+#################################################
+## output all non association types
+## e.g. - String, Long, <enumerated types>, etc..
+#################################################	
+#macro( nonAssociations $class $colPrefix )
+#set( $includePKs = false ) ## pks are handled elsewhere
+#set( $attributes = $class.getAttributesOrdered( $includePKs ) )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isFromAssociation() == false )
+#if ( $attribute.isFromEnumerator() == false )
+    <property name="${attribute.getAsArgument()}" column="${colPrefix}${attribute.getAsArgument()}" not-null="false"/>
+#else ##if ( $attribute.isFromEnumerator() == false )
+	<property name="$attribute.getAsArgument()" column="$attribute.getAsArgument()">
+    	<type name="org.hibernate.type.EnumType">
+        	<param name="enumClass">${aib.getRootPackageName(${class})}.#getBOPackageName().${attribute.getType()}</param>
+            <param name="useNamed">true</param>
+		</type>
+	</property>
+#end ##if ( $attribute.isFromEnumerator() == false )    
+#end ##if ( $attribute.isFromAssociation() == false )
+#end ##foreach( $attribute in $attributes )
+#end

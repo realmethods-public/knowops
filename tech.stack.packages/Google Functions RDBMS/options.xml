@@ -1,0 +1,51 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="application">
+	<option name="name" value="demo" required="true" 
+		description="app display name" type="input"/>
+	<option name="description" value="" required="false"
+		description="app description" type="input"/>
+	<option name="author" value="" required="false"
+		description="app's author" type="input"/>
+	<option value="" required="" name="corporate logo URL"
+		description="link to company logo" type="input"/>
+	<option value="./img/turnstone.biologics.png" required="false" name="application logo URL"
+		description="link to app logo" type="input"/>
+	<option value="Turnstone Biologics" required="true" modifiable="false" name="company name"
+		description="your company name" type="input"/>
+	<option value="1.0.0" required="true" name="version"
+		description="app version" type="input"/>		
+	<option name="package name" value="com.occulue" modifiable="false" required="true"
+		description="package prefix to apply(com.xyz format)" type="input"/>
+</options>
+
+<options name="heroku">
+	<option name="auto deploy"  value="true" required="false" description="auto deploy to heroku" type="boolean"/>	
+	<option name="app name" value="demo" required="true" description="heroku app name" type="input"/>
+</options>
+
+<options name="swagger">
+
+	<option name="host" value="" required="true" description="API host" type="input"/>
+	<option name="basepath" value="/" required="true" description="API host" type="input"/>
+	<option name="contact name" value="" required="false" description="contact name" type="input"/>
+	<option name="contact email" value="" required="false" description="contact email address" type="input"/>
+	<option name="contact url" value="" required="false" description="contact url" type="input"/>
+	<option name="license url" value="http://www.apache.org/licenses/LICENSE-2.0.html" required="false" description="license url" type="input"/>
+	<option name="license name" value="Apache 2.0" required="false" description="license name" type="input"/>
+	<option name="title" value="add a title" required="false" description="title" type="input"/>
+	<option name="version" value="v1.0" required="false" description="version" type="input"/>
+	<option name="description" value="" required="false" description="description" type="input"/>
+	<option name="terms of service" value="" required="false" description="terms of service" type="input"/>
+	<option name="output formats"  value="json" selections="json,yaml" type="select"/> 	
+</options>

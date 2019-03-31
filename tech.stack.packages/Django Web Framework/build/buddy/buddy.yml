@@ -1,0 +1,33 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+- pipeline: "${appName} build-test pipeline"
+  trigger_mode: "ON_EVERY_PUSH"
+  trigger_condition: "ALWAYS"
+  ref_name: "${gitRepoName}"
+  ref_type: "BRANCH"  
+  actions:
+  - action: "Execute: mvn clean install"
+    type: "BUILD"
+    working_directory: "/buddy/${gitRepoName}"
+    docker_image_name: "library/python"
+    docker_image_tag: "3.7"
+    execute_commands:
+    - pip install pipenv
+    - pipenv install
+    - pipenv install Django
+    - pipenv install pytest-django
+    - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests    
+    variables:
+    - key: "PIPENV_VENV_IN_PROJECT"
+      value: "true"
+      settable: true
+      description: "pipenv reqd decl var"
+    cached_dirs:
+    - "/root/.cache/pip"
+    mount_filesystem_path: "/buddy/${gitRepoName}"
+    shell: "BASH"
+    trigger_condition: "ALWAYS"

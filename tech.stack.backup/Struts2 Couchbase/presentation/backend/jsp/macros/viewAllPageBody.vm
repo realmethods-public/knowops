@@ -1,0 +1,11 @@
+#macro( viewAllBody_Struts )
+
+#set( $lowercaseClassName = "$Utils.lowercaseFirstLetter( $classObject.getName() )" )	
+#set( $objectListName = "${classObject.getName()}List" )
+#set( $includePKs = false )
+#set( $addOnly = false )
+
+<!--Display a Table View of all $classObject.getName() -->
+#generateTable( $classObject.getUserModifiableAttributes() $classObject.getAttributeNames() $objectListName $addOnly )
+  
+#end

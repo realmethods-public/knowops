@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>${aib.getApplicationName()}</title>
+  <base href="/">
+  <script>
+  	var global = global || window;
+    var process = process || {
+      env: { DEBUG: undefined },
+      version: []
+    };
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/css/compiled.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Mono:300" rel="stylesheet">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+<script type="text/javascript" src="assets/js/compiled.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+<script>
+    wow = new WOW().init();
+</script>
+    
+</html>

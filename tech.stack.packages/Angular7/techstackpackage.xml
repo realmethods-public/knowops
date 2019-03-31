@@ -1,0 +1,19 @@
+<tech-stack-package 
+	name="Angular7" 
+	shortName="Angular7MongoDB"
+	description="Uses Angular7 with MongoDb" 
+	icon-url="./img/angular.png" 	
+	info-page-url="http://www.realmethods.com/infopages/angularjs-mongodb-info-page.html"
+    version="1.0"
+    app-type="mobile"
+    release-status="production">
+	<target-languages>
+		<target-language name="typescript"/>
+		<target-language name="javascript"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="bootstrap/html5" description="front-end" app-layer="presentation"/>
+		<tech-stack-component name="angular" description="RESTful API services layer" app-layer="business"/>
+		<tech-stack-component name="mongodb" description="document persistence" app-layer="data"/>
+	</tech-stack>
+</tech-stack-package>

@@ -1,0 +1,57 @@
+#macro( outputDAOFindAllImplementations )
+#foreach( $method in $classObject.getFindAllByMethods() )
+#outputDAOFindAllDecl( $method )
+    {
+        $method.getReturnType()  returnList = null;
+		Session session	= null;
+		
+    	try
+    	{    				
+			session	= currentSession();
+			session.beginTransaction();
+
+			// create the Hibernate SQL
+			StringBuffer sql = new StringBuffer( "from ${aib.getRootPackageName(true)}.#getBOPackageName().${classObject.getName()} as bo" );
+			
+			// build the where clause from list of method args
+			StringBuffer where = new StringBuffer( " where " );
+#set( $numArgs = $method.getArguments().size() )
+#foreach( $methodArg in $method.getArguments().getArgs() )
+            where.append( "bo.${methodArg.getName()} = ?" );
+#if( $velocityCount < $numArgs )
+            where.append( " AND " );
+#end ##if( $velocityCount < $numArgs )
+#end ##foreach( $methodArg in $method.getArguments().getArgs() )
+			// combine the initial sql and the where clause
+			sql.append( where.toString() );
+			
+			// fire off the query 
+			returnList = session.createQuery( sql.toString() )
+#foreach( $methodArg in $method.getArguments().getArgs() )
+#set( $counter = $velocityCount - 1 )
+            				.setParameter( ${counter}, ${methodArg.getName()} )
+#end ##foreach( $methodArg in $method.getArguments().getArgs() )			
+							.list();
+		}
+		catch( Throwable exc )
+		{
+			exc.printStackTrace();			
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.${method.getName()} failed - " + exc );
+		}		
+		finally
+		{
+			try
+			{
+				session.flush();
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.${method.getName()} - Hibernate failed to close the Session - " + exc );
+			}
+		}		
+		
+        return( returnList );
+    }
+#end ##foreach( $method in $classObject.getBusinessMethods() )
+#end

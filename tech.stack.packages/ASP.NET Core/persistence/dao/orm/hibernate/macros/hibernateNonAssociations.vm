@@ -1,0 +1,18 @@
+#################################################
+## output all non association types
+## e.g. - String, Long, <enumerated types>, etc..
+#################################################	
+#macro( nonAssociations $class $colPrefix )
+#set( $appName = $aib.getApplicationNameFormatted() )
+#set( $includePKs = false ) ## pks are handled elsewhere
+#set( $attributes = $class.getAttributesOrdered( $includePKs ) )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isFromAssociation() == false )
+#if ( $attribute.isFromEnumerator() == false )
+    <property name="${attribute.getName()}" column="${colPrefix}${attribute.getName()}" not-null="false"/>
+#else ##if ( $attribute.getName() == false )
+	<property name="${attribute.getName()}" column="${colPrefix}${attribute.getName()}" type="${attribute.getType()}"/> 
+#end ##if ( $attribute.isFromEnumerator() == false )    
+#end ##if ( $attribute.isFromAssociation() == false )
+#end ##foreach( $attribute in $attributes )
+#end

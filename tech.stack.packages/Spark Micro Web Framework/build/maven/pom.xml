@@ -1,0 +1,71 @@
+#xmlHeader()
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+	<modelVersion>4.0.0</modelVersion>  
+	<groupId>${aib.getRootPackageName(true)}</groupId>  
+  
+#if ( $containerObject )
+	<parent>
+		<groupId>${aib.getRootPackageName(true)}</groupId>
+    	<artifactId>${aib.getApplicationNameFormatted().replaceAll(" ",".")}-parent</artifactId>
+    	<version>${aib.getVersion()}</version>
+  	</parent>
+#end  
+	<artifactId>${appName.replaceAll(" ",".")}</artifactId>  
+  	<version>${aib.getVersion()}</version>  
+  
+  	<packaging>jar</packaging>  
+    
+  	<name>${appName}</name>    
+
+#repositories()
+
+	<properties>
+#standardProperties()
+	</properties>
+  
+	<build>
+
+		<plugins>
+
+#standardMavenWarPlugin()
+#jfrogPluginDecl()		  	
+#testPluginDecl()		  
+#herokuPluginDecl()	
+#set( $exclusion = "" )
+#apacheMavenAntRunPluginDecl( $exclusion )
+#sparkWebMicroframeworkPluginDecl()
+
+    	</plugins>
+
+  	</build>
+
+  	<dependencies>  
+  
+#sparkMicroframeworkDependencies()
+#slf4jDependencies()
+#hibernateDependencies()
+#mySQLDependencies()
+#jacksonJsonDependencies()
+#apacheCommonDependencies()
+#junitDependencies()
+#easyMockTestDependencies()
+#googleGsonDependencies()
+#googleGuavaDependencies()
+#mongoDBMorpiaDependencies()
+#mongoDBDependencies()
+#memcachedDBDependencies()
+#jalopyDependencies()
+#velocityDependencies()
+#w3cDOMDependencies()
+#jbossJavaxTransactionDependencies()
+#log4jDependencies()
+  	</dependencies>  
+ 
+</project>  

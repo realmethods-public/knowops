@@ -1,0 +1,17 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+build:
+  cache: true
+  ci:
+    - mvn test
+    - mkdir -p shippable/testresults
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} shippable/testresults/ \;    
+      
+services:
+  - memcached
+  - mongodb    
+
+#### END CI CONFIG

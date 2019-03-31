@@ -1,0 +1,31 @@
+#*
+ Outputs a representation of all attributes, formatted as arguments, 
+ optionally including the primary keys.
+ This macro recurses. 
+ 
+ $class						the ClassObject to focus on
+ $includeRequiredAttribute	boolean
+*#  
+#macro ( getAllArguments $class $includeRequiredAttribute )
+#set( $keys = $classObject.getAttributeNames() )
+#foreach( $attributes in $classObject.getAttributes )    
+#if( $attribute.isFromUserModel() )   
+#if( $attribute.isPrimaryKey() == $includeRequiredAttribute )
+#if( $attribute.isFinal() == false )
+#if( $velocityCount < $numAttributes || $class.hasParent() == true )
+#set( $suffix = ", " )
+#else
+#set( $suffice = "" )
+#end  ## $velocityCount < $numAttributes || $class.hasParent() == true
+## output the argument declaration for the current attribute
+	$attribute.getType() $attribute.getAsArgument() $suffix
+#end## $attribute.isFinal() == false
+#end## $attribute.isPrimaryKey() == $includeRequiredAttribute
+#end## $attribute.isFromUserModel()
+#end## foreach $key in $keys
+## attempt to recurse using the parent
+#if( $class.hasParent() == true )
+#getAllArguments( $aib.getClassObject( $class.getParentName() ) $includeRequiredAttribute ) 
+#end## $class.hasParent() == true      	
+	
+#end

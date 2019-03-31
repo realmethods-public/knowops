@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+  	>
+
+  			<xsd:element name="options">
+				<xsd:complexType>
+    				<xsd:sequence>
+        				<xsd:element name="option" minOccurs="1" maxOccurs="unbounded">
+	        				<xsd:complexType>
+	        					<xsd:attribute name="name" type="xsd:string" use="required"/>
+								<xsd:attribute name="value" type="xsd:string" default=""/>
+								<xsd:attribute name="description" type="xsd:string" />
+								<xsd:attribute name="required" type="xsd:string" default="false"/>
+								<xsd:attribute name="modifiable" type="xsd:string" default="true"/>
+								<xsd:attribute name="visible" type="xsd:string" default="true"/>
+								<xsd:attribute name="type" type="xsd:string" default="input"/>
+								<xsd:attribute name="selections" type="xsd:string" default="input"/>
+	        				</xsd:complexType>
+        				</xsd:element>
+    				</xsd:sequence>
+					<xsd:attribute name="name" type="xsd:string" use="required"/>
+					<xsd:attribute name="maxPerRow" type="xsd:string" default="2"/>
+				</xsd:complexType>
+  			</xsd:element>
+  	
+<xsd:complexType name="nameType">
+	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="name" type="xsd:string" />
+    	</xsd:extension>
+  	</xsd:simpleContent>
+</xsd:complexType>
+
+<xsd:complexType name="descriptionType">
+ 	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="description" type="xsd:string" />
+    	</xsd:extension>
+  	</xsd:simpleContent>
+</xsd:complexType>
+
+<xsd:complexType name="nameDescriptionType">
+	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+			<xsd:attribute name="description" type="xsd:string" />
+    	</xsd:extension>
+  	</xsd:simpleContent>
+</xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,10 @@
+#macro( enumCaseStatement )
+#set( $attributes = $classObject.getAttributesOrdered(false) )
+#set( $className = $classObject.getName() )
+#set( $counter = 0 )
+#foreach( $attribute in $attributes )
+#set( $arg = ${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})} )
+            case ${counter} : return $arg;
+#set( $counter = $counter + 1 )
+#end
+#end

@@ -1,0 +1,52 @@
+
+#*
+ Generates code to apply the fields of a Struts form to a value object
+*#
+#macro ( getAllOutputStrutsFormFields )
+#set( $includesPKs = false )
+#set( $attributes = $classObject.getUserModifiableAttributes() )
+	    BaseActionForm form = getTheForm( performParameters );
+	    Object data = null;            
+#getAllOutputStrutsFormFieldsHelper( $attributes "businessObject" )
+#end
+
+#macro ( getAllOutputStrutsFormFieldsHelper $attributes $prefix )
+#set( $className = $classObject.getName() )
+#set( $varPortion = "" )
+#foreach( $attribute in $attributes )
+#* don't need to associations *#
+#if( ($attribute.isFromUserModel() == true && $attribute.isFinal() == false && $attribute.isFromAssociation() == false && $attribute.isFromMultiValueAssociation() == false ) || $attribute.isSingleComposite() == true )
+#set( $type = $attribute.getType() )
+#set( $asArgument = $Utils.capitalizeFirstLetter( $attribute.getAsArgument() ) )
+#set( $attribName = $attribute.getUniqueName() )
+#set( $attribName = $Utils.lowercaseFirstLetter( $attribName ) )
+#set( $output = "${prefix}.set${asArgument}" )
+        data = form.getValue("${attribName}");
+#if( $attribute.isSingleComposite() )
+// from ${attribute.getClassObject().getName()}:${attribute.getName()}
+        if ( ${prefix}.get${asArgument}() == null )
+            ${prefix}.set${asArgument}( new ${attribute.getType()}() );
+#set( $foo = $aib.getUtilityStack().push( $prefix ) )
+#set( $newprefix = "${prefix}.get${asArgument}()" )
+#getAllOutputStrutsFormFieldsHelper( $attribute.getAttributes() $newprefix )        
+#set( $prefix = $aib.getUtilityStack().pop() )
+#elseif( $type.equals( "Boolean") )            
+        ${output}(new ${type}((data == null ? "false" : "true")));
+#elseif ( $attribute.isFromEnumerator() )
+        if ( data != null )
+            ${output}( ${type}.get${type}( data.toString() ) );                
+#else
+        if ( data != null )
+## Continue Type Checking
+#if( $type.equals( "java.sql.Date") )
+            ${output}(Utility.formatToSQLDate((String)data));
+#elseif ( $type.equals( "java.sql.Timestamp" ) )
+            ${output}(Utility.formatToTimestamp((String)data));
+#elseif ( $type.equals( "java.sql.Time" ) )
+            ${output}(Utility.formatToTime((String)data));
+#elseif ( $type.equals( "String" ) )              
+            ${output}(data.toString());
+#else## treat as normal
+            ${output}(new ${type}(data.toString()));
+#end#end#end#end## $attribute in $attributes
+#end

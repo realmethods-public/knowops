@@ -1,0 +1,198 @@
+#xmlHeader()
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = "$aib.getApplicationNameFormatted()" )
+#end
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+  <modelVersion>4.0.0</modelVersion>  
+  <groupId>${aib.getRootPackageName(true)}</groupId>  
+  
+#if ( $containerObject )  <parent>
+	<groupId>${aib.getRootPackageName(true)}</groupId>
+    <artifactId>${aib.getApplicationNameFormatted().replaceAll(" ",".")}-parent</artifactId>
+    <version>${aib.getVersion()}</version>
+  </parent>
+#end  
+  <artifactId>${appName.replaceAll(" ",".")}-lambda-serverless</artifactId>  
+  <version>${aib.getVersion()}</version>  
+
+#if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )  
+  <packaging>jar</packaging>  
+#else
+  <packaging>pom</packaging>
+#end ##if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )
+    
+  <name>${appName}-aws-lambda-jar</name>    
+  
+#repositories()
+  
+	<properties>
+#standardProperties()
+#awslambdaProperties()
+#swaggerProperties()
+	</properties>
+
+	<build>
+  
+		<plugins>
+
+#if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )
+		<!-- maven compiler plugin -->
+		  	<plugin>
+	  			<groupId>org.apache.maven.plugins</groupId>
+	  			<artifactId>maven-compiler-plugin</artifactId>
+	  			<version>3.7.0</version>
+	  			<configuration>
+		    		<excludes>
+		        		<exclude>**\action\*.java</exclude>
+		            	<exclude>**\servlet\*.java</exclude>
+		            	<exclude>**\test\*.java</exclude>
+						<exclude>**\dao\*.java</exclude>
+						<exclude>**\persistent\*.java</exclude>
+						<exclude>**\service\*.java</exclude>
+						<exclude>**\bo\*UserType.java</exclude>
+						<exclude>**\bo\FrameworkHibernateEnumerator.java</exclude>                						                	
+						<exclude>**\delegate\*BusinessDelegate.java</exclude>
+						<exclude>**\common\JsonTransformer.java</exclude>
+						<exclude>**\Application.java</exclude>
+		    		</excludes>
+	  			</configuration>
+		  	</plugin>
+<!-- shade uberjar plugin -->    
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-shade-plugin</artifactId>
+		        <version>3.0.0</version>
+	        	<executions>
+	          		<execution>
+	            		<phase>package</phase>
+	            		<goals>
+	              			<goal>shade</goal>
+	            		</goals>
+	 					<configuration>
+	          	  			<filters>
+	          	    			<filter>
+	          	      				<artifact>com.occulue:demo</artifact>
+	          	      				<excludes>
+	                					<exclude>**/action/*.class</exclude>
+	                					<exclude>**/servlet/*.class</exclude>
+	                					<exclude>**/test/*.class</exclude>
+										<exclude>**/dao/*.class</exclude>
+										<exclude>**/service/*.class</exclude>
+										<exclude>**/delegate/*BusinessDelegate.class</exclude>
+										<exclude>*.xml</exclude>
+										<exclude>*.properties</exclude>					                						                					
+										<exclude>**/Application.class</exclude>					                						                
+	              	  				</excludes>
+	          	    			</filter>
+	          	    			<filter>
+	          	      				<artifact>com.fasterxml.jackson.core:jackson-annotations</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>
+	          	    			<filter>
+	          	      				<artifact>org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>
+	          	    			<filter>
+	          	      				<artifact>org.apache.velocity:velocity</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>
+	          	    			<filter>
+	          	      				<artifact>jalopy:jalopy</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>
+	          	    			<filter>
+	          	      				<artifact>jalopy:jalopy-ant</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>          	            	   
+	          	    			<filter>
+	          	      				<artifact>org.hibernate:hibernate-core</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>          	    
+	          	    			<filter>
+	          	      				<artifact>org.hibernate:hibernate-c3p0</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>          	    
+	          	    			<filter>
+	          	      				<artifact>org.hibernate:hibernate-tools</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  					</excludes>
+	          	    			</filter>          	    
+	          	    			<filter>
+	          	      				<artifact>org.hibernate:hibernate-tools</artifact>
+	          	      				<excludes>
+	                					<exclude>**/*.*</exclude>
+	                  				</excludes>
+	          	    			</filter>          	    
+	            				<filter>
+	              	  				<artifact>*:*</artifact>
+	              	  				<excludes>
+	                					<exclude>META-INF/*.SF</exclude>
+	                					<exclude>META-INF/*.DSA</exclude>
+	                					<exclude>META-INF/*.RSA</exclude>
+	              	  				</excludes>
+	            				</filter>
+	          	  			</filters>
+	        			</configuration>          
+	          		</execution>
+	        	</executions>
+	      	</plugin>
+#apacheMavenAntRunPluginDecl()	  
+#else 	
+			<plugin>
+	        	<artifactId>maven-assembly-plugin</artifactId>
+	        	<version>2.5.3</version>
+	        	<configuration>
+	          		<descriptor>assembly-dep.xml</descriptor>
+	        	</configuration>
+	        	<executions>
+	          		<execution>
+	            		<id>create-archive</id>
+	            		<phase>package</phase>
+	            		<goals>
+	              			<goal>single</goal>
+	            		</goals>
+	          		</execution>
+	        	</executions>
+	      	</plugin>    
+#end ##if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )
+#awsLambdaPluginDecl()
+#eclipseJettyMavenPluginDecl()
+
+		</plugins>
+
+	</build>
+   
+	<dependencies>  
+
+#awsDependencies()
+#googleGsonDependencies()
+#jacksonJsonDependencies()
+#jalopyDependencies()
+#log4jDependencies()
+#apacheCommonDependencies()
+#w3cDOMDependencies()
+#mavenInvokerDependencies()
+#swaggerDependencies()
+
+	</dependencies>  
+  
+</project>  

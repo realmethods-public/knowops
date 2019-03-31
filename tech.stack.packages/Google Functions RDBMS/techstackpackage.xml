@@ -1,0 +1,21 @@
+<tech-stack-package 
+    name="Google Functions"
+    shortName="GoogleFunctions"
+    description="Tech stack using Google Functions as the service layer, and Spark web framework with Hibernate as a Restful DAO persistence layer" 
+    icon-url="./img/gcp.functions.png"
+	info-page-url="http://www.realmethods.com/infopages/google-functions-info-page.html"
+    version="1.0"
+    app-type="serverless"
+    release-status="production">
+
+	<target-languages>
+		<target-language name="nodejs8"/>
+		<target-language name="java"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="gcp-functions" description="serverless business delegate" app-layer="business"/>
+		<tech-stack-component name="spark web" description="RESTful APIS for DAOs" app-layer="business"/>
+		<tech-stack-component name="hibernate rbms" description="ORM for persistence" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>

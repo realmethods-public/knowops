@@ -1,0 +1,12 @@
+#macro ( getPrimaryKeyFieldsFromRequest )
+#set( $attributes = $classObject.getAllPrimaryKeysInHierarchy() )
+#foreach ( $attribute in $attributes )
+#if( $attribute.isPrimaryKey() )
+#set( $rootName = $attribute.getRootPKName() )
+##set( $name = "${Utils.capitalizeFirstLetter( $attribute.getAsArgument() )}" )                
+                keys = getKeysFieldsFromServletRequest( "${rootName}" + DEFAULT_OBJECT_ID_PREFIX );
+                if ( keys != null && keys.isEmpty() == false )
+                    businessObject.setFrameworkPrimaryKey(new ${classObject.getName()}PrimaryKey(keys));
+#end
+#end
+#end

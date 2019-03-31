@@ -1,0 +1,43 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+- pipeline: "${appName} build-angular7 pipeline"
+  trigger_mode: "ON_EVERY_PUSH"
+  trigger_condition: "ALWAYS"
+  ref_name: "${gitRepoName}"
+  ref_type: "BRANCH"  
+  actions:
+  - action: "Execute: npm commands"
+    type: "BUILD"
+    working_directory: "/buddy/${gitRepoName}"
+    docker_image_name: "library/node"
+    docker_image_tag: "8"    
+    execute_commands:
+    - npm i -g npm
+    - npm install -g @angular/cli
+    - mkdir -p $APP_ROOT_DIR
+    - cd $APP_ROOT_DIR
+    - ng new $APP_NAME --defaults
+    - cd ..
+    - cp -r $APP_NAME/. $APP_ROOT_DIR/$APP_NAME/.
+    - cd $APP_ROOT_DIR/$APP_NAME/
+    - npm install --prod
+    - npm run setup
+    - ng build
+    variables:
+    - key: "APP_NAME"
+      value: "${appName}"
+      settable: true
+      description: "application name"
+    - key: "APP_ROOT_DIR"
+      value: "appRoot"
+      settable: true
+      description: "app root directory"
+    cached_dirs:
+    - "/root/.cache/pip"
+    mount_filesystem_path: "/buddy/${gitRepoName}"
+    shell: "BASH"
+    trigger_condition: "ALWAYS"

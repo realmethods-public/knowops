@@ -1,0 +1,9 @@
+#*
+ Returns the text required for output of the toString() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AtttributeObject
+*#
+#macro ( attributeToString $attribute )  
+returnString = returnString + "${attribute.getName()} = " + this.${attribute.getName()} + ", ";
+#end

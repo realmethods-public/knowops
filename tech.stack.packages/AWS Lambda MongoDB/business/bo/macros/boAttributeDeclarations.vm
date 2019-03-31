@@ -1,0 +1,27 @@
+#*
+ Outputs a formatted representation of the attribute declarations
+ $useAssociations 		true/false - for/not for associations
+*# 
+#macro ( getAttributeDeclarations $useAssociations )
+#set( $includePKs = true )
+#set( $forceDeclarePublic = false )
+#set( $autoGeneratePKs = $aib.autoGeneratePKs() )
+#set( $attributes = $classObject.getAttributesOrdered( $includePKs ) )
+## set the autoGeneratePKs flag to false if there the $classObject is dealing
+## with a simple (single) primary key...handled by the persistent store
+#if ( $autoGeneratePKs == true )
+#if ( $classObject.hasSimplePrimaryKey() )
+#set( $autoGenPKs = false )
+#else
+#set( $autoGenPKs = true )
+#end
+#else
+#set( $autoGenPKs = false )
+#end
+#foreach( $attribute in $attributes )
+#if( $attribute.isFromAssociation() == false || $useAssociations == true )
+## Call another macro to get the real work done for the current attribute
+#getAttributeDeclaration( $attribute $forceDeclarePublic $autoGenPKs )
+#end##if( $attribute.isFromAssociation() == false || $useAssociations == true )
+#end## $attribute in $attributes
+#end

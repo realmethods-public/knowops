@@ -1,0 +1,32 @@
+#macro ( getBOAccessorMethodDeclarations  )
+#set( $declareThrowsRemoteException = false )
+#foreach( $attributes in $classObject.getAttributes() )
+##if( $attribute.isFromAssociation() == true )
+#getAccessorMethodDeclarations( $attribute $declareThrowsRemoteException false true )
+##end##if( $attribute.isFromAssociation() == false )
+#end##foreach( $key in $attributes.keySet() )
+#end
+
+
+#*
+ Outputs a formatted representation of the code that makes up
+ the accessor methods for the contained attributes of the current ClassObject
+ *#
+#macro( getBOAccessorMethods  )
+#getBOAccessorMethods( true )
+#end
+#*
+ Outputs a formatted representation of the code that makes up
+ the accessor methods for the contained attributes of the current ClassObject
+ *#
+#macro( getBOAccessorMethods  $includeAssociations )
+#set( $includeRequiredAttribute = true )
+#set( $throwRemoteException = false )
+#foreach( $attribute in $classObject.getAttributes() )
+## only provide accessors for non-primary-key fields
+#if( $attribute.isFromAssociation() == false || $includeAssociations == true )
+## delegate to the macro that outputs the accessor method for the provided attribute
+#getAttributeAccessorMethods( $attribute true $throwRemoteException $attribute.getAsArgument() )
+#end##if( $attribute.isFromAssociation() == $includeAssociations )
+#end##foreach( $attributes in $classObject.getAttributes() )
+#end

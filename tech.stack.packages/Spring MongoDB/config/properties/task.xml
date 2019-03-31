@@ -1,0 +1,21 @@
+<!--    Copyright (c) 2017        This file is part of cloudMigrate.           cloudMigrate is free software: you can redistribute it and/or modify        it under the terms of the GNU General Public License as published by        the Free Software Foundation, either version 3 of the License, or        (at your option) any later version.           cloudMigrate is distributed in the hope that it will be useful,        but WITHOUT ANY WARRANTY; without even the implied warranty of        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        GNU General Public License for more details.           You should have received a copy of the GNU General Public License        along with cloudMigrate.  If not, see <http://www.gnu.org/licenses/>.            Contributors:        cloudMigrate Inc - initial API and implementation -->
+<!-- Task definitions 
+
+     A task is defined either by a single class task, or by one or more commands to be executed in the provided order
+
+-->
+
+<tasks>
+
+    <!-- the following definition is used internally by the framework to handle application logging -->
+
+    <task name="FrameworkLogTask" commands="com.cloudmigrate.framework.integration.command.FrameworkLogCommand"/>
+
+<!-- an example with no commands, just a referrenced task 
+
+    <task name="CreateEmployee" task="com.poc.task.CreateEmployeeTask" />
+
+-->
+
+
+</tasks>

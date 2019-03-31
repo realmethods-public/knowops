@@ -1,0 +1,20 @@
+#*
+ Returns the business method implementation for this instance
+ 
+ $rootName		String
+ $class			ClassObject
+ $businessMethods Collection - need to pass it for recursion purposes
+ $interfaces 	Collection - need to pass it for recursion purposes
+ 
+*#
+#macro ( getBusinessMethodImplementations $rootName $class $businessMethods $interfaces )
+#foreach( $businessMethod in $businessMethods )
+#getAsImplementation( $businessMethod $rootName )
+#end## foreach $businessMethod in $businessMethods
+## iterate through the interfaces...
+#foreach( $interfaceName in $interfaces )    
+#set( $interface = $aib.getClassObject( $interfaceName ) )
+#getBusinessMethodImplementations( $rootName $interface $interface.getBusinessMethods() $interface.getInterfaces() )
+#end## foreach $interfaceName in $interfaces
+#end
+

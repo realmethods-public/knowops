@@ -1,0 +1,299 @@
+#*
+ DAO related output
+*#
+
+
+#*
+ Helper for generating all DAO finders using the contained AssociationEndObjects
+
+  $sqlOutput	EntitySQLGeneratedOutput
+*#
+#macro( daoFinderMethodsOutput $sqlOutput )       
+#set( $associations = $aib.getAssociationsFromParents( $classObject ) )   
+#foreach( $association in $associations )    
+#if( $association.isMultivalued() && $association.isNavigable() )	    
+#set( $child = $association.getType() )
+#set( $parent = $association.getSiblingAssociationEndObject().getType() )
+#set( $roleName = $association.getRoleName() )		        
+#daoFinderMethodsOutputHelper( $child $parent $roleName $sqlOutput )            
+#end## $association.isMultivalued() && $association.isNavigable()
+#end## foreach $association in $associations
+#end
+
+#*
+ Returns the DAO finder methods based 
+ on the AssociationEndObjects of the
+ current ClassObjects
+$child		String
+$parent		String
+$roleName	String
+$sqlOutput	EntitySQLGeneratedOutput
+*#
+#macro( daoFinderMethodsOutputHelper $child $parent $roleName $sqlOutput )
+   /**
+	* Returns a Collection of ${child}s
+    * @param	key		${parent}PrimaryKey
+    * @exception FrameworkDAOException
+    */
+    public Collection findAll${roleName}( ${parent}PrimaryKey key )
+    throws FrameworkDAOException
+    {
+    	if ( key == null )
+    		throw new FrameworkDAOException( "${child}DatabaseDAO:findAll${roleName}() - null key provided.");
+    
+    	Collection coll = null;
+        Collection args = new ArrayList();
+	    
+	    // Execute the Stored procedure
+        try
+    	{
+    	    args = key.getValuesAsParameters();
+        
+## Need to determine if we are using stored procedure or SQL embedded
+#if ( $sqlOutput.hasFindersSQL() == false)   #* if nothing, used Stored Procedure *#
+            // Execute Stored Procedure
+#set( $trimmedName = "FindAll${roleName}By${parent}" )
+#if ( $trimmedName.length() > $dbEntityMaxNameLen.intValue() )
+#set( $trimmedName = $trimmedName.substring(0,${dbEntityMaxNameLen.intValue()}) )            
+#end
+        coll = getConnection().executeStoredProcedure( "${trimmedName}", args, this );
+#else
+#set( $trimmedName = "FindAll${roleName}By${parent}" )            
+#if ( $trimmedName.length() > $dbEntityMaxNameLen.intValue() )
+#set( $trimmedName = $trimmedName.substring(0,${dbEntityMaxNameLen.intValue()}) )            
+#end
+        	String sSQL = (String)sqlOutput.findersSQL.get( "${trimmedName}" );
+        
+       	  	// Execute SQL
+        	String sSQL = "'" + sSQL + "'";
+        	coll = getConnection().executeSelectStatement( sSQL, args, this );            
+#end            	
+        }
+        catch( Throwable exc )
+        {
+        	throw new FrameworkDAOException( "${child}DatabaseDAO:findAll${roleName} - " + exc, exc );
+        }
+        // Now check the enumeration and if there is none then log it
+        if ( coll.size() <= 0 )
+        {
+        	FrameworkDefaultLogger.info( "${child}DatabaseDAO:findAll${roleName} - Collection is empty." );
+        }
+        return( coll );
+    }
+#end
+
+#*
+ DAO database arguments
+*#
+#macro( databaseArgsOutput )
+#set( $includePrimaryKeys = true )
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+#databaseArgsOutputHelper( $attributes "businessObject" )
+#end
+
+#macro( databaseArgsOutputHelper $attributes $prefix )
+#foreach( $attribute in $attributes )		
+#if( $attribute.isFinal() == false )    	
+#set( $asArg = $attribute.getAsArgument() )    
+#set( $asArgFirstCap = $Utils.capitalizeFirstLetter( ${asArg} ) )
+#set( $the-type = "${attribute.getRootType()}" )
+#if ( $attribute.isComposite() == true )
+// from ${attribute.getClassObject().getName()}:${attribute.getName()}
+#set( $var = "businessObject.get${attribute.getName()}()" )
+#databaseArgsOutputHelper( $attribute.getAttributes() $var )
+#elseif( $attribute.isFromEnumerator() == false )
+v.add( new ${the-type}Parameter( ${prefix}.get${asArgFirstCap}(), bIn ) );
+#else
+## need to dig to find the internal type of the enum
+#set( $enumType = $aib.getEnumClassObject( $attribute.getType() ).getCommonType() )
+v.add( new ${enumType}Parameter( ${prefix}.get${asArgFirstCap}().getValue(), bIn ) );
+#end		
+#else ## $attribute.isPrimaryKeyObject()
+if ( businessObject.get${asArgFirstCap}() != null )
+v.addAll( ${prefix}.get${asArgFirstCap}().getValuesAsParameters( bIn ) );
+else                
+v.addAll( new ${attribute.getFirstForeignKey().getClassObject().getName()}PrimaryKey().getValuesAsParameters( bIn ) );
+#end## $attribute.isFinal() == false
+#end## foreach( $attribute in $attributes )
+#end
+
+#*
+ DAO Resultset output
+*#
+#macro( resultSetRelatedCallsOutput )
+#set( $includePrimaryKeys = true )
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )	
+#resultSetRelatedCallsOutputHelper( $attributes "businessObject" )
+#end
+
+#macro( resultSetRelatedCallsOutputHelper $attributes $prefix )
+#foreach( $attribute in $attributes )		
+#if( $attribute.isFinal() == false )	            
+#set( $type = $attribute.getRootType() )
+#set( $asArg = $attribute.getAsArgument() )
+#set( $asArgCapsFirst = $Utils.capitalizeFirstLetter( $asArg ) )
+#if( $attribute.isComposite() )
+// from ${attribute.getClassObject().getName()}:${attribute.getName()}
+#set( $var = "${prefix}.get${attribute.getName()}()" )
+#resultSetRelatedCallsOutputHelper( $attribute.getAttributes() $var )
+#elseif( $attribute.isDateTimeRelated() == true )
+			${prefix}.set${asArgCapsFirst}( rs.get${type}( "$asArg" ) );				
+#else				
+#set( $businessObjectSetPrefix = "${prefix}.set${asArgCapsFirst}" )				
+#if( $attribute.isForeignKey() == true )
+				${businessObjectSetPrefix}( new $type ( 
+	#set( $pkArg = $asArg.substring( 0, $asArg.indexOf( "PrimaryKey" ) ) )
+	#set( $fks = $attribute.getForeignKeys() )
+	#set( $numFKs = $fks.size() )
+	#foreach( $fk in $fks )
+	#set( $fkName = "${Utils.lowercaseFirstLetter( $fk.getName() )}" )
+	#if( $velocityCount < $numFKs )
+					rs.getObject( "${fkName}" ),
+	#else
+					rs.getObject( "${fkName}" )				
+	#end
+	#end ##foreach( $fk in $fks )
+					) );
+#else  ## $type.indexOf( "PrimaryKey" ) == -1
+#set( $types = ["Byte", "Boolean", "Long", "Short", "Integer", "Double", "Float" ] )
+#if ( $aib.isClassType( $type ) == true )					
+## do nothing...                    	
+#elseif( $attribute.isFromEnumerator() == true )
+            ${businessObjectSetPrefix}( ${attribute.getType()}.get${attribute.getType()}(rs.getString( "${asArg}" ) ) );
+#elseif( $types.contains( $type ) )                              
+			${businessObjectSetPrefix}( assignSafe${type}( rs.getString( "${asArg}" ) ) );                             
+#elseif( $type.endsWith( ".imestamp" ) )                        
+			${businessObjectSetPrefix}( new com.cloudmigrate.framework.misc.FrameworkTimestamp( rs.getString( "${asArg} ) ) );                    
+#else    ## treat it as a String                    
+			${businessObjectSetPrefix}( rs.getString( "${asArg}" ) );                    	
+#end                    
+#end  ##if( $attribute.isPrimaryKeyObject() == true )
+#end## type checking
+#end## $attribute.isFinal() == false
+#end			
+#end
+
+#*
+ DAO SQL CRUD methods output
+ $sqlOutput
+*#
+#macro( sqlRelatedCallsOutput $sqlOutput )
+
+   // output Create SQL 
+   /**        
+    * Returns the Create SQL Related String
+    * @return String
+    * @Throwable exception
+    */
+    protected String getCreateSQL()
+    throws Exception
+    {
+#if ( $aib.usingStoredProcedure() == false )
+		String sql = "#sqlCreateCreateStoreProcedure( $classObject )";
+#else
+		String sql = "Create${classObject.getName()}";
+#end				
+    	return( sql );
+    }
+
+   // output Update SQL 
+   /**        
+    * Returns the Update SQL Related String
+    * @return String
+    * @Throwable exception
+    */
+    protected String getUpdateSQL() throws Exception
+    {
+#if ( $aib.usingStoredProcedure() == false )
+		String sql = "#sqlCreateStoreStoreProcedure( $classObject )";
+#else
+		String sql = "Store${classObject.getName()}";
+#end				
+    	return( sql );
+    }
+        
+    // output Load SQL 
+   /**        
+    * Returns the Load SQL Related String
+    * @return String
+    * @Throwable exception
+    */
+    protected String getLoadSQL()
+    throws Exception
+    {
+#if ( $aib.usingStoredProcedure() == false )
+		String sql = "#sqlCreateLoadStoreProcedure( $classObject )";
+#else
+		String sql = "Load${classObject.getName()}";
+#end				
+    	return( sql );
+    }        
+
+    // output Delete SQL 
+    /**        
+    * Returns the Delete SQL Related String
+    * @return String
+    * @Throwable exception
+    */
+    protected String getDeleteSQL()
+    throws Exception
+    {
+#if ( $aib.usingStoredProcedure() == false )
+		String sql = "#sqlCreateDeleteStoreProcedure( $classObject )";
+#else
+		String sql = "Remove${classObject.getName()}";
+#end				
+    	return( sql );
+    }
+
+#end
+
+#*
+ Outputs the representation for the primary key shell code found in the 
+ generated DAO.  If not using stored procedures, includes a call to generateUID()..
+ This macro recurses.
+  
+ $class				ClassObject  
+ $usingStoredProc	boolean
+*#
+#macro ( getPrimaryKeyShell $class $usingStoredProc )
+#set( $attributes = $class.getAllPrimaryKeysInHierarchy() )
+#set( $numAttributes = $attributes.size() )
+				${classObject.getName()}PrimaryKey key = new ${classObject.getName()}PrimaryKey( 
+#foreach( $attribute in $attributes )    
+#if( $usingStoredProc == false || $aib.autoGeneratePKs() == true )
+#set( $value = "generateUID()" )
+#else ## $usingStoredProc == true
+#set( $value = '"1"' )
+#end## $usingStoredProc == false   		    
+#if( $velocityCount < $numAttributes )
+#set( $suffix = "), " )
+#else
+#set( $suffix = ")" )
+#end## $velocityCount < $numAttributes
+##output
+						new $attribute.getType()( $value $suffix
+#end## foreach $attribute in $attributes
+					);
+#end
+
+
+#macro ( autoGeneratePKInCreate )
+#if ( $aib.autoGeneratePKs() == true )
+#set( $attributes = $classObject.getAllPrimaryKeysInHierarchy() )
+#set( $numAttributes = $attributes.size() )
+				${classObject.getName()}PrimaryKey key = new ${classObject.getName()}PrimaryKey( 
+#foreach( $attribute in $attributes ) 
+     
+#if( $velocityCount < $numAttributes )
+#set( $suffix = "), " )
+#else
+#set( $suffix = ")" )
+#end## $velocityCount < $numAttributes
+##output
+						new $attribute.getType()( com.cloudmigrate.framework.common.misc.Utility.generateUID() $suffix
+#end## foreach $attribute in $attributes
+					);
+#end##if ( $aib.autoGeneratePKs() == true )    
+
+#end

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping default-cascade="all" default-lazy="false"> 
+
+   	<class name="com.cloudmigrate.entity.BaseTransactionalEntity" table="baseTransactional" abstract="false">         
+
+		<id name="id" type="long" column="id">
+      		<generator class="native"/>    
+    	</id>
+
+		<property name="ownerId" column="ownerId" not-null="false"/>	
+		<property name="filePath" column="filePath" not-null="false"/>
+		<property name="dateTime" column="dateTime" not-null="false"/>
+		<property name="deleted" column="deleted" not-null="false"/>
+		<property name="cost" column="cost" not-null="false"/>
+		<property name="checkSum" column="checkSum" not-null="false"/>
+		<property name="scopeType" column="scopeType" type="com.cloudmigrate.entity.ScopeTypeEnumType" not-null="false"/>
+		<property name="name" column="name" not-null="false"/>	
+		<property name="description" column="description" not-null="false"/>
+
+		<joined-subclass name="com.cloudmigrate.entity.FrameworkPackage" table="techstack">
+			<key column="id"/>
+			<property name="shortName" column="shortName" not-null="false"/>
+			<property name="version" column="version" not-null="false"/>	
+			<property name="packageXML" column="packageXML" length="65535" not-null="false"/>		
+			<property name="iconUrl" column="iconUrl" not-null="false"/>	
+			<property name="appType" column="appType" not-null="false"/>	
+			<property name="infoPageUrl" column="infoPageUrl" not-null="false"/>	
+			<property name="releaseStatus" column="releaseStatus" not-null="false"/>	
+		</joined-subclass>
+		
+		<joined-subclass name="com.cloudmigrate.entity.GeneratedAppDetails" table="archiveApp">
+			<key column="id"/>
+			<property name="modelId" column="modelId" not-null="false"/>
+			<property name="packageId" column="packageId" not-null="false"/>		
+		</joined-subclass>
+			
+		<joined-subclass name="com.cloudmigrate.entity.LocalModel" table="model">
+			<key column="id"/>
+			<property name="originalFileName" column="originalFileName" not-null="false"/>
+		   	<property name="modelType" column="modelType" type="com.cloudmigrate.entity.ModelType"/> 		
+		</joined-subclass>
+	
+		
+	</class>
+			
+</hibernate-mapping>

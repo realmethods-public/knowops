@@ -1,0 +1,152 @@
+#if( ${containerObject} )
+#set( $appName = "${aib.getApplicationNameFormatted()} Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+<html>
+
+#jsHeadDeclaration()
+
+<script type="text/javascript">
+
+	function doPrint()
+	{
+		window.print();
+	}
+
+	function localAction( action )
+	{
+		jQuery.ajax(
+		{
+	  		url: action,
+	  		dataType: 'text',
+		}
+		).always(function( data ) 
+		{
+			document.getElementById("mainSection").innerHTML = data;
+	    });
+	}
+
+	$( document ).ready(function()
+	{
+		//========================================================
+		// initialize the jstree
+		//========================================================
+		$('#modelTreeId').jstree(
+		{
+			"core" : {
+				"multiple" : false,
+				"animation" : 0,
+				"themes" : { "stripes" : true }
+				}
+		});
+		
+		populateTree();
+			
+		$('#modelTreeId').on('changed.jstree', function (e, data) 
+		{
+			var name = $('#modelTreeId').jstree('get_selected');
+			var url = "/html/" + name + "ViewAllList.html";
+//			console.log( 'tree on changed for url ' + url );
+			
+			$( "#treeSelectPanelDivId" ).load(url);        	 
+		});
+	});
+	
+	function populateTree()
+	{
+		var content = '<ul>';
+
+#if( ${containerObject} )
+#set( $classesToUse = $continerObject.getChildrenClassObjects() )
+#else
+#set( $classesToUse = $aib.getClassesWithIdentity() )
+#end	
+#foreach( $class in $classesToUse )
+		content = content + '<li id="${class.getName()}"><font style="font-size:0.8em;">${class.getName()}</font></li>';
+#end ##foreach( $class in $classesToUse )
+
+		content = content + '</ul>';
+	
+		//=====================================================				
+		// apply the content to the tree div then refresh
+		//=====================================================			
+		$('#modelTreeId').jstree(true).settings.core.data = content;
+		$('#modelTreeId').jstree(true).refresh();
+	
+	}
+	
+	function localAction( action )
+	{
+		jQuery.ajax(
+		{
+	  		url: action,
+	  		dataType: 'text',
+		}
+		).always(function( data ) 
+		{
+			document.getElementById("homePageDivId").innerHTML = data;
+	    });
+	}
+		
+</script>
+
+<body>
+
+<div class="header">
+	<center>
+	<img align="center" src="${aib.getApplicationLogoURL()}" 
+			alt="app logo" border="0" style="width:64px;height:64px"/>
+	<br>
+	    <h4>${appName}</h4>
+	</center>
+</div>
+
+<div id="toolbar">
+
+	<img align="center" src="/img/printer.png" 
+				border="0" alt="print" onclick="print()" style="width:32px;height:32px"/>
+        
+	<img align="center" src="/img/logout.png" 
+			border="0" alt="logoff" onclick="localAction('logoff')" style="width:32px;height:32px"/>
+	
+</div>
+
+<div id="homePageDivId" style="width:100%;height:420px;vertical-align:top">
+
+<!-- home page div -->
+
+  <table>
+    <tr>
+	  <td style="width:100px;vertical-align:top;background:white;padding:8px;text-align:left;vertical-align:top">
+	    <div id="modelTreeId" style="height:380px;overflow-y:auto">
+	    </div>	    
+	  </td>
+	  <td style="width:100%;height:380px;padding:8px;background:white;text-align:left;vertical-align:top">
+		<div id="treeSelectPanelDivId" style="height:100%;background:white">
+		<h6>Select a tree option to display relevant options and data</h6>
+		</div>
+	  </td>
+	</tr>
+  </table>
+</div> <!-- homepageId -->
+
+<div class="footer">
+  <p>Copyright &copy; <script language="JavaScript" type="text/javascript">
+    document.write((new Date()).getFullYear());</script> $aib.getCompanyName()
+  </p>
+</div>
+
+<p>
+
+<div id="loadingDivId" style = "display:none;">
+	<!-- this is the default loading gif -->
+	<img src="/img/loader.gif">
+</div>
+
+</body>
+
+</body>
+</html>
+    
+       

@@ -1,0 +1,16 @@
+language: java
+
+git:
+  depth: false
+  quiet: true
+
+before_install:
+- echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+- git lfs pull
+
+script:  
+  # using maven to first package then to deploy the generated Lambda functions.  
+  # The key vars (USER_AWS_ACCESSKEY and USER_AWS_SECRETKEY) are read in as env vars for the current project.
+  # See https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings
+  - mvn package lambda:delete-lambda lambda:deploy-lambda -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY 
+  

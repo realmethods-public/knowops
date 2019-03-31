@@ -1,0 +1,80 @@
+#header()
+/**
+ * ${classObject.getName()} PrimaryKey class.
+ * 
+ * @author    $aib.getAuthor()
+ */
+// AIB : \#getPrimaryKeyClassDeclJS() 
+#getPrimaryKeyClassDeclJS()
+// ~AIB
+
+//************************************************************************
+// Public Methods
+//************************************************************************
+
+    /** 
+     * Default Constructor 
+     */
+    constructor() 
+    {
+#if( $classObject.hasParent() == true )
+		super();
+#end    
+    }     
+
+    /** 
+     * Constructor with all arguments relating to the primary key
+     */
+    ${classObject.getName()}PrimaryKey(    
+// AIB : \#getAllPrimaryKeyArgumentsForJS( \$classObject )
+#getAllPrimaryKeyArgumentsForJS( $classObject )
+// ~AIB
+    {
+#if( $classObject.hasParent() == true )
+		super();
+#end    
+// AIB : \#getKeyFieldAssignmentsForJS()
+#getKeyFieldAssignmentsForJS()
+// ~AIB 
+    }   
+
+    
+//************************************************************************
+// Access Methods
+//************************************************************************
+
+#foreach( $attribute in $classObject.getPrimaryKeyAttributes() )
+#set( $attribName = $attribute.getName() )
+	get ${attribName}() {
+    	return this._${attribName};
+  	}
+
+  	set ${attribName}(value) {
+    	this._${attribName} = value;
+  	}
+#end ##foreach( $attribute in $classObject.getAttributes() )
+
+    /**
+     * Retrieves the value(s) as a single List
+     * @return List
+     */
+    get keys()
+    {
+		// assign the attributes to the Collection back to the parent
+        var keys = new Array();
+        
+#foreach( $primaryKey in $classObject.getAllPrimaryKeysInHierarchy() )
+		keys.push( this._${primaryKey.getAsArgument()} );
+#end## foreach $primaryKey in $classObject.getAllPrimaryKeysInHierarchy()
+
+        return( keys );
+    }
+
+#if ( $classObject.hasParent() == false )
+	get firstKey()
+	{
+		return( this._${classObject.getAllPrimaryKeysInHierarchy().get(0)} );
+	}
+#end
+
+}

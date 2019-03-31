@@ -1,0 +1,35 @@
+#*
+ Default connection pool property output
+*#
+#macro ( defaultConnectionPoolOutput )
+#set( $connPoolProps = $aib.getConnectionPoolInputs() )	
+   <connectionpool 
+        name="TheDBConnection"
+        connectionClassName="$connPoolProps.getConnectionClass()"
+        user="$connPoolProps.getUserID()"
+        password="$connPoolProps.getPassword()"
+#if( $connPoolProps.isDataSource() == true )    
+        usingDataSourcePooling="$connPoolProps.isPoolable()"
+        JNDIDataSourceName="$connPoolProps}.getJNDIName()"                
+#else ## $connPoolProps.isDataSource() == false   
+        driver="$connPoolProps.getDriver()"
+        url="$connPoolProps.getURL()"	    
+#if( $connPoolProps.isPoolable() == true )	    
+        maxCapacity="$connPoolProps.getMaxCapacity()"
+        initialCapacity="$connPoolProps.getInitialCapacity()"
+        capacityIncrement="$connPoolProps.getCapacityIncrement()"
+        allowShrinking="$connPoolProps.allowShrinking()"   
+        maxConnectionAttempts="$connPoolProps.getMaxConnectionAttempts()"
+	    waitUntilAvailable="$connPoolProps.waitUntilAvailable()"				        
+    />
+	
+#end## $connPoolProps.isPoolable() == true	                
+#end## $connPoolProps.isDataSource() == true
+#end 
+
+#macro( esbProperties )
+  <esb-params
+      config-files="mule-framework-config.xml,mule-${aib.getApplicationName()}-config.xml"
+      endPointURL="${aib.getSOAPServerURL()}"
+  />
+#end

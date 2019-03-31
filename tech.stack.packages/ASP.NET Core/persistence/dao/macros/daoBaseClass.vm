@@ -1,0 +1,10 @@
+#macro( generateBaseDAO )
+abstract public class BaseDAO 
+##if ( $aib.usingJDO() == true )
+#extends FrameworkJDODAO
+##else
+extends FrameworkHibernateDAO
+##end
+{
+}
+#end

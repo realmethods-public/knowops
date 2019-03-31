@@ -1,0 +1,16 @@
+#*
+ Outputs a formatted representation of the
+ business methods declarations for the provided
+ ClassObject.
+
+ $rootName		String
+ $class			ClassObject in use
+ $businessMethods Collection - required for the purpose of recursion
+ $superTypes	Collection - required for the purpose of recursion
+*#
+#macro( getBusinessMethodDeclarations $class $businessMethods $superTypes )
+
+#foreach( $businessMethod in $businessMethods )
+#getAsInterfaceDeclaration( $businessMethod );
+#end## foreach $businessMethod in $businessMethods
+#end 

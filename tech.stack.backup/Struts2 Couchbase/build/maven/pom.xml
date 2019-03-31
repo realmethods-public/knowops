@@ -1,0 +1,62 @@
+#xmlHeader()
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+	<modelVersion>4.0.0</modelVersion>  
+  
+	<groupId>${aib.getRootPackageName(true)}</groupId>  
+	<artifactId>${aib.getApplicationName().replaceAll(" ",".")}</artifactId>  
+	<version>${aib.getVersion()}</version>  
+	<packaging>war</packaging>  
+    
+	<name>${aib.getApplicationName()}</name>    
+  
+#repositories()  
+
+	<properties>
+#standardProperties()
+#strutsProperties()
+	</properties>
+
+	<build>
+  
+		<plugins>
+
+#standardMavenWarPlugin()      
+#eclipseJettyMavenPluginDecl()
+#testPluginDecl()
+#jfrogPluginDecl()
+#herokuPluginDecl()	
+#set( $exclusion = "" )
+#mavenCompilerPluginDecl( $exclusion )
+#apacheMavenAntRunPluginDecl( $exclusion )
+	  
+		</plugins>
+
+	</build>
+   
+	<dependencies>  
+	
+#googleGsonDependencies()
+#memcachedDBDependencies()
+#couchbaseDependencies()
+#mySQLDependencies()
+#jalopyDependencies()
+#junitDependencies()
+#strutsDependencies()
+#velocityDependencies()
+#apacheCommonDependencies()
+#mavenInvokerDependencies()
+#w3cDOMDependencies()
+#jeeDependencies()    
+#log4jDependencies()
+#jbossJavaxTransactionDependencies()
+
+	</dependencies>  
+ 
+</project>  

@@ -1,0 +1,9 @@
+#macro( getEnumValues )
+#set( $attributes = $classObject.getAttributesOrdered(false) )
+        Map values = new HashMap();
+#foreach( $attribute in $attributes )
+#set( $arg = ${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})} )
+        values.put( "${attribute.getAsArgument()}", $arg );	
+#end    
+        return( values );
+#end

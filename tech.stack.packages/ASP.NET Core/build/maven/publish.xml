@@ -1,0 +1,21 @@
+#xmlHeader()
+	
+<project name="nuget-project" default="all" basedir=".">
+
+<target name="all" depends="nuget"/>        
+
+<property environment="os"/>
+                    
+<!-- 
+****	Package the files and push (publish) to the provided NuGet repository
+-->
+	<target name="nuget" 
+			description="nuget the package to push to the repository...">	
+		<exec executable="cmd">
+	    	<arg value="/c"/>
+	    	<arg value="publish.bat"/>
+	    	<arg value="-p"/>
+	  	</exec>
+	</target>
+    
+</project>

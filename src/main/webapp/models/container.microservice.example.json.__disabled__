@@ -1,0 +1,60 @@
+{ "containers" : 
+  [ 
+    {"name":"OrderSystem", "host":"localhost", "port":"4567",
+      "classes":
+      [
+        {
+          "name":"OrderItem",
+          "attributes":
+          [
+              {"name":"name","type":"String"},
+              {"name":"product","type":"Product"}
+          ]
+        },
+        {
+          "name":"Product",
+          "attributes":
+          [
+              {"name":"name","type":"String"},
+              {"name":"sku","type":"String"},
+              {"name":"price","type":"double"},
+              {"name":"category","type":"Category"}              
+          ]
+        },
+        {
+          "name":"Category",
+          "attributes":
+          [
+              {"name":"categoryId","type":"String","primarykey":"true"},
+              {"name":"name","type":"String"}
+          ]
+        }
+        
+      ]
+    },
+    {"name":"ShoppingCart", "host":"localhost", "port":"4568",
+      "classes":
+      [
+        {
+          "name":"Cart",
+          "attributes":
+          [
+              {"name":"capacity","type":"String"}
+          ],
+          "associations":
+          [
+          	  {"name":"products","type":"Product","multiplicity":"OneToMany"}
+          ]
+        },
+        {
+          "name":"Product",
+          "attributes":
+          [
+              {"name":"name","type":"String"},
+              {"name":"price","type":"Double"}
+          ]
+        }
+      ]
+    } 
+  ]
+}

@@ -1,0 +1,12 @@
+#*
+Logic to determine if versioning should be applied or not
+*#
+#macro ( versioningOutput )
+#if ( $aib.hasIdentity( $classObject ) == true ) 
+#if( $classObject.canBeVersioned() == true )
+## output the applyVersiong call as true
+		applyVersioning( true );
+#else
+## output the applyVersion call as false
+		applyVersioning( false );
+#end#end#end

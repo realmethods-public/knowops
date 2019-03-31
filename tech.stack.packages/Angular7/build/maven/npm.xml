@@ -1,0 +1,20 @@
+#xmlHeader()
+	
+<project name="npm-angular-project" default="all" basedir=".">
+
+<target name="all" depends="nuget"/>        
+
+<property environment="os"/>
+                    
+<!-- 
+****	Package the files and push (publish) to the provided NuGet repository
+-->
+	<target name="npm" 
+			description="nuget the package to push to the repository...">	
+	    <exec executable="bash" logError="true" failonerror="false" failifexecutionfails="false">
+	      <arg value="--login"/>
+	      <arg value="./npm.sh"/>
+	    </exec>
+	</target>
+    
+</project>

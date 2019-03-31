@@ -1,0 +1,245 @@
+#macro(delegateCRUDMethodsForAxis)
+	
+#if ( $classObject.isAbstract() == false )
+
+   /**
+	* ${classObject.getName()} Business Delegate Factory Method
+	*
+	* Returns a singleton instance of ${classObject.getName()}BusinessDelegate().
+	* All methods are expected to be self-sufficient.
+	*
+	* @return 	${classObject.getName()}BusinessDelegate
+	*/
+	static public ${classObject.getName()}BusinessDelegate get${classObject.getName()}Instance()
+	{
+	    if ( singleton == null )
+	    {
+	    	singleton = new ${classObject.getName()}BusinessDelegate();
+	    }
+	    
+	    return( singleton );
+	}
+
+    /**
+     * Method to retrieve the ${name} via an ${name}PrimaryKey.
+     * @param 	key
+     * @return 	I${name}
+     * @exception ProcessingException - Thrown if processing any related problems
+     * @exception IllegalArgumentException 
+     */
+    public I${name} get${name}( ${name}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException        
+    {
+		preGetBO( key );
+		
+        if ( key == null )
+        {
+            String errMsg = "${name}BusinessDelegate:get${name}( ${name}PrimaryKey key ) - null key provided." ;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+    
+        I${name} returnBO = null;
+        
+        try
+        {
+            Collection parameters = new ArrayList();
+            parameters.add( key );
+            
+            // make the SOAP call
+            returnBO  = (I${name})send( "find${name}", parameters, "${name}Service" );
+            
+            if ( returnBO == null )
+            {
+                throw new Exception( "${name}BusinessDelegate:get${name}(..) - Could not find ${name} by ${name}PrimaryKey" );
+            }
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = " ${name}BusinessDelegate:get${name}(..) - Could not find ${name} by ${name}PrimaryKey due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+
+		returnBO = (I${name})postGetBO( returnBO );
+		
+        return returnBO;
+    }
+
+    /**
+     * Method to retrieve a collection of all I${name}s
+     *
+     * @return      ${name}[] Null if there are none found
+     * @exception ProcessingException Thrown if any problems
+     */
+    public ${name}[] getAll${name}() 
+    throws ProcessingException
+    {
+	    preGetAllBOs();
+	    
+        // find the collection of ${name}s for the provided id
+        ${name}[] array = null;
+        
+        try
+        {           
+            // make the SOAP call
+            array = (${name} [])send( "findAll${name}", null, "${name}Service" );
+            
+        }        
+        catch (Throwable exc)
+        {
+            String errMsg = " ${name}BusinessDelegate:getAll${name}(..) - Could not find all ${name}'s due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        array = (${classObject.getName()}[])postGetAllBOs( array );
+        
+        return array;
+    }
+
+
+   /**
+    * Creates the provided BO.
+    * @param		businessObject 	I${classObject.getName()}
+    * @return       I${classObject.getName()}
+    * @exception    ProcessingException
+    * @exception	IllegalArgumentException
+    */
+	public I${classObject.getName()} create${classObject.getName()}( I${classObject.getName()} businessObject )
+    throws ProcessingException, IllegalArgumentException
+    {
+    	businessObject = (I${classObject.getName()})preCreateBO( businessObject );
+    	
+		if ( businessObject == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:create${classObject.getName()}( I${classObject.getName()} businessObject ) - null businessObject provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        try
+        {
+            Collection parameters = new ArrayList();
+            parameters.add( businessObject );
+            
+            // make the SOAP call
+            businessObject = (I${name})send( "create", parameters, "${name}Service" ) );
+            
+            if ( businessObject == null )
+            {
+                throw new Exception( "${name}BusinessDelegate:create${name}(..) - Could not create ${name} - returned value is empty. " );
+            }        
+        }        
+        catch (Throwable exc)
+        {
+            String errMsg = "${name}BusinessDelegate:create(..) - Could not create ${name} due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );   
+            throw new ProcessingException( errMsg );   
+        }
+       
+        // Since versioning actually modifies the version attribute during the
+        // EJB transaction, what is returned doesn't have it's versionID set 
+        // correctly.  The safest action is to get it again...
+        if ( businessObject.isVersioned() )
+            businessObject = get${name}( businessObject.get${name}PrimaryKey() );
+
+		businessObject = (I${classObject.getName()})postCreateBO( businessObject );
+
+        return ( businessObject );
+    }
+        
+   /**
+    * Saves the underlying BO.
+    * @param		businessObject		I${classObject.getName()}
+    * @return       what was just saved
+    * @exception    ProcessingException
+    * @exception  	IllegalArgumentException
+    */
+    public I${classObject.getName()} save${classObject.getName()}( I${classObject.getName()} businessObject ) 
+    throws ProcessingException, IllegalArgumentException
+    {
+    	businessObject = (I${classObject.getName()})preSaveBO( businessObject );
+    	
+		if ( businessObject == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:save${classObject.getName()}( I${classObject.getName()} businessObject ) - null businessObject provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        try
+        {
+            // create the FrameworkAxisSOAPParameter parameter
+            FrameworkAxisSOAPParameter parameter = new FrameworkAxisSOAPParameter( "businessObject", businessObject, new QName("urn:${name}Service", "${name}") );
+            
+            Collection parameters = new ArrayList();
+            parameters.add( businessObject );
+            
+            // make the SOAP call
+            businessObject  = (I${name})send( "save", parameters, "${name}Service" );
+            
+            if ( businessObject == null )
+            {
+                throw new Exception( " ${name}BusinessDelegate:save${name}(..) - Could not save ${name} " );
+            }
+        }        
+        catch (Throwable exc)
+        {
+            String errMsg = "${name}BusinessDelegate:save(..) - Could not save ${name} due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );   
+            throw new ProcessingException( errMsg );   
+        }
+       
+        // Since versioning actually modifies the version attribute during the
+        // EJB transaction, what is returned doesn't have it's versionID set 
+        // correctly.  The safest action is to get it from the again...
+        if ( businessObject.isVersioned() )
+            businessObject = get${name}( businessObject.get${name}PrimaryKey() );
+
+        // assign back internally 	
+        setFrameworkBusinessObject( businessObject );
+        
+        businessObject = (I${classObject.getName()})postSaveBO( businessObject );
+
+        return ( businessObject );
+    }
+   
+   /**
+    * Deletes the associatied value object using the provided primary key.
+    * @param		key 	${classObject.getName()}PrimaryKey    
+    * @exception 	ProcessingException
+    */
+    public void delete( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException
+    {    	
+    	preDeleteBO( key );
+    	
+		if ( key == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:delete() - null key provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        try
+        {
+            ArrayList parameters = new ArrayList();
+            parameters.add( key );
+            
+            // make the SOAP call
+            send( "delete", parameters, "${name}Service" );
+        }        
+        catch (Throwable exc)
+        {
+            String errMsg = "${name}BusinessDelegate:delete(..) - Could not delete ${name} by ${name} key due to - "  + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        postDeleteKeyBO( key );
+        
+        return;
+    }
+#end ##if ( $classObject.isAbstract() == false )
+#end

@@ -1,0 +1,40 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="application">
+	<option name="name" value="demo" required="true" 
+		description="app display name" type="input"/>
+	<option name="description" value="" required="false"
+		description="app description" type="textarea"/>
+	<option name="author" value="" required="false"
+		description="app's author" type="input"/>
+	<option value="" required="" name="corporate logo URL"
+		description="link to company logo" type="input"/>
+	<option value="./img/turnstone.biologics.png" required="false" name="application logo URL"
+		description="link to app logo" type="input"/>
+	<option value="Turnstone Biologics" required="true" modifiable="false" name="company name"
+		description="your company name" type="input"/>
+	<option value="1.0.0" required="true" name="version"
+		description="app version" type="input"/>		
+	<option value="" required="true" name="email"
+		description="email address" type="input"/>		
+	<option value="" required="true" name="url"
+		description="application url" type="input"/>		
+	<option value="" required="true" name="license"
+		description="license type" type="input"/>		
+
+</options>
+
+<options name="Heroku">
+	<option name="auto deploy"  value="true" required="true" description="auto deploy to heroku" type="boolean"/>	
+	<option name="app name" value="demo" required="true" description="heroku app name" type="input"/>
+</options>

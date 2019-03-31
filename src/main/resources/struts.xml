@@ -1,0 +1,498 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+	<include file="struts-default.xml"></include>
+	
+<!-- =============== Constants ==================== -->
+
+    <!-- Some or all of these can be flipped to true for debugging -->
+    <constant name="struts.i18n.reload" value="true" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.custom.i18n.resources" value="globalMessages,jsonAPIMessages" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+    <constant name="struts.serve.static" value="true" />
+    <constant name="struts.serve.static.browserCache" value="false" />   
+    <constant name="struts.codebehind.defaultPackage" value="action" /> 	
+    <constant name="struts.convention.default.parent.package" value="json-default"/>
+
+ 	<!-- file upload related constants -->
+	<constant name="struts.multipart.maxSize" value="1000000" />
+	<constant name="struts.multipart.parser" value="jakarta" />
+
+<!-- =============== Global Results ==================== -->
+
+<!-- =============== Default Package ==================== -->
+
+    <package name="default" extends="struts-default, json-default" namespace="/" >
+       <interceptors>
+          <interceptor-stack name="interceptorStack">          
+            <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="i18n"/>                
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+				</interceptor-ref>
+				<interceptor-ref name="json">
+    				<param name="enableSMD">true</param>
+				</interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+          </interceptor-stack>
+
+            <interceptor-stack name="myParamsPrepareParamsStack">
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+	            </interceptor-ref>
+                <interceptor-ref name="servletConfig"/>
+				<interceptor-ref name="i18n"/>                
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+	            </interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+            </interceptor-stack>
+        </interceptors>
+
+
+        <default-interceptor-ref name="interceptorStack"/>          
+
+        <action name="" class="com.cloudmigrate.server.action.StartupAction" method="noOp">
+	    	<result name="success">./html/realmethods.html</result>
+        </action>
+
+        <action name="logoff" class="com.cloudmigrate.server.action.StartupAction" method="logoff">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+			<result name="licenseExpired">licenseExpired.html</result>
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+
+        </action>
+
+        <action name="logon" class="com.cloudmigrate.server.action.StartupAction" method="logon">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+			<result name="licenseExpired">licenseExpired.html</result>
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+        </action>
+
+        <action name="sendEmail" class="com.cloudmigrate.server.action.EmailAction" method="sendEmail">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="sendPassword" class="com.cloudmigrate.server.action.UserAction" method="sendPassword">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="userInfo" class="com.cloudmigrate.server.action.UserAction" method="userInfo">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="generateToken" class="com.cloudmigrate.server.action.UserAction" method="generateToken">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="saveUserOptions" class="com.cloudmigrate.server.action.UserAction" method="save">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="registerUser" class="com.cloudmigrate.server.action.UserAction" method="register">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  
+        </action>
+
+        <action name="resetPassword" class="com.cloudmigrate.server.action.UserAction" method="resetPassword">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  	    	
+        </action>
+
+        <action name="service" class="com.cloudmigrate.server.action.api.GoFrameworkAPIAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>    
+        </action> 
+
+       	<action name="checkStatus" class="com.cloudmigrate.server.action.BaseStrutsAction" method="checkStatus">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">stagingContainer</param>
+	    	</result>    
+        </action> 
+
+		<action name="stages" class="com.cloudmigrate.server.action.BaseStrutsAction" method="stages">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">stagingContainer</param>
+	    	</result>    
+        </action> 
+
+        <action name="loadGeneratedAppDetails" class="com.cloudmigrate.server.action.GenerateAppAction" method="loadGeneratedAppDetails">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">generatedAppDetails</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action> 
+                
+        <action name="generateApp" class="com.cloudmigrate.server.action.GenerateAppAction" method="exec">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">generateAppStats</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+        </action> 
+
+        <action name="findPackage" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="findPackage">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">package</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action> 
+
+
+        <action name="loadAllPackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadAllPackages">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">frameworkPackages</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action> 
+
+        <action name="loadAllPackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadAllPackages">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">frameworkPackages</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action> 
+
+        <action name="retrievePackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="retrievePackages">
+			<result name="success" type="stream">
+		        <param name="contentType">text/plain</param>
+		        <param name="inputName">fileStream</param>
+	    	    <param name="bufferSize">1024</param>
+	    	</result>    
+        </action> 
+
+        <action name="uploadPackage" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="uploadPackage">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+        </action> 
+        
+        <action name="uploadFile" class="com.cloudmigrate.server.action.FileHandlerAction" method="uploadFile">
+			<result name="success" type="stream">
+		        <param name="contentType">text/plain</param>
+		        <param name="inputName">fileStream</param>
+	    	    <param name="bufferSize">1024</param>
+	    	    <param name="contentDisposition">attachment;filename=\"${uploadedFileName}\"</param>
+	    	</result>    
+        </action> 
+
+        <action name="retrieveOptions" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="retrieveOptions">
+			<result name="success" type="stream">
+		        <param name="contentType">text/plain</param>
+		        <param name="inputName">fileStream</param>
+	    	    <param name="bufferSize">1024</param>
+	    	</result>    
+		</action>
+
+        <action name="loadDirMappings" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadDirMappings">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">dirMappings</param>
+			</result>
+		</action>
+				
+        <action name="uploadSqlScript" class="com.cloudmigrate.server.action.model.SqlScriptHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="uploadPojo" class="com.cloudmigrate.server.action.model.PojoHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="uploadXMI" class="com.cloudmigrate.server.action.model.XMIHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="uploadJson" class="com.cloudmigrate.server.action.model.JsonHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="uploadEMF" class="com.cloudmigrate.server.action.model.EMFHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findUMLModel" class="com.cloudmigrate.server.action.model.XMIHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findECOREModel" class="com.cloudmigrate.server.action.model.EMFHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findPOJOModel" class="com.cloudmigrate.server.action.model.PojoHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findSQL_SCRIPTModel" class="com.cloudmigrate.server.action.model.SqlScriptHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findJSONModel" class="com.cloudmigrate.server.action.model.JsonHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="loadAllModels" class="com.cloudmigrate.server.action.model.ModelFileHandlerAction" method="loadAllModels">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">sharedModels</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action>
+        
+        <action name="reverseEngineer" class="com.cloudmigrate.server.action.model.DBSchemaHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="determineSchema" class="com.cloudmigrate.server.action.model.DBSchemaHandlerAction" method="determineSchema">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="excludeProperties">schemaAsJson,id</param>
+	    	    <param name="root">dbSchema</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+         
+    </package>	
+
+                
+</struts>

@@ -1,0 +1,33 @@
+#macro ( getCopyString $useAssociations )
+#set( $attributes = $classObject.getAttributesOrdered( true ) )
+#foreach( $attribute in $attributes )       
+##if ( $attribute.isPrimaryKey() == false )
+#if( $attribute.isFromAssociation() == $useAssociations )        
+## delegate to output the copy() contribution of the current attribute
+#attributeCopyString( $attribute )     						
+#end##if( $attribute.isFromAssociation() == $useAssociations )
+##end ##if ( $attribute.isPrimaryKey() == false )
+#end## foreach $key in $attributes.keySet()
+#end
+
+#macro ( getCopyIntoString $useAssociations )
+#set( $attributes = $classObject.getAttributesOrdered( true ) )
+#foreach( $attribute in $attributes )       
+##if ( $attribute.isPrimaryKey() == false )
+##if( $attribute.isFromAssociation() == $useAssociations )        
+## delegate to output the copy() contribution of the current attribute
+#attributeCopyIntoString( $attribute )     						
+##end##if( $attribute.isFromAssociation() == $useAssociations )
+##end ##if ( $attribute.isPrimaryKey() == false )
+#end## foreach $key in $attributes.keySet()
+#end   
+
+#macro ( getShallowCopyString )
+#set( $attributes = $classObject.getAttributesOrdered( true ) )
+#foreach( $attribute in $attributes )       
+if( $attribute.isFromAssociation() == false || $attribute.isFromEnumerator() == true || $attribute.isComposite() == true )        
+## delegate to output the copy() contribution of the current attribute
+#attributeCopyString( $attribute )     						
+##end##if( $attribute.isFromAssociation() == false || $attribute.isFromEnumerator() == true )
+#end## foreach( $attribute in $attributes )       
+#end

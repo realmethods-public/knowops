@@ -1,0 +1,13 @@
+#propertiesHeader()
+{
+	"main": "functions_awslambda.js",
+	"name": "${aib.getParam('application.name')}",
+	"version": "${aib.getParam('application.app version')}",
+#if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )	
+	  "dependencies": {
+		    "aws-sdk": "^2.6.7",
+		    "uuid": "^2.0.3"
+		  },	
+#end ##if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )
+	"license": "MIT"	
+}

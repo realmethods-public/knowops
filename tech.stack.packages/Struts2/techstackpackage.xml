@@ -1,0 +1,21 @@
+<tech-stack-package 
+    name="Struts2"
+    shortName="Struts2"
+    description="Struts2 tech stack including js (JQuery) frontend, java (Struts2) backend, and an ORM (hibernate) persistence layer" 
+    icon-url="./img/struts2.png"
+ 	info-page-url="http://www.realmethods.com/infopages/struts-info-page.html"
+    version="1.4"
+    app-type="webapp"
+    release-status="production">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="javascript"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="jquery/bootstrap" description="front end frameworks" app-layer="presentation"/>
+		<tech-stack-component name="strut2s" description="Strut2 MVC web framework" app-layer="business"/>
+		<tech-stack-component name="hibernate" description="ORM framework for object persistence" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>			
+	</tech-stack>
+</tech-stack-package>

@@ -1,0 +1,32 @@
+<options name="jfrog">
+	<option name="inUse"  value="false" required="true" description="using jFrog" type="boolean"/>
+
+<!-- publisher -->	
+	<option name="serverUrl" value="" 
+		required="true" description="context Url" placeHolder="https://localhost:8081/artifactory" type="input"/>		
+	<option name="userName" value="" required="true" description="" type="input"/>
+	<option name="password" value="" required="true" description="" type="password"/>	
+	<option name="apiKey" value="" required="false" description="use instead of password" type="input"/>
+	<option name="excludePatterns" value="" required="false" description="file exclusion patterns, eg: *.jar" type="input"/>	
+	<option name="pluginRepoKey" value="remote-maven-repo" required="false" description="plugin repository key" type="input"/>	
+
+<!-- artifactory -->
+	<option name="includeEnvVars"  value="true" required="true" description="include environment vars for build" type="boolean"/>
+	<option name="envVarsExcludePatterns" value="*password*,*secret*,*key*,*token*,*passphrase*" required="true" description="" type="input"/>
+	<option name="timeoutInSeconds" value="60" required="true" description="" type="input"/>
+
+<!--  build -->
+	<option name="buildName" value="" placeHolder="if empty, app name is used" required="true" description="build name" type="input"/>
+	<option name="buildNumber" value="001" required="true" description="DRONE_BUILD_NUMBER|TRAVIS_BUILD_NUMBER|CI_BUILD_NUMBER|BUILD_NUMBER|'333'" type="input"/>	
+	<option name="buildUrl" value="" required="false" placeHolder="Repository URL of source" type="input"/>
+	<option name="publishRepoKey" value="local-maven-repo" required="true" description="repo key to publish build artifacts" type="input"/>
+	<option name="snapshotRepoKey" value="libs-snapshot-local" required="true" description="snapshot repository key" type="input"/>	
+
+<!--  license -->
+	<option name="licenseAutoDiscover"  value="true" required="true" description="include environment vars for build" type="boolean"/>
+	<option name="licenseIncludePublishedArtifacts"  value="false" required="true" description="include environment vars for build" type="boolean"/>
+	<option name="licenseRunChecks"  value="true" required="true" description="include environment vars for build" type="boolean"/>
+	<option name="licenseScopes" value="compile,runtime" required="false" description="biuld scope to validate license to" type="input"/>
+	<option name="violationRecipients" value="" required="false" description="email address to send violation notifications to" type="input"/>
+</options>
+

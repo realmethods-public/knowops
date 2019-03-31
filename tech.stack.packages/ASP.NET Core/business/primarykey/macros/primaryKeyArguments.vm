@@ -1,0 +1,28 @@
+#*
+ Outputs a representation of the primary keys, formatted as arguments. 
+ This macro recurses
+ 
+ $class			ClassObject
+ $usePKType		boolean
+*#
+#macro ( getAllPrimaryKeyArgumentsForDotNet $class $usePKType )
+#set( $attributes = $class.getAllPrimaryKeysInHierarchy() )
+#set( $numAttributes = $attributes.size() )	
+#foreach( $attribute in $attributes )    
+#if( $attribute.isFromUserModel() )
+#if( $usePKType == true )
+#set( $type = $Utils.mapTypeToDotNetType( $attribute.getType() ) )
+#else ## $usePKType == false
+#set( $type = "object" )
+#end## $usePKType == true
+#if( $velocityCount < $numAttributes )
+#set( $suffix = ", " )
+#else
+#set( $suffix = "" )
+#end## $velocityCount < $numAttributes 
+## output
+		$type $attribute.getAsArgument() $suffix			
+#end## $attribute.isFromUserModel() && $attribute.isPrimaryKey()
+#end## foreach $key in $keys	    
+#end
+

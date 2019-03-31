@@ -1,0 +1,16 @@
+#macro( getBusinessDelegateInterfaceDecl ) 
+public interface I${classObject.getName()}BusinessDelegate 
+extends IBaseBusinessDelegate #getBusinessDelegateInterfaceParentName()
+{
+#end
+
+
+#macro ( getBusinessDelegateInterfaceParentName )
+#if( $classObject.getInterfaces().size() > 0 )
+#set( $noPrefix = "" )
+#set( $noSuffix = "" )
+#set( $interfaces = "${classObject.getInterfacesAsString( $noPrefix, $noSuffix )}" )
+, $interfaces
+#else ## $classObject.getInterfaces().size() == 0
+#end## $classObject.getInterfaces().size() > 0
+#end

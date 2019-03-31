@@ -1,0 +1,46 @@
+#macro( header )
+/*******************************************************************************
+  ${aib.getParam("application.company name")} Confidential
+  
+  2018 ${aib.getParam("application.company name")}
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        ${aib.getParam("application.company name")} - General Release
+ ******************************************************************************/
+#end
+
+
+#macro( xmlHeader )
+<!--
+  ${aib.getParam("application.company name")} Confidential
+  
+  2018 ${aib.getParam("application.company name")}, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        ${aib.getParam("application.company name")} - General Release
+-->
+#end
+
+
+#macro( propertiesHeader )
+#------------------------------------------------------------------------------
+# ${aib.getParam("application.company name")} Confidential
+# 2018 ${aib.getParam("application.company name")}
+# All Rights Reserved.
+# 
+# This file is subject to the terms and conditions defined in
+# file 'license.txt', which is part of this source code package.
+#  
+# Contributors :
+#       ${aib.getParam("application.company name")} - General Release
+#-------------------------------------------------------------------------------
+#end
+

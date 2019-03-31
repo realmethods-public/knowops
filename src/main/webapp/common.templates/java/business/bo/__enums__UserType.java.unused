@@ -1,0 +1,40 @@
+#header()
+package ${aib.getRootPackageName(true)}.#getBOPackageName();
+#set( $className = $classObject.getName() )
+#set( $commonType = $classObject.getCommonType() )
+
+import java.util.*;
+
+import org.hibernate.HibernateException;
+import org.hibernate.usertype.UserType;
+
+/**
+ * ${className} enumerator class.  
+ * 
+ * Enumerated types are handled on behalf of Hiberate as VARCHARs.  The necessary
+ * methods that implement Hibernat's UserType interface assume that Enumerated
+ * types contain one or more values, each named uniquely and declared (modeled) with
+ * order, although the order is assumed.
+ * 
+// AIB : \#enumDocumentation()
+#enumDocumentation()
+// ~AIB
+ * @author $aib.getAuthor()
+ */
+public class ${className}UserType
+    extends FrameworkHibernateEnumerator<${aib.getRootPackageName(true)}.#getBOPackageName().${className}>
+    implements java.io.Serializable
+{
+//************************************************************************
+// Constructors
+//************************************************************************
+    /**
+     * Default Constructor - for reflection purposes only
+     */
+    public ${className}UserType()
+    {
+        super(${aib.getRootPackageName(true)}.#getBOPackageName().${className}.class);
+    }
+}
+
+

@@ -1,0 +1,92 @@
+#macro( delegateMuleWebServiceHelpers )
+#if ( $aib.usingEmbeddedESB() )
+   /** 
+    * Helper method used to make a Web Service call using the Mule ESB, but
+    * without expecting a return
+    */
+    public void dispatch( String methodName, java.util.Collection args, String serviceName, java.util.Properties props )
+    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    {
+        try
+        {
+            Object [] payLoad = null;
+            
+            if ( args != null )
+                payLoad = args.toArray( payLoad );
+                
+            org.mule.extras.client.MuleClient client = new org.mule.extras.client.MuleClient();
+            client.dispatch(buildEndPointURL( serviceName, methodName ), payLoad, null);
+        }
+        catch( org.mule.umo.UMOException exc )
+        {
+            throw new com.cloudmigrate.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );
+        }
+    }
+
+   /** 
+    * helper method used to make a Web Service call using the Mule ESB, but waits
+    * for a return
+    */
+    public Object send( String methodName, java.util.Collection args, String serviceName )
+    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    {
+    	return( send( methodName, args, serviceName, null ) );
+	}    
+   /** 
+    * helper method used to make a Web Service call using the Mule ESB, but waits
+    * for a return
+    */
+    public Object send( String methodName, java.util.Collection args, String serviceName, java.util.Properties props )
+    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    {
+        Object returnValue = null;
+        
+        try
+        {
+        	Object [] payLoad = null;
+            
+            if ( args != null )
+                payLoad = args.toArray( payLoad );
+        
+            org.mule.extras.client.MuleClient client = new org.mule.extras.client.MuleClient();
+            org.mule.umo.UMOMessage result = client.send( buildEndPointURL( serviceName, methodName ), payLoad, props );
+            returnValue = result.getPayload();
+        }
+        catch( org.mule.umo.UMOException exc )
+        {
+            throw new com.cloudmigrate.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );        
+        }
+                     
+    	return( returnValue );   
+    }
+    
+    /**
+     * Helper method used to build the endpoint url
+     */
+    private String buildEndPointURL( String serviceName, String methodName )
+    {
+        if ( serviceName == null )
+            logErrorMessage( "BaseBusinessDelegate.buildEndPointURL() - Null serviceName argument" );
+            
+        if ( methodName == null )
+            logErrorMessage( "BaseBusinessDelegate.buildEndPointURL() - Null methodName argument" );
+        
+        StringBuffer buf = new StringBuffer( "axis:" );
+        buf.append( getEndPointURL() );
+        buf.append( "/" );
+        buf.append( "?method=" );
+        buf.append( methodName );
+        
+        return( buf.toString() );
+    }
+    
+    /**
+     * 
+     */
+    protected String getEndPointURL()
+    {
+        return( "$aib.getSOAPParameters().getContextProviderURL()" );
+    }
+        
+#end ##if ( $aib.usingEmbeddedESB() )
+#end

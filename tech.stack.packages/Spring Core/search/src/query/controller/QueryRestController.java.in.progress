@@ -1,0 +1,246 @@
+#header()
+package ${aib.getRootPackageName()}.#getRestControllerPackageName();
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.logging.*;
+
+import com.google.gson.*;
+
+import org.apache.http.impl.client.*;
+import org.apache.http.client.methods.*;
+import org.apache.http.entity.*;
+import org.apache.http.util.*;
+import org.apache.http.*;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.ModelMap;
+
+import ${aib.getRootPackageName()}.exception.*;
+import ${aib.getRootPackageName()}.#getDAOPackageName().*;
+
+/** 
+ * Query Rest Controller
+ *
+ * @author 
+ */
+@RestController
+public class QueryRestController
+{
+	@RequestMapping("/query")
+    ModelAndView queryInit() 
+	{
+        return new ModelAndView("query", "message", "sample message" );
+    }
+
+	@RequestMapping("/search")
+    ModelAndView search( @RequestParam(value="keywords", required=true) String theKeyWords,
+    						@RequestParam(value="start", required=false, defaultValue="0") String start) 
+	{
+		this.keywords = theKeyWords;
+		this.start = start;
+        return new ModelAndView("searchResults", handleSearch() );
+    }
+	
+	protected ModelMap handleSearch()
+	{
+		String results 		= null;
+		ModelMap modelMap 	= null;
+		
+		try
+		{
+			results		= httpGet();
+			modelMap 	= mapResultsToModel( results );
+		}
+		catch( IOException exc )
+		{
+			FrameworkDefaultLogger.severe("QueryRestController:hanleSearch() - " + exc.getMessage() );
+		}
+		
+		return( modelMap );
+		
+	}
+	
+	protected JsonObject buildSearchAsAsJson()
+	{
+			
+		String indexName 		= "${aib.getParam( "couchbase.full text search index" )}";
+		String size 			= "${aib.getParam( "couchbase.search size" )}";
+		String explain  		= "${aib.getParam( "couchbase.search explain" )}"; 
+		String fields 			= "${aib.getParam( "couchbase.search fields" )}";
+		String highLightFields	= "${aib.getParam( "couchbase.search highlight fields" )}";
+		String level			= "";
+		
+		JsonObject args 		= new JsonObject();
+		JsonObject highlight	= new JsonObject();
+		JsonArray fieldsArray	= new JsonArray();
+		JsonObject ctl			= new JsonObject();
+		JsonObject consistency 	= new JsonObject();
+		JsonObject vectors		= new JsonObject();
+		JsonObject the_keywords = new JsonObject();
+		Integer timeout			= new Integer(0);
+		
+		args.addProperty( "indexName", indexName );
+		args.addProperty( "from", new Integer( start ) );
+		args.addProperty( "size", new Integer( size ) );
+		args.addProperty( "explain", new Boolean( explain ) );
+		//highlight.addProperty( "field", highlightFields );
+		args.add( "highlight", highlight );
+		the_keywords.addProperty( "query", this.keywords);
+		args.add( "query", the_keywords );
+		fieldsArray.add( fields );
+		args.add( "fields", fieldsArray );
+		
+		// "ctl": {"consistency": {"level": "","vectors": {}},"timeout": 0}}
+		consistency.addProperty( "level", level );
+		consistency.add( "vectors", vectors );
+		ctl.addProperty( "timeout", timeout );
+		ctl.add( "consistency", consistency );
+		args.add( "ctl", ctl );
+		
+		return( args );
+	}
+	
+	protected ModelMap mapResultsToModel( String jsonQueryResult )
+	{
+		ModelMap modelMap = new ModelMap();
+		JsonObject jsonObject = new JsonParser().parse( jsonQueryResult).getAsJsonObject(); 
+	    JsonObject status = jsonObject.getAsJsonObject("status");
+	    JsonObject request = jsonObject.getAsJsonObject("request");
+	    JsonArray hits = jsonObject.getAsJsonArray("hits");
+	    JsonPrimitive total_hits = jsonObject.getAsJsonPrimitive("total_hits");
+	    JsonPrimitive took = jsonObject.getAsJsonPrimitive("took");
+	    JsonPrimitive from = request.getAsJsonPrimitive("from");
+	    JsonPrimitive size = request.getAsJsonPrimitive("size");
+	    
+        modelMap.addAttribute( "status", status.toString() );
+        modelMap.addAttribute( "request", request.toString() );
+        modelMap.addAttribute( "start", new Integer( from.getAsInt() + 1 ).toString() );
+        modelMap.addAttribute( "size", size.toString() );
+        modelMap.addAttribute( "end", new Integer( from.getAsInt() + size.getAsInt() ).toString() );
+        modelMap.addAttribute( "hits", deduceHits( hits ));
+        modelMap.addAttribute( "totalHits", total_hits.toString() );
+        modelMap.addAttribute( "timeTook", took.toString() );
+
+        System.out.print( request.toString() );
+
+		return modelMap;
+	}
+	
+    public String httpGet()
+    throws IOException
+    {
+        HttpURLConnection conn 	= null;
+        StringBuilder sb 		= new StringBuilder();
+        BufferedReader rd 		= null;
+        try
+        {
+    		// X POST -H "Content-Type: application/json"
+    		//http://127.0.0.1:8094/api/index/default_query_index/query -d 
+
+        	String searchUrl 	= "${aib.getParam( "couchbase.search url" )}";
+        	String searchIndex 	= "${aib.getParam( "couchbase.full text search index" )}";
+    		StringBuffer buf 	= new StringBuffer();
+
+    		if ( !searchUrl.startsWith( "http") )
+    			buf.append( "http://" );
+    		
+    		buf.append( searchUrl );
+    		buf.append( "/api/index/" );
+    		buf.append( searchIndex );
+    		buf.append( "/query" );
+
+    		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+    		try {
+    		    HttpPost request = new HttpPost(buf.toString());
+    		    StringEntity params = new StringEntity(buildSearchAsAsJson().toString());
+    		    request.addHeader("content-type", "application/json");
+    		    request.setEntity(params);
+
+    		    HttpResponse result = httpClient.execute(request);
+                sb.append( EntityUtils.toString(result.getEntity(), "UTF-8")); 
+                
+    		// handle response here...
+    		} catch (Exception ex) {
+    		    // handle exception here
+    		} finally {
+    		    httpClient.close();
+    		}
+        }
+        catch (IOException ioExc)
+        {
+        	//ioExc.printStackTrace();
+            FrameworkDefaultLogger.severe("Exception while querying to Couchbase " + ioExc.getMessage() );
+        }
+        finally
+        {
+        }
+        return sb.toString();
+    }
+
+    protected Map<String, List<String>> deduceHits( JsonArray hits )
+    {
+    	Map<String, List<String>> map = new HashMap<String, List<String>>();
+    	Iterator<JsonElement> iter 	= hits.iterator();
+    	List<String> list			= null;
+    	JsonElement hit 			= null;
+    	JsonPrimitive id			= null;
+    	String strId				= null;
+    	String objName				= null;
+    	String jsonBO				= null;
+    	
+    	while( iter.hasNext() )
+    	{
+    		hit = iter.next();
+    		id = hit.getAsJsonObject().getAsJsonPrimitive( "id" );
+    		
+    		if ( id != null )
+    		{
+    			strId 	= id.toString();
+    			strId 	= strId.substring(1,strId.length()-1 );
+        		objName = strId.substring(0,strId.indexOf(":"));
+        		jsonBO	= getBO( strId );
+        		
+        		if ( map.get( objName ) != null )
+        			map.get(objName).add( jsonBO );
+        		else
+        		{
+        			list = new ArrayList<String>();
+        			list.add( jsonBO );
+        			map.put( objName, list );
+        		}
+    		}
+    	}
+    	
+    	return( map);
+    	    	
+    }
+    
+    protected String getBO( String id )
+    {
+    	String jsonBO = null;
+    	
+    	if ( id != null )
+    	{
+    		try
+    		{
+    			jsonBO = new BaseDAO().find( id );
+    		}
+    		catch( ProcessingException exc )
+    		{
+    			exc.printStackTrace();
+    		}
+    	}
+    	
+    	return( jsonBO );
+    }
+
+	protected String keywords = "*";
+	private static final Logger FrameworkDefaultLogger = Logger.getLogger(QueryRestController.class.getName());
+	private String start = "0";
+}

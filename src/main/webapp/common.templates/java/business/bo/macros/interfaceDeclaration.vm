@@ -1,0 +1,9 @@
+#macro ( getInterfaceDecl )
+public interface ${classObject.getName()} 
+#if( $classObject.getInterfaces().size() > 0 )    
+#set( $noPrefix = "" )
+#set( $noSuffix = "" )    
+extends $classObject.getInterfacesAsString( $noPrefix, $noSuffix )
+#end## $classObject.getInterfaces().size() > 0
+{
+#end

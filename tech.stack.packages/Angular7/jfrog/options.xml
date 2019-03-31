@@ -1,0 +1,14 @@
+<options name="jfrog">
+	<option name="inUse"  value="false" required="true" description="using jFrog" type="boolean"/>
+	<option name="userName"  value="" required="true" description="jfrog user name" type="input"/>
+	<option name="password"  value="" required="true" description="jFrog password" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with jFrog"
+		placeHolder="email address asigned to jfrog account" type="input"/>
+	<option name="serverUrl" value="http://localhost:8081/artifactory" 
+		required="true" description="jFrog Artifactory Server Url" type="input"/>
+	<option name="publishRepoKey" value="" placeHolder="local-npm-repo" required="true" description="target an existing NPM repository" type="input"/>
+ 	<option name="pluginRepoKey" value="" placeHolder="remote-npm-repo" required="true" description="target an existing remote NPM repository" type="input"/>
+	<option name="snapshotRepoKey" value="" placeHolder="libs-snapshot-local" required="true" description="target an existing snapshot NPM repository" type="input"/>
+</options>
+
+

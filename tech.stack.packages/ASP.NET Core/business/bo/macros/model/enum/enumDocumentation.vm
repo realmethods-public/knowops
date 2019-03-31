@@ -1,0 +1,8 @@
+#macro( enumDocumentation )
+    #if( $classObject.hasDocumentation() == false )
+ * Encapsulates data for business entity ${classObject.getName()}.
+    #else
+ * $classObject.getDocumentation()
+    #end 
+#end
+

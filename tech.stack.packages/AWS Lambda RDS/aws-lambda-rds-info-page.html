@@ -1,0 +1,85 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">Serverless/RESTful API Tech Stack</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px">
+
+Depending upon the complexity of the input entity model, goFramework will created 100s to 1000s of AWS Lambda functions, each representing the fundamental unit of business functionality.  Therefore
+the deployment process will take some time.  Once a function is deployed, it is immediately available on AWS.
+
+<h3>Intent</h3>
+
+To create an application that uses:
+<ul>
+<li>A custom model controller framework, backed by business delegates that serve the role of Lambda functions
+<li>All functions necessary to create/read/update/delete/readAll of each entity of the model as well as each model's 
+single and multiple associations 
+<li>GitHub to push application files
+<li>Maven to build, compile, and deploy the Lambda functions and app package to an S3 bucket
+</ul>
+
+<h3>Usage</h3>
+Under app options, be sure to assign the AWS Lambda related data to ensure mvn can connect to an S3 bucket to push the build package.
+<p>
+If the host machine is accessible, run the following:
+<h4>Package</h4>
+Use maven to install then package the application by issuing the following command:<p>
+<i>mvn package</i>
+<h4>Deploy Lambda Functions</h4>
+<i>mvn lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml</i>
+<h4>Heroku</h4>
+To deploy the app to Heroku, issue the following commands
+<ol>
+<li>heroku create
+<li>mvn clean heroku:deploy
+<li>heroku open -a your_app_name
+</ol>
+</div>      
+      </td>
+        <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/aws.lambda.rds.png" align="top"/>
+		  <center><h3>Tech Stack Components</h3>
+  		    <table>
+  		      <tr><td class="topicColClass">Build</td><td class="respColClass">Apache Maven</td></tr>
+  		      <tr><td class="topicColClass">Presentation</td><td class="respColClass">JQuery, HTML5, CSS3</td></tr>
+  		      <tr><td class="topicColClass">Business</td><td class="respColClass">AWS Lambda,Spark Microframework </td></tr>
+  		      <tr><td class="topicColClass">Data</td><td class="respColClass">Hibernate, RDBMS</td></tr>
+  		      <tr><td class="topicColClass">Test</td><td class="respColClass">JUnit</td></tr>
+  		    </table>
+  		  </center>
+      	</td>
+
+    </tr>
+  </table>
+</div>

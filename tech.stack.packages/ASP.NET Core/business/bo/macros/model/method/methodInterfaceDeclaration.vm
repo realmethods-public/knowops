@@ -1,0 +1,32 @@
+#*
+ Outputs an interface declaration using the input args.
+ $method		Method
+ $usingEJB		boolean
+ $usingCMP		boolean
+*#
+#macro ( getAsInterfaceDeclaration $method )
+   /**
+#if( $method.hasDocumentation() )
+    * $method.getDocumentation()
+#end    
+#if( $method.hasReturnValue() )
+	* Returns a ${method.getReturnType()}
+#end## method.hasReturnValue()
+#set( $arguments = ${method.getArguments().args} )
+#foreach( $arg in $arguments )
+	* @param $arg.name		$arg.type
+#end##foreach( $arg in $arguments )
+#if( $method.hasReturnValue() )
+	* @return ${method.getReturnType()}
+#end## method.hasReturnValue()
+    * @exception ProcessingException
+##output end of comment
+    */
+## output method signature
+#set( $static = "" )
+#if( $method.isStatic() )
+#set( $static = "static " )
+#end## $method.isStatic()         
+## output declaration
+	${static}${method.getVisibility()} ${method.getReturnType()} ${method.getName()}( $method.getAsDeclaration() )
+	throws ProcessingException#end

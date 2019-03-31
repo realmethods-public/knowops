@@ -1,0 +1,70 @@
+<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
+ * This software is the proprietary information of cloudMigrate, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by cloudMigrate, Inc. and you.
+ * 
+ * Contributor
+ *     cloudMigrate, Inc - initial API and implementation
+-->
+
+<!-- 
+ Page content for the  display of the application archive
+-->
+
+<div id="libraryDivId">
+
+	<a href="#" id="libraryTriggerId">
+  		<img class="navImageClass theToolTip" src="./img/library-2.png" 
+			title="Display archived apps"/>
+	</a>
+	<div id="librarySlideId" class="slideClass">
+  	
+      	<h3 style="text-align:left">Archive</h3>
+		<div class="container col-lg-12">
+	  		<div class="row">
+	    		<div class="col-lg-4 text-right">
+		  			<form class="pure-form">
+						<select class="form-control" id="archivedAppSelectId">
+							<option value="ALL" selected="selected">
+							  All Available To Me
+						    </option>
+							<option value="PUBLIC">
+							  Public App Archives
+						    </option>
+							<option value="PRIVATE">
+							  Private App Archives
+						    </option>
+							<option value="COMMUNITY">
+							  Available Community App Archives
+						    </option>						
+						<select>
+					  </form>
+				</div> <!-- col -->
+				<div class="col-lg-2 text-left">    
+		   			<a href="#" class="theToolTip" title="Refesh list of packages" onclick="loadArchivedAppLibrary()" >
+	    				<button type="button" class="btn btn-lg" >
+	        				<span class="glyphicon glyphicon-refresh">
+	          				</span>
+	        			</button>
+	  				</a>
+	  			</div> <!-- col -->
+				<div class="col-lg-4 text-left">
+		      	  <div id="archivesLoadingDivId" style="display:none;color:black">
+		        	loading archived applications...
+		        	<image src="./img/load_new.gif" width=48 height=48"/>
+		          </div>
+				</div> <!-- col -->
+	  			
+	  		</div><!-- row -->
+	  	</div><!-- container -->
+  		<div id="componentLibraryDivId">
+    		<div id="componentLibraryLoadingDivId" style="display:none;color:black;overflow-y : auto;">
+	  			please wait while the library is loaded...<image src="./img/load_new.gif" width=48 height=48/>
+    		</div> <!--componentLibraryLoadingDivId" --> 
+  
+  		</div> <!-- componentLibraryDivId -->
+  
+	</div> <!-- librarySlideId -->
+    	
+</div> <!-- libraryDivId -->
+	    			  

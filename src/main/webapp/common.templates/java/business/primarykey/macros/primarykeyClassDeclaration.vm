@@ -1,0 +1,16 @@
+#*
+ Outputs the parent name for the primary key class
+*#
+#macro ( getPrimaryKeyParentNameOutput )
+#set( $pkParentName = "" )
+#if( $classObject.hasParent() == true )
+	#set( $pkParentName = "${classObject.getParentName()}PrimaryKey" )
+#end## $classObject.hasParent() == true
+
+## The macro output
+#if( $pkParentName.length() > 0 )
+	extends $pkParentName
+#else
+    extends BasePrimaryKey
+#end## $pkParentName.length() > 0
+#end

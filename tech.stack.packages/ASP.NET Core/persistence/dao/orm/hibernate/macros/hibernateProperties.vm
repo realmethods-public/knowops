@@ -1,0 +1,40 @@
+#macro( hibernateOutput $attribute )
+	#if( $attribute.isPrimaryKey() )	## if a pk, declare so
+	    * @hibernate.id  generator-class="native"
+	#elseif( $aib.hasIdentity( $attribute.getClassObject() ) == false ) ## if no identity, declare component
+	    * @hibernate.component class="${attribute.getType()} prefix="${attribute.getAsArgument()}"    
+	#elseif( $attribute.isFromAssociation() )    
+		#set( $association = $classObject.getAssociation( $attribute.getAsArgument() ) )
+		#set( $cascade = "none" )
+		#if ( $association.isComposite() )
+			#set( $cascade = "all" )
+		#end ##if ( $association.isComposite() )
+		#if ( $association.isOneToOne() )
+			#set( $hibernateMultiplicity = "@hibernate.one-to-one" )
+		#elseif ( $association.isOneToMany() )
+			#set( $hibernateMultiplicity = "@hibernate.collection-one-to-many" )
+		#elseif ( $association.isManyToMany() )
+			#set( $hibernateMultiplicity = "@hibernate.collection-many-to-many" )
+		#elseif ( $association.isManyToOne() )
+			#set( $hibernateMultiplicity = "@hibernate.many-to-one" )
+		#end ##if ( $association.isOneToOne() )
+		#if ( $attribute.isFromMultiValueAssociation() == false )
+		    * ${hibernateMultiplicity}  
+		    *    class="${aib.getRootPackageName()}.${classObject.getFormattedPackageName()}#getEJBPackageName().${association.getType()}"
+		    *    cascade="${cascade}"
+		#else
+		    *
+		    * @hibernate.bag  
+		    *    role="${attribute.getAsArgument()}"
+		    * 
+		    * @hibernate.collection-key  
+		    *     column="${classObject.getName().toLowerCase()}_id"
+		    *     
+		    * ${hibernateMultiplicity}  
+		    *    class="${aib.getRootPackageName()}.${classObject.getFormattedPackageName()}#getEJBPackageName().${association.getType()}"
+		    *    cascade="${cascade}"
+		#end ##if( $attribute.isFromSingleValueAssociation() == true )		    
+	#else
+		    * @hibernate.property
+	#end ##if( $attribute.isPrimaryKey() )	## if a pk, declare so
+#end

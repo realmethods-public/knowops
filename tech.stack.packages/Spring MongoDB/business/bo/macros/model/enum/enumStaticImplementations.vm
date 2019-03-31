@@ -1,0 +1,12 @@
+#macro( enumStaticImplementations )
+	#if ( $commonType.equalsIgnoreCase( "String" ) == false )        
+    static public $name get${name}( $commonType value )
+    throws IllegalArgumentException
+    {
+        if ( value == null )
+        	throw new IllegalArgumentException( "${name}.get${name}(${commonType}) - arg cannot be null." );	        	
+        	
+		return( get${name}( value.toString() ) );        	
+    }
+	#end        
+#end

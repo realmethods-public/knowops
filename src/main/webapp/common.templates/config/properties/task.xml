@@ -1,0 +1,21 @@
+#xmlHeader()
+<!-- Task definitions 
+
+     A task is defined either by a single class task, or by one or more commands to be executed in the provided order
+
+-->
+
+<tasks>
+
+    <!-- the following definition is used internally by the framework to handle application logging -->
+
+    <task name="FrameworkLogTask" commands="com.cloudmigrate.framework.integration.command.FrameworkLogCommand"/>
+
+<!-- an example with no commands, just a referrenced task 
+
+    <task name="CreateEmployee" task="com.poc.task.CreateEmployeeTask" />
+
+-->
+
+
+</tasks>

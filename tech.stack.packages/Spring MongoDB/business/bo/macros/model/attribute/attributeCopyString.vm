@@ -1,0 +1,23 @@
+#*
+ Returns the text required for output of the copy() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyString $attribute )
+#if( $attribute.isFinal() == false )
+        this.${attribute.getAsArgument()} = object.get${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}();
+#end
+#end
+
+#*
+ Returns the text required for output of the copyInto() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyIntoString $attribute )
+#if( $attribute.isFinal() == false )
+        ((${classObject.getName()}) bo).set${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}( this.${attribute.getAsArgument()} );
+#end
+#end

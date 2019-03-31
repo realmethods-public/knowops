@@ -1,0 +1,27 @@
+version: v1.0
+name: Standard Java Build-Test Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+    
+blocks:
+  - name: Build-Test using Maven and JUnit5
+    task:
+      env_vars:
+        - name: DEFAULT_HOST_ADDRESS
+          value: "mongo"
+        - name: DEFAULT_HOST_PORT
+          value: "27017"
+      jobs:
+        - name: Running test using Junit
+          commands:
+            - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)     
+            - sem-service start mongodb
+            - sem-service status mongodb
+            - sem-service start memcached
+            - sem-service status memcached
+            - checkout
+            - mvn dependency:go-offline test
+            - cache store maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) ~/.m2
+            

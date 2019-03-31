@@ -1,0 +1,106 @@
+<html>
+
+
+<head>
+
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 	<meta http-equiv="cache-control" content="no-cache" />
+   	
+	<!-- 3rd party style sheets -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet" />	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Libre Franklin" rel="stylesheet" type="text/css"/>
+	<!-- app specific style sheets -->
+	<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+		
+	<!-- 3rd part javascript functions, etc -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/js/bootstrap-dialog.min.js"></script>
+ 	
+ 	<!-- app specific javascript functions -->
+ 	<script src="/js/common.js"></script> 
+
+</head>
+
+<script>
+function logOn()
+{
+	jQuery.ajax(
+	{
+  		url: '/logon',
+  		dataType: 'text',
+	}
+	).always(function( data ) 
+	{
+		document.getElementById("mainSection").innerHTML = data;
+    });
+}
+</script>
+
+<body>
+
+<div class="header">
+	<center>
+	<img align="center" src="${aib.getApplicationLogoURL()}" 
+			alt="app logo" border="0" style="width:64px;height:64px"/>
+	<br>
+	    <h4>${aib.getApplicationName()}</h4>
+	</center>
+</div>
+
+<p>
+
+<div id="mainSection" >
+  <center>
+    <form action="/logon">
+      <div class="form-group" style="width:300px">
+        <table>
+          <tr>
+            <td>
+      	      <label for="user.id" style="color:black">User Id:</label>
+      	    </td>
+      	    <td>
+  	          <input type="text" class="form-control" id="user.id" style="width:100%">
+  	        </td>
+  	      </tr>
+  	      <tr>
+  	        <td>
+  	  	      <label for="password" style="color:black">Password:</label>
+  	  	    </td>
+  	  	    <td>
+  	  	      <input type="password" class="form-control" id="password" style="width:100%">
+  	  	    </td>
+  	  	  </tr>
+  	    </table>
+  	    <button id="appGenBttnId' type="submit" class="btn btn-default btn-sm">
+	      <span style="color:black">Log On</span>
+	    </button>
+  	  </div>  	
+  	</form>
+  </center>
+	
+</div>
+
+<div class="footer">
+  <p>Copyright &copy; <script language="JavaScript" type="text/javascript">
+    document.write((new Date()).getFullYear());</script> $aib.getCompanyName()
+  </p>
+</div>
+
+<p>
+
+<div id="loadingDivId" style = "display:none;">
+	<!-- this is the default loading gif -->
+	<img src="/img/loader.gif">
+</div>
+
+</body>
+
+</html>
+

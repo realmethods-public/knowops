@@ -1,0 +1,11 @@
+#macro( getDAOClassDecl )
+#set( $parentName = "" )        
+#if( $classObject.hasParent() == true )    
+#set( $parentName = "${parentName}${classObject.getParentName()}DAO" )   
+##set( $parentName = "${parentName}BaseDAO" )
+#else ## no parent, so come directly off of the BaseDAO
+#set( $parentName = "${parentName}BaseDAO" )		
+#end
+public class ${classObject.getName()}DAO extends $parentName
+#end
+

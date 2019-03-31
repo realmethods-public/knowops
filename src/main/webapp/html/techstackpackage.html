@@ -1,0 +1,139 @@
+<!--
+ Page content for the technology stack packages
+-->
+
+<a href="#" id="frameworkPackageTriggerId">
+	<img class="navImageClass theToolTip" 
+   		src="./img/package-box-2.png" title="Display technology package options"/>                  
+</a>
+<span class="navImageTextClass">Tech Stacks</span>
+
+<div class="frameworkPackageInfoModalContainerId">
+</div>
+
+<div id="frameworkPackageSlideId" style="text-align:left" class="slideClass">
+	<div class="container col-lg-12">
+	  <div class="row">
+	    <div class="col-lg-4 text-right">
+		  <form class="pure-form">
+			<select class="form-control" id="techStackSelectId">
+				<option value="ALL" selected="selected">
+				  All Available To Me
+			    </option>
+				<option value="PUBLIC">
+				  Public Tech Stacks
+			    </option>
+				<option value="PRIVATE">
+				  Private Tech Stacks
+			    </option>
+				<option value="COMMUNITY">
+				  Available Community Tech Stacks
+			    </option>
+			<select>
+		  </form>
+		</div> <!-- col -->
+		<div class="col-lg-2 text-left">    
+		   <a href="#" class="theToolTip" title="Refesh list of packages" onclick="loadPackages()" >
+	    	<button type="button" class="btn btn-lg" >
+	        	<span class="glyphicon glyphicon-refresh">
+	          	</span>
+	        </button>
+		   </a>
+		   <a href="#" class="theToolTip" title="View more details on selected tech stack" onclick="viewPackage()" >
+	    	<button type="button" class="btn btn-lg" >
+	        	<span class="glyphicon glyphicon-zoom-in">
+	          	</span>
+	        </button>
+		   </a>
+		    			     
+		</div> <!-- col -->
+		<div class="col-lg-4 text-left">
+      	  <div id="packagesLoadingDivId" style="display:none;color:black">
+        	loading tech stacks...
+        	<image src="./img/load_new.gif" width=48 height=48"/>
+          </div>
+		</div> <!-- col -->
+	  </div> <!-- row -->
+		
+	  <div class="row">
+		<div class="col-lg-10 text-left">
+  		  <div id="frameworkPackageViewId" style="background:transparent;width:100%">				  
+          </div>
+		</div> <!-- col -->
+	  <div> <!-- row -->
+	  <p/>
+	  <div class="row">
+		<div class="col-lg-10 text-left">
+      	  <div id="packageDetailsLoadingDivId" style="display:none;color:black">
+            loading tech stack details...
+        	<image src="./img/load_new.gif" width=48 height=48/>
+          </div>
+	      <div id="packageInformationAreaId">
+	      </div>
+		</div> <!-- col -->
+	  <div> <!-- row -->
+	</div> <!-- container -->		 
+</div> <!-- frameworkPackageSlideId -->
+
+
+
+<!-- 
+==================================================
+	Upload Tech Stack Package Dialog
+================================================== 
+-->
+
+<div id="upload_Framework_Package_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="upload_Framework_Package_Label_Id" aria-hidden="true" style="background:white;color:black">
+		
+	<div class="modal-dialog">
+    	<div class="modal-content">
+
+			<div class="modal-header">
+		    	<h3 id="upload_Framework_Package_Label_Id">Tech Stack Package Zip File Upload</h3>
+		  	</div> <!-- modal-header -->
+	
+		  	<div class="modal-body" style="padding-left:3px;background-color:#6BA9C8;color:white">
+				<label for="framework_package_upload" >Click here to select a .zip file...</label>
+				<input id="framework_package_upload" type="file" title=" " style="display:none;" name="files" single/>
+		  	</div> <!-- modal-body -->
+	
+		  	<div class="modal-footer">
+				<div id="frameworkPackageLoadingDivId" style="display:none">
+					tech stack package is being uploaded, unpacked and validated...<image src="./img/load_new.gif" width=48 height=48/>
+				</div> <!-- frameworkPackageLoadingDivId -->			
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		  	</div> <!-- modal-footer -->
+		  	
+	 	</div> <!-- modal-content -->
+	 	
+	</div> <!-- modal-dialog -->
+	  
+</div> <!--upload_Framework_Package_Modal -->
+
+
+<div id="Info_Tech_Stack_Package_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Info_Tech_Stack_Package_Modal" aria-hidden="true" style="background:white;color:black">
+		
+	<div class="modal-dialog">
+    	<div class="modal-content">
+
+			<div class="modal-header">
+		  	</div> <!-- modal-header -->
+	
+		  	<div class="modal-body" style="padding-left:3px;background-color:#6BA9C8;color:white">
+		  	</div> <!-- modal-body -->
+	
+		  	<div class="modal-footer">
+				<div id="frameworkPackageLoadingDivId" style="display:none">
+					tech stack package is being uploaded, unpacked and validated...<image src="./img/load_new.gif" width=48 height=48/>
+				</div> <!-- frameworkPackageLoadingDivId -->			
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		  	</div> <!-- modal-footer -->
+		  	
+	 	</div> <!-- modal-content -->
+	 	
+	</div> <!-- modal-dialog -->
+	  
+</div> <!--upload_Framework_Package_Modal -->
+

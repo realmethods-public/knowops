@@ -1,0 +1,16 @@
+#xmlHeader()
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <render-context>
+        <attribute name="errors"/>
+        <attribute name="message"/>
+    </render-context>
+
+    <portlet-url-type>
+<!-- AIB : \#portletURLTypes() -->
+#portletURLTypes()
+<!-- ~AIB -->        
+    </portlet-url-type>
+    
+</config>  

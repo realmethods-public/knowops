@@ -1,0 +1,93 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">Spark Micro Web Framework</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px">
+<h3>Intent</h3>
+<p>
+To create an application that uses:
+<ul>
+<li>Spark Java Micro Web Framework to faciltate the view/controller of an MVC framework
+<li>Fully functional front-end using Javascript, HTML5, JQuery, CSS, and Bootstrap 
+<li>Hibernate for object to table db mapping
+<li>GitHub to commit application files
+<li>Maven to build, package, and run the application
+<li>Docker to containerize the app into a single platform independent image
+</ul>
+<p>
+<h3>Usage</h3>
+<p>
+<ul>
+<li>Jetty
+<p>
+To build and run the app issue the following from the host command line: <i>mvn clean install</i>
+<p>
+By default, Spark listens on port 4567, accessible through the browswer via: <i>http://your_host_name_or_ip_address:4567</i></center>
+<p>
+If using a model that defines containers for microservices, goFramework will handle getting Spark to listen on the port assigned to the container within the model.
+<p>
+<li>Docker
+<p>
+<u>Build</u>:<br>
+Issue the following from the root directory of the app generation location:<p>
+<b><i>docker build -t namespace/repository:version .</i></b>  
+<br>namespace - <i>your_company_name</i>
+<br>repository - <i>your_app_name</i>
+<br>version - latest 
+<p>
+The '.' at the end of the build command indicates to use the Dockerfile and content of the current directory
+<p>
+<u>Run</u>:The following usage of docker run assumes MySQL is in use by the app and is listening on port 3306 
+<p>
+<b><i>docker run -it -d -p 52000:3306 -p 8080:8080 namespace/repository:version</i></b>
+<p>
+52000 is used by way of example for the purpose of avoiding a port conflict in the event MySQL is being run locally on the host machine. 
+</div>      
+      </td>
+        <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/spark.micro.png" align="top"/>
+		  <center><h3>Tech Stack Components</h3>
+  		    <table>
+  		      <tr><td class="topicColClass">Build</td><td class="respColClass">Apache Maven</td></tr>
+  		      <tr><td class="topicColClass">Presentation</td><td class="respColClass">JQuery, HTML5, CSS3</td></tr>
+  		      <tr><td class="topicColClass">Business</td><td class="respColClass">Spark Micro Web Framework </td></tr>
+  		      <tr><td class="topicColClass">Data</td><td class="respColClass">Hibernate, RDBMS</td></tr>
+  		      <tr><td class="topicColClass">Test</td><td class="respColClass">JUnit</td></tr>
+  		      <tr><td class="topicColClass">Container</td><td class="respColClass">Docker</td></tr>
+  		    </table>
+  		  </center>
+      	</td>
+    </tr>
+  </table>
+</div>

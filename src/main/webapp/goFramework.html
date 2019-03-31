@@ -1,0 +1,2265 @@
+<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
+ * This software is the proprietary information of cloudMigrate, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by cloudMigrate, Inc. and you.
+ * 
+ * Contributor
+ *     cloudMigrate, Inc - initial API and implementation
+-->
+<head>
+    <meta charset="utf-8">
+    <title>goFramework 7.1</title>
+    
+	<link rel="icon" href="./img/favicon-16x16.fw.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="realMethods platform, applies a tech stack package to a business model to create rich fully functional apps">
+    <meta name="author" content="realMethods">
+     
+<!-- css links -->
+	<!-- Bootstrap -->
+	<link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap/bootstrap-responsive.min.css" rel="stylesheet">
+    <!-- tool tip -->
+    <link rel="stylesheet" type="text/css" href="./css/tooltipster/tooltipster.bundle.min.css" />
+     <link rel="stylesheet" type="text/css" href="./css/tooltipster/themes/tooltipster-sideTip-shadow.min.css" />
+    <!-- toggle checkbox -->
+    <link href="./css/toggle.checkbox.css" rel="stylesheet">
+    <!-- file upload -->
+    <link href="./js/jquery.file.upload/css/style.css">
+	<link href="./js/jquery.file.upload/css/jquery.fileupload.css">
+	<!-- tree -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css">
+	<!-- dialog -->	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css">
+	<!-- google font -->
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Libre Franklin">
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+	
+	<!-- bootstrap glyphicons-->	
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+	
+    <!-- realMethods - last so its contents take precedent -->
+    <link href="./css/common/goFramework.css" rel="stylesheet">
+
+	<!-- file tree viewer -->
+	<link href="./js/file.tree/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<!-- treema json viewer -->
+	<link href="./js/treema/treema.css" rel="stylesheet" type="text/css" media="screen" />
+	
+	<!-- wizard stepper -->
+	<link rel="stylesheet" href="./css/stepper/jquery.step-maker.css">
+	
+<!-- js links -->
+	<!-- JQuery -->	
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<script src="./js/bootstrap/bootstrap.min.js"></script>
+	<!-- tab -->
+	<script src="./js/tab/jquery.easytabs.js" type="text/javascript"></script>
+	<!-- tool tips -->
+	<script type="text/javascript" src="./js/tooltipster/tooltipster.bundle.min.js"></script>
+	<!-- file upload -->
+	<script src="./js/jquery.file.upload/js/vendor/jquery.ui.widget.js"></script>
+	<script src="./js/jquery.file.upload/js/jquery.iframe-transport.js"></script>
+	<script src="./js/jquery.file.upload/js/jquery.fileupload.js"></script>
+	<!-- tree -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <!-- dialog -->
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.min.js"></script>
+ 	<!-- realMethods -->
+	<script src="./js/common/goFramework.js"></script>    
+    <!-- stepper wizard -->
+	<script src="./js/stepper/jquery.step-maker.min.js"></script>
+	
+	<script data-rocketsrc="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" type="text/rocketscript"></script>
+	<script data-rocketsrc="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js" type="text/rocketscript"></script>
+	<script src="./js/scotch-panels-master/dist/scotchPanels.js"></script>
+
+	<!-- slide reveal -->	
+	<script src="./js/slide.reveal/dist/jquery.slidereveal.js"></script>
+	<script src="./js/file.tree/jquery.easing.js" type="text/javascript"></script>
+	
+	<!-- file tree viewer -->
+	<script src="./js/file.tree/jqueryFileTree.js" type="text/javascript"></script>
+
+	<!-- treema json viewer -->
+	<script src="./js/treema/treema.js" type="text/javascript"></script>
+	<script src="./js/treema/treema-utils.js" type="text/javascript"></script>
+
+	<!-- tiny validator -->
+	<script src="./js/tv/tv4.js" type="text/javascript"></script>
+	
+<script type="text/javascript">
+
+
+//========================================================
+// jQuery document ready function
+//========================================================
+
+	$( document ).ready(function()
+	{			
+		displayPricing();
+		
+		checkForOperModeEnablement();
+		
+    	//========================================================
+		// tool tip kickoff
+		//========================================================
+		$('.theToolTip').tooltipster({
+		    theme: 'tooltipster-shadow',
+		    animation: 'fade',
+   			delay: 2500,
+		});
+		
+    	//========================================================
+		// populate the hibernate db dropdown
+		//========================================================
+		var select = document.getElementById("revEngDBNamesSelectId"); 
+			
+		var dbNames = [ "MySQL", "DB2", "DB2-AS/400", "DB2-OS390", "PostgreSQL", 
+					"Oracle (any version)", "Oracle9/10g", "Sybase", "SybaseAnywhere",
+					"SQL-Server", "SAP", "Informix", "HypersonicSQL",
+					"Ingres", "Progress", "Mckoi", "Interbase", "Pointbase",
+					"Frontbase", "Firebird", "Access" ];
+		
+		for(var i = 0; i < dbNames.length; i++) 
+		{
+    		var opt = dbNames[i];
+    		var el = document.createElement("option");
+    		el.textContent = opt;
+    		el.value = opt;
+    		select.appendChild(el);
+    	}
+
+		//========================================================
+		// handle close even on the load local model dialog
+		// to clear the checkbox and input/textarea content
+		//========================================================
+		$('#load_Shared_Model_Modal').on('shown.bs.modal', function () 
+		{
+			populateSharedModelsDiv();
+		}); 
+
+		//========================================================
+		// handle close on the dialogs that can save a model...
+		// to clear the checkbox and input/textarea content
+		//========================================================
+		$('#load_Local_Model_Modal').on('hidden.bs.modal', function () 
+		{
+			hideAndClearShareModelDivContent();
+		}); 
+
+		//========================================================
+		// slow toggle the share model div area when the share
+		// model checkbox is clicked
+		//========================================================
+		$('#shareModelCheckboxId').on('click', function() 
+		{
+			if ( $('#shareModelCheckboxId').is(':checked') )	
+				$('#shareModelInfoDivId').show(500);
+			else
+				$('#shareModelInfoDivId').hide(500);
+		}); 
+
+		//========================================================
+		// slow toggle the share model div area when the share
+		// model checkbox is clicked
+		//========================================================
+		$('#sql_shareModelCheckboxId').on('click', function() 
+		{
+			$('#sql_shareModelInfoDivId').toggle('slow', function() {
+			});
+		}); 
+
+		//========================================================
+		// slow toggle the share model div area when the build
+		// app checkbox is clicked
+		//========================================================
+		$('#gitHubCheckboxId').on('click', function() 
+		{
+			$('#launchAppBttnDivId').toggle('slow', function() {
+			});
+		}); 
+
+		//========================================================
+		// enable/disable according to the checkbox
+		//========================================================
+		$('#persistAppGenerationId').on('click', function() 
+		{
+			$('#nameToPersistAppGenerationId').prop('disabled', !this.checked);
+			$('#persistAppGenerationDescriptionId').prop('disabled', !this.checked); 			
+		}); 
+    	 
+		//========================================================
+		// initialize the jstree
+		//========================================================
+		//$.jstree.defaults.core.themes.variant = "large";
+		
+		$('#modelTreeId').jstree(
+		{
+	 		"core" : 
+	 		{
+	    		"multiple" : false,
+	    		"animation" : 0,
+	    		"themes" : { "stripes" : false }
+	  			}
+		});
+		
+		//========================================================
+		// initialize the tooltip facility
+		//========================================================
+		//$('[data-toggle="tooltip"]').tooltip();
+
+		//===============================================
+		// shared model view row click function
+		//===============================================
+
+		$('#sharedModelBodyDivId').on('click', 'tr', function() 
+		{
+			$(this).addClass('modelTableRowHighlight').siblings().removeClass('modelTableRowHighlight');
+			updateDownloadModelHref( $(this) );
+		});
+
+		//===============================================
+		// framework package view row click function
+		//===============================================
+		$('#frameworkPackageViewId').on('click', 'tr', function() 
+		{
+			handlePackageSelection( $(this) );
+		});		
+
+		//========================================================
+		// hide the descriptors bttn
+		//========================================================
+		$('#descriptorsMenu').hide();
+
+		//=================================================
+		// load the packages available on the server
+		//=================================================						
+		loadPackages();
+
+		//=================================================
+		// load the component library
+		//=================================================						
+		loadComponentLibrary();
+	});
+
+</script>
+          
+ </head>
+
+<body>
+
+<script>
+var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv, createAppSlideDiv, librarySlideDiv, helpSlideDiv, logoSlideDivWithInstructions, logoSlideDiv;
+
+ $(function()
+ {
+ 	// main side nav bar
+	navBarDiv = $("#navBarDivId").slideReveal(
+	{
+	  trigger: $("#menuTriggerId"),
+	  push: true,
+	  overlay: false,
+	  position : "left",
+	  width : 96,
+	  speed : 500,
+	  shown: function(obj)
+	  {
+	    document.getElementById("menuTriggerId").innerHTML = '<span id="closeChevronId" style="z-index:1000;font-size:0.7em" class="glyphicon glyphicon-chevron-left theToolTip" title="Close the control panel"></span>';
+	    $('#menuTriggerId').on('mouseenter', '.theToolTip:not(.tooltipstered)', function(){
+		    $(this)
+		        .tooltipster({
+		        				theme: 'tooltipster-shadow',
+		    					animation: 'fade',
+   								delay: 2500,
+   								})
+		        .tooltipster('open');
+		});
+//	    obj.addClass("left-shadow-overlay");
+	  },
+	  hidden: function(obj)
+	  {
+	    document.getElementById("menuTriggerId").innerHTML = '<span id="openChevronId" style="font-size:0.7em" class="glyphicon glyphicon-chevron-right theToolTip" title="Open the control panel"></span>';
+	    $('#menuTriggerId').on('mouseenter', '.theToolTip:not(.tooltipstered)', function(){
+		    $(this)
+		        .tooltipster({
+		        				theme: 'tooltipster-shadow',
+		    					animation: 'fade',
+   								delay: 2500,
+   								})
+		        .tooltipster('open');
+		});
+
+//	    obj.removeClass("left-shadow-overlay");
+		closeOtherSlideDivs(null);		
+	  }    
+	});
+
+	// help slider
+	helpSlideDiv = $("#helpSlideId").slideReveal(
+	{
+	  trigger: $("#helpTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '95%',
+	  speed : 700,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs( helpSlideDiv );
+	  }
+	});
+
+	
+	// package slider
+	packageSlideDiv = $("#frameworkPackageSlideId").slideReveal(
+	{
+	  trigger: $("#frameworkPackageTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs(packageSlideDiv);
+	  }
+	});
+
+	// model slider
+	modelSlideDiv = $("#modelSlideId").slideReveal(
+	{
+	  trigger: $("#modelTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs(modelSlideDiv);
+	  	$('#reverseEngineerDivId').hide();
+	  	$('#loadModelDivId').show();
+	  }
+	});
+
+	// options slider
+	optionsSlideDiv = $("#optionsSlideId").slideReveal(
+	{
+	  trigger: $("#optionsTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs( optionsSlideDiv );
+	  }
+	});
+
+	// create app slider
+	createAppSlideDiv = $("#createAppSlideId").slideReveal(
+	{
+	  trigger: $("#createAppTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs( createAppSlideDiv );
+	  }
+	});
+
+	// library slider
+	librarySlideDiv = $("#librarySlideId").slideReveal(
+	{
+	  trigger: $("#libraryTriggerId"),
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs( librarySlideDiv );
+	  }
+	});
+
+    // logo slider with instructions
+	logoSlideDivWithInstructions = $("#logoWithInstructionSlideId").slideReveal(
+	{
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '70%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  }
+	});
+
+    // logo slider 
+	logoSlideDiv = $("#logoSlideId").slideReveal(
+	{
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  }
+	});
+
+	$('#json-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-json-panel',
+        containerSelector: '#toggle-json-panel-div-id',
+        direction: 'left',
+        duration: 600,
+        transition: 'ease-in-out',
+        distanceX: '50%',
+        enableEscapeKey: true,
+    });
+
+	$('#uml-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-uml-panel',
+        containerSelector: '#toggle-uml-panel-div-id',
+        direction: 'left',
+        duration: 600,
+        transition: 'ease-in-out',
+        distanceX: '70%',
+        enableEscapeKey: true,
+    });
+       
+	$('#ecore-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-ecore-panel',
+        containerSelector: '#toggle-ecore-panel-div-id',
+        direction: 'left',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',        
+        enableEscapeKey: true
+    });
+    
+	$('#repository-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-repository-panel',
+        containerSelector: '#toggle-repository-panel-div-id',
+        direction: 'right',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',
+        enableEscapeKey: true
+    });	
+
+    $('#j2ee-jar-panel-id').scotchPanel(
+	{
+		hoverSelector: '.toggle-j2ee-jar-panel',	
+        containerSelector: '#toggle-j2ee-jar-panel-div-id',
+        direction: 'left',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',
+        enableEscapeKey: true
+    });	
+    
+    $('#java-jar-panel-id').scotchPanel(
+	{
+		hoverSelector: '.toggle-java-jar-panel',	
+        containerSelector: '#toggle-java-jar-panel-div-id',
+        direction: 'left',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',
+        enableEscapeKey: true
+    });	
+    
+    $('#sql-script-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-sql-script-panel',
+        containerSelector: '#toggle-sql-script-panel-div-id',
+        direction: 'left',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',        
+        enableEscapeKey: true
+    });	
+    
+    $('#database-panel-id').scotchPanel(
+	{
+        hoverSelector: '.toggle-database-panel',
+        containerSelector: '#toggle-database-panel-div-id',
+        direction: 'right',
+        duration: 1000,
+        transition: 'ease-in-out',
+        distanceX: '50%',
+        enableEscapeKey: true
+    });
+
+	 closeOtherSlideDivs( null );
+	 //logoSlideDivWithInstructions.slideReveal("show", false);
+                        	
+  });
+
+  function handleReverseEngClick()
+  {
+    $('#loadModelDivId').hide();
+	$('#reverseEngineerDivId').show();
+
+	closeOtherSlideDivs( modelSlideDiv );
+	
+	modelSlideDiv.slideReveal('toggle', false);
+	
+	return false;
+  }
+
+  function closeOtherSlideDivs( notThisDiv )
+  {
+	if ( notThisDiv != packageSlideDiv )
+		packageSlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv != modelSlideDiv )
+		modelSlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv != optionsSlideDiv )
+		optionsSlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv != createAppSlideDiv )
+		createAppSlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv != librarySlideDiv )
+		librarySlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv !=  helpSlideDiv )
+		helpSlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv == null )
+		logoSlideDiv.slideReveal("show", false);
+	else
+	 	logoSlideDiv.slideReveal("hide", false);
+	 	
+/*	if ( notThisDiv !=   factorySlideDiv )
+		factorySlideDiv.slideReveal("hide", false);
+
+	if ( notThisDiv !=   wizardSlideDiv )
+		wizardSlideDiv.slideReveal("hide", false);
+*/
+	// always force a hide
+	logoSlideDivWithInstructions.slideReveal("hide", false);
+  }
+  	
+  	
+</script>
+  <table class="statusTableClass">
+	<tr>
+	  	  
+	  <td style="height:36px;width:10%;text-align:left;vertical-align:center;color:white;">
+<!--	  
+	  <a href="#" onclick="factory()">
+	    <img src="./img/factory.png" style="float:right;margin:4px;width:32;height:32"/>
+	  </a>
+-->
+
+	<div id="wizardDivId">
+	  <a href="#" onclick="wizard()">
+	    <img src="./img/wizard.hat.png" class="theToolTip" title="Get started with the App Creation Wizard" 
+	    	style="float:left;margin:4px;width:32;height:32;padding-right:10px"/>
+	  </a>
+	</div>
+<!--
+	  <img src="./img/timmy.only.with.water.png" style="float:right;margin:4px;width:45;height:45;padding-right:10px"/>
+-->	  
+	  
+<!-- help button and slider-->
+
+        <a href="#" id="helpTriggerId">
+		<img src="./img/help.png" class="theToolTip" title="Launch the User's Guide" 
+	    	style="float:left;margin:4px;width:32;height:32;padding-right:10px"/>
+		</a>
+
+		<div id="helpSlideId" class="slideClass">
+		  <iframe src="http://www.realmethods.com/docs/users.guide.7.1/" height=500 width=1300 scrolling="auto"></iframe>
+		</div>
+			
+      </td>
+	  <td style="vertical-align:center;width:60%;text-align:center">		    
+<!-- package, descriptor, and model output div -->
+	    <div id="package_fd_model_div_id" style="padding-top:6px">
+		  &nbsp
+		</div>
+	  </td>	  
+	  <td style="vertical-align:left;width:30%;text-align:center">
+	  	<div id="titleDivId">
+	  	</div>
+	  </td>
+      
+	</tr>
+  </table>    
+
+
+<div id="navBarDivId" class="sideNavBarClass">
+  <table class="mainTableClass">
+    <tr>
+      <td>
+        <table class="sideNavImageTableClass">
+          <tr class="sideNavImageTableRowClass">          
+            <td class="sideNavBarImageClass">
+			  <a href="#" id="frameworkPackageTriggerId">
+                <img class="navImageClass theToolTip" 
+                	src="./img/package-box-2.png" title="Display technology package options"/>                  
+              </a>
+              <span class="navImageTextClass">Tech Stacks</span>
+              <!--<br>-->
+              <div id="frameworkPackageSlideId" style="text-align:left" class="slideClass">
+              <table><tr>
+              <td style="vertical-align:top;width:180px">
+				<div style="align:top;text-align:left" >
+                <!--<h2>Tech Stack Packages</h2>-->     
+<!-- use to hide if needed on startup
+                 <div id="uploadTSPDivId"> -->    
+                 <a href="#" id="uploadHefId" class="theToolTip" title="Upload a new tech stack package">
+		          	<button id="loadFrameworkPackageId' type="button" class="btn btn-dark btn-small" data-toggle="modal" 
+		          		data-target="#upload_Framework_Package_Modal">
+		          	 <span class="glyphicon glyphicon-upload"></span>
+		            </button>
+				  </a>
+<!-- download selected package button -->	
+			      <a href="#" id="downloadHrefId" class="theToolTip" title="Download a selected tech stack package">
+			        <button type="button" class="btn btn-dark btn-small" >
+			          <span class="glyphicon glyphicon-download">
+			          </span>
+			        </button>
+			      </a>
+			    
+<!-- view selected package button -->
+			      <a href="#" class="theToolTip" 
+			      		id="viewPackageId" onclick="viewPackage()" title="View the contents of a selected tech stack package">
+			        <button type="button" class="btn btn-dark btn-small">
+			          <span class="glyphicon glyphicon-search">
+			          </span>
+			        </button>
+ 			      </a>
+ 			      
+<!-- refresh button -->
+	      		  <a href="#" class="theToolTip" title="Refesh list of packages" onclick="loadPackages()" >
+			        <button type="button" class="btn btn-dark btn-small" >
+			          <span class="glyphicon glyphicon-refresh">
+			          </span>
+			        </button>
+			      </a> 			      
+<!--			 </div> -->
+			    </div>
+                <table id="packageTableId"> 
+                  <tr>
+				    <td class="packageTDClass">			
+              		  <div id="frameworkPackageViewId" style="background:transparent;width:220px">				  
+		              </div>
+			          <div id="packagesLoadingDivId" style="display:none;color:black">
+   			            loading framework packages...
+   			            	<image src="./img/load_new.gif" width=48 height=48 
+   				            	class="theToolTip" title="refresh the list of tech stack packages"/>
+  			          </div>
+			        </td>
+			      </tr>
+			    </table>
+			    </div>
+      			</td>
+      			<td style="vertical-align:top;">
+                <table> 
+                  <tr>
+			        <td class="packageTDClass">
+			          <div id="frameworkDescriptorContentAreaId" style="padding:4px">
+  			    	    &nbsp				  
+			          </div>
+			        </td>
+			      </tr>
+			    </table>
+			   </td></tr></table> 
+			  </div>
+            </td>
+          </tr>
+          <tr class="sideNavImageTableRowClass">
+            <td class="sideNavBarImageClass">            
+              <a href="#" id="modelTriggerId">
+                <img class="navImageClass theToolTip" 
+                	src="./img/model-2.png" title="Display options to use a model for a new `app"/>                	
+              </a>
+              <span class="navImageTextClass">New App</span>
+              <!---->
+              <div id="modelSlideId" class="slideClass">
+                <table>
+                  <tr>
+                    <td width="65%" style="vertical-align:top">
+                     <div id="loadModelDivId">
+	                  <table>
+	                   <tr style="padding-top:10px">
+	                      <td colspan="3"><h3>Load Model From a File</h3>
+	                      	<!--<button type="button" onclick="viewJsonExample()" id="viewJsonExampleBttnId"
+	                      			class="btn btn-secondary btn-small theToolTip" title="For reference, view the elements of Json model">
+	                           View Sample Json
+			        		</button>	-->					       
+	                      </td>
+	                    </tr>	                 
+	                    <tr>
+	                      <td style="padding-left:10px;">
+	                        <div id="toggle-json-panel-div-id">
+	                          <a href="#" class="toggle-json-panel" onclick="showLocalModelModal('json')">
+	                            <img class="modelImageClass" src="./img/json-circle.png"/>
+	                           </a>
+	                           <div id="json-panel-id">
+						         <span class="panelClass">
+						           Model definition stored in .json file.
+						         </span>
+						         <button type="button" onclick="viewJsonExample()" id="viewJsonExampleBttnId"
+	                      			class="btn btn-secondary btn-small theToolTip" title="For reference, view the elements of Json model">
+	                           View Sample Json
+			        		</button>
+						       </div>
+						     </div>
+	                      </td>
+	                      <td style="padding-left:10px">
+	                        <div id="toggle-uml-panel-div-id">
+	                          <a href="#" class="toggle-uml-panel" onclick="showLocalModelModal('xmi')">
+	                            <img class="modelImageClass" src="./img/uml-circle.png"/>
+	                           </a>
+	                           <div id="uml-panel-id">
+						         <span class="panelClass">
+						           Unified Modeling Language stored as a v1.2 .xmi file
+						         </span>
+						       </div>
+						     </div>
+	                      </td>
+	                      <td style="padding-left:40px">
+	                        <div id="toggle-ecore-panel-div-id">
+  	                          <a href="#" class="toggle-ecore-panel" onclick="showLocalModelModal('ecore')">
+	                            <img class="modelImageClass" src="./img/eclipse-circle.png"/>
+	                          </a>
+	                          <div id="ecore-panel-id">
+						         <span class="panelClass">
+						           Eclipse Modeling Framework stored as a .ecore file
+						         </span>
+						       </div>
+	                        </div>  
+	                      </td>	                      
+	                      <td style="padding-left:40px">
+	                        <div id="toggle-repository-panel-div-id">
+	                          <a href="#" class="toggle-repository-panel" onclick="showSharedModelModal()">
+	                            <img class="modelImageClass" src="./img/catalog-circle.png"/>
+	                          </a>
+	                          <div id="repository-panel-id">
+						         <span class="panelClass">
+						           A repository of previously saved models
+						         </span>
+						       </div>
+	                        </div>  
+	                      </td>                    
+	                    </tr>
+	                   </table>
+	                  </div>
+	                  <div id="reverseEngineerDivId" style="vertical-align:top">
+	                   <table>
+	                    <tr style="padding-top:10px">
+	                      <td colspan="3"><h3>Reverse Engineer a Model</h3></td>
+	                    </tr>
+	                    <tr>
+	                      <td style="padding-left:10px">
+	                        <div id="toggle-j2ee-jar-panel-div-id">	                      
+	                          <a href="#" class="toggle-j2ee-jar-panel" onclick="showLocalModelModal('jar')">
+	                            <img class="modelImageClass" src="./img/ejb-circle.png"/>
+	                          </a>
+	                          <div id="j2ee-jar-panel-id">
+						        <span sty="font-size:1.2em;color:#222222">
+						          Bean classes stored in an EJB Module's .jar file						        
+						        </span>
+						      </div> 
+						    </div>
+	                      </td>
+	                      <td style="padding-left:10px">
+	                        <div id="toggle-java-jar-panel-div-id">	                      
+	                          <a href="#" class="toggle-java-jar-panel" onclick="showLocalModelModal('jar')">
+	                            <img class="modelImageClass" src="./img/java-circle.png"/>
+	                          </a>
+	                          <div id="java-jar-panel-id">
+						        <span class="panelClass">
+						          Plain Old Java Objects stored in a .jar file						        
+						        </span>
+						      </div> 
+						    </div>
+	                      </td>
+	                      <td style="padding-left:40px">
+	                        <div id="toggle-sql-script-panel-div-id">
+	                          <a href="#" class="toggle-sql-script-panel" onclick="showLocalModelModal('sql')">
+	                            <img class="modelImageClass" src="./img/sqlscript-circle.png"/>
+	                          </a>
+	                          <div id="sql-script-panel-id">
+						        <span class="panelClass">
+						          SQL script containing database def stored in .sql file						        
+						        </span>
+						      </div>
+						    </div>
+	                      </td>
+	                     <!-- <td style="padding-left:40px">
+	                        <div id="toggle-database-panel-div-id">
+	                          <a href="#" class="toggle-database-panel" onclick="showRevEngModal()">
+	                            <img class="modelImageClass" src="./img/database-circle.png"/>
+	                          </a>
+	                          <div id="database-panel-id">
+						        <span class="panelClass">
+						          Deduce an entity model from a database's schema						        
+						        </span>
+						      </div>
+						    </div>
+	                      </td>  -->                  
+	                    </tr>
+	                  </table>
+	                 </div> 
+	                </td>
+	                <td width="50%" style="vertical-align:top;padding-left:6px">  
+	          		  <div id="modelTreeDivId" class"modelTreeDivClass" style="display:none">
+	          	        <table id="modelTreeTableId" class="modelTreeTableClass">          	
+				          <tr>
+	<!-- Tree Control of Model -->
+					        <td class="modelTreeTDClass">				
+			            	  <div id="modelTreeId" class="modelTreeClass" style="background:white">
+		                	  </div>
+		                	  <div id="modelTreeResultsId" style="color:blue;font-size:0.9em">
+		                	  </div>
+					  		</td>          	
+				    	  </tr>
+				  		</table>
+	            	  </div>
+	            	</td>
+	           	  </tr>
+	           	</table>		
+			  </div>
+            </td>
+          </tr>
+          <tr class="sideNavImageTableRowClass" id="reverseEngineerSideNavRowId">
+            <td class="sideNavBarImageClass">
+              <div id="reverseEngineerSideNavDivId">
+                <a href="#" id="reverseTriggerId" onclick="return handleReverseEngClick()" >
+                  <img class="navImageClass theToolTip" src="./img/reverse-2.png" 
+                		title="Display import model options for an existing application"/>
+                </a>
+                <span class="navImageTextClass">Reverse</span>
+                <!---->
+              </div>
+            </td>
+          </tr>
+          <tr class="sideNavImageTableRowClass">
+            <td class="sideNavBarImageClass">
+              <a href="#" id="optionsTriggerId">
+                <img class="navImageClass theToolTip" src="./img/options-2.png" 
+                	title="Display options for selected technology stack package"/>                  
+              </a>
+              <span class="navImageTextClass">App Options</span>
+              <!---->
+              <div id="optionsSlideId" class="slideClass">
+              	<h3 style="text-align:left">Options</h3>              	
+		  		    <button type="button" class="pull-right btn btn-small btn-secondary" onclick="showAppCreateSlide()">
+		  		      Finish Here >>
+		  		    </button>
+
+		  		<div id="appGenOptionsDivId" class="appGenOptionsDivClass tab-container">
+		  		  <form id="appGenOptionsFormId" style="background:transparen">
+		  		    Select a technology stack package to reveal its available optionss
+		  		  </form> 
+		  		</div>
+			  </div>              
+            </td>
+          </tr>
+          <tr class="sideNavImageTableRowClass" id="reverseEngineerSideNavRowId">
+            <td class="sideNavBarImageClass">
+              <div id="libraryDivId">
+                <a href="#" id="libraryTriggerId">
+                  <img class="navImageClass theToolTip" src="./img/library-2.png" 
+                  	title="Display archived apps"/>
+                </a>
+                <span class="navImageTextClass">App Archive</span>
+                <div id="librarySlideId" class="slideClass">
+		          <h3 style="text-align:left">Archive</h3>
+  		          <div id="componentLibraryDivId">
+      			    <div id="componentLibraryLoadingDivId" style="display:none;color:black;overflow-y : auto;">
+					  please wait while the library is loaded...<image src="./img/load_new.gif" width=48 height=48/>
+ 				    </div>
+ 				  </div>
+ 			    </div> 
+ 			  </div>  			  
+           </td>
+          </tr>
+          <tr class="sideNavImageTableRowClass">
+            <td class="sideNavBarImageClass">
+              <a href="#" id="createAppTriggerId">
+                <img class="navImageClass theToolTip" src="./img/gears-2.png" 
+                	title="Display application creation screen"/>                  
+              </a>
+              <span class="navImageTextClass">Generate</span>
+              <!---->              
+			  <div id="createAppSlideId" class="slideClass">
+	        	<h3 style="text-align:left">Code Generation</h3>
+	        	<div class="well well-sm">
+	        	<table>
+	        	  <tr>
+	        	  <td valign="top" width="33%">
+                	<div class="checkbox checkbox-slider--b" id="buildDivId">
+	    	      	<label>
+	      	        	<input id="gitHubCheckboxId" type="checkbox" value" 
+	      	        	class="checkSpanClass theToolTip" 
+	      	        	style="text-align:right"
+	      	        	title="Commit app files to GitHub"/>
+	      	        	<span style="font-size:14px;text-align:left">Commit to GitHub</span>
+	    	      	</label>
+	    	      	</div>
+	    	      </td>
+	    	      	<td valign="top" align="left" width="33%">
+	    	      	<label for="nameToPersistAppGeneration" style="color:black">name to save as:</label>
+				  	<input type="text" class="form-control" id="nameToPersistAppGenerationId" placeholder="uses app name if empty">	    	
+	    	      	</td>
+	    	      	<td valign="top" width="33%">
+				  	<label for="persistAppGenerationDescriptionId" style="color:black">description:</label>
+				  	<textarea id="persistAppGenerationDescriptionId" class="form-control" rows="4" cols="50" style="width:100%" placeholder="Enter Description"></textarea>
+				  </td>
+				  </tr>
+				</table>
+	    	    </div>
+	    	    <div style="padding-top:6px;padding-bottom:6px;text-align:text">
+		  		    <button id="appGenBttnId' type="button" class="btn btn-md btn-dark theToolTip" 
+			  		  title="Click to create all the files related of the application" onclick="appCreate()">
+          			 <span style="color:blue;text-align:left" class="theToolTip">Generate</span>
+					 <select name="os0" disabled id="priceSelectorId">
+					   <option value="Small App" selected="true">Small App $99.00 USD</option>
+					   <option value="Medium App">Medium App $299.00 USD</option>
+		               <option value="Large App">Large App $499.00 USD</option>
+					  </select>
+      		    </div>
+	<!-- app creation running/loading div-->
+          		<div id="appGenRunningDivId" style="display:none;color:black;overflow-y : auto;">
+					please wait while the app is created...<image src="./img/waiting.gif" width=256 height=256/>
+	 			</div>				  				  		          	
+			          	
+	<!-- app creation results div -->	
+				<div id="resultsDivId" class="well well-sm" style="display:none">
+				<table>
+				  <tr>	          	
+	  			    <td style="width:700px;padding-top:20px;vertical-align:top">
+	  			      <div id="stepperDivId" class="step-container" style="width:700px;margin: 0 auto;display:none"></div>
+	          		  <div id="appGenResultsDivId" style="appGenResultsClass;padding-top:20px"></div>	
+
+	  			     </td>
+
+	  			     <td style="vertical-align:top">
+						<div id="genOutputDivId" class="genOutputClass">Code Generation Status</div>
+					 </td>
+				   </tr>
+				 </table>
+				 </div>
+ 			</td>
+ 		   </tr>
+ 		</table>				  				  		          	
+      </td>
+    </tr>
+  </table>         
+</div>
+
+<div id="menuTriggerId">
+  <span style="font-size:0.7em" class="btn-lg glyphicon glyphicon-chevron-right theToolTip" title="Open the control panel"></span>
+</div>
+
+<div id="logoWithInstructionSlideId" class="slideClass" style="align:center">
+	<div id="logoSlideId" class="slideClass" style="align:center">
+	  <image src="./img/bg-hero-devops-tag.jpg" align="center" 
+	  	class="theToolTip" title="realMethods goFramework to generate Serverless, RESTful APIs, WebApps"/>
+	</div>
+	<div id="startInstructionsSlideId" class="slideClass" style="align:center">
+		<h1 style="color:black">
+			To get started, click the <!-- <img src="./img/wizard.hat.png" height="32" width="32"/> to take a guided tour<br>
+			or the--> <span id="openChevronId" class="glyphicon glyphicon-chevron-right theToolTip" title="Open the control panel"></span> to navigate through the control panel
+		</h1>
+	</div>
+</div>
+
+<!-- 
+===============================================================================
+							Modal Dialogs
+=============================================================================== 
+--
+
+<!-- 
+==================================================
+	Load Model Shared Repository Dialog
+================================================== 
+-->
+    
+	<div id="load_Shared_Model_Modal" class="modal hide" 
+		role="dialog" aria-labelledby="loadModelLabel" aria-hidden="true" style="background:white;color:black;">
+     <div class="modal-dialog">
+      <div class="modal-content">
+	   <div class="modal-header">
+	    <h3 id="loadModelLabel">Select Model From Local Repository</h3>
+	   </div> <!-- modal-header -->
+
+	  <div class="modal-body" >
+	    <div id="sharedModelBodyDivId" style="padding:0px 4px 0px 0px>
+	    	please wait while loading models from the local repository...<image src="./img/load_new.gif" width=48 height=48/>
+	    </div>
+	    <br>	    
+	  </div> <!-- modal-body -->
+	
+	  <div class="modal-footer">
+		<div id="sharedModelLoadingDivId" style="display:none">
+			please wait while the model is loaded and parsed...<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" >Close</button>
+	  </div> <!-- modal-footer -->
+	  </div>
+	 </div>
+    </div> <!--load_Shared_Model_Modal -->
+
+
+<!-- 
+==================================================
+	Load Local Model Dialog
+================================================== 
+-->
+    
+	<div id="load_Local_Model_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="loadModelLabel" aria-hidden="true" style="background:white;color:black">
+    <div class="modal-dialog">
+     <div class="modal-content">
+	  <div class="modal-header">
+	    <h3 id="loadModelLabel">Model File Upload</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <table class="shareModelTableClass">
+	      <tr>
+	        <td class="shareModelTDClass">
+	          <div class="checkbox">
+                <div class="checkbox checkbox-slider--b">
+	    	      <label>
+	    	        <input id="appendModelCheckboxId" type="checkbox" value="" class="theToolTip" 
+	    	        	title="Add this model to an already loaded model"/>
+	    	        <span class="checkSpanClass">Append To Loaded Model</span> 
+	    	       </label>
+	    	    </div>
+                <div class="checkbox checkbox-slider--b">
+	    	      <label>
+	      	        <input id="shareModelCheckboxId" type="checkbox" value"" title="Save this model for use later" class="theToolTip"/>
+	      	        <span class="checkSpanClass">Save Model</span>
+	    	       </label>
+	    	     </div>
+	    	   </div>		
+	    	   <div id="rootPackageNameDivId" style="display:none">
+  	             <input id="rootPackageNameId" type="textbox" class="form-control" placeholder="Enter root package name"/>
+  	           </div>	    	   
+	        </td>
+	        	        
+	        <td class="shareModelTDClass"> 
+	    	  <div id="shareModelInfoDivId" style="display:none">
+  	            <input id="shareModelNameId" type="textbox" class="form-control" placeholder="Enter Name"/>
+  	            <textarea id="shareModelDescriptionId" class="form-control" rows="4" cols="25" placeholder="Enter Description"></textarea>
+  	            <input id="shareModelContributorId" type="textbox" class="form-control" placeholder="Your Name (optional)"/>
+  	            <input id="shareModelCompanyId" type="textbox" class="form-control" placeholder="Company (optional)"/>
+  	            <input id="shareModelEmailId" type="textbox" class="form-control" placeholder="Email (optional)"/>
+	          </div>
+	        </td>
+	      </tr>
+	    </table> 
+
+	    <div style="padding-left:3px;background-color:#6BA9C8;color:white">
+		  <label for="model_upload">Click here to select a model file...</label>	    
+	      <input id="model_upload" style="display:none;" type="file" name="files" title=" " single/>	      
+	    </div>
+	    <span style="font-size:0.8em;text-align:left">Note: Upload has a 1MB file size limit</span>
+	    
+	  </div> <!-- modal-body -->
+	
+	  <div class="modal-footer">
+		<div id="modelLoadingDivId" style="display:none">
+			please wait while the model is loaded and parsed...<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	</div> 
+   </div> <!--load_Model_Modal -->
+
+<!-- 
+==================================================
+	Upload Tech Stack Package Dialog
+================================================== 
+-->
+
+	<div id="upload_Framework_Package_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="upload_Framework_Package_Label_Id" aria-hidden="true" style="background:white;color:black">
+     <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <h3 id="upload_Framework_Package_Label_Id">Tech Stack Package Zip File Upload</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="padding-left:3px;background-color:#6BA9C8;color:white">
+		<label for="framework_package_upload" >Click here to select a .zip file...</label>
+		<input id="framework_package_upload" type="file" title=" " style="display:none;" name="files" single/>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<div id="frameworkPackageLoadingDivId" style="display:none">
+			tech stack package is being uploaded, unpacked and validated...<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div> 
+    </div> <!--upload_Framework_Package_Modal -->
+
+<!-- 
+==================================================
+	Upload JAR File Dialog
+================================================== 
+-->
+
+	<div id="upload_JAR_File_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="upload_JAR_File_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <h3 id="upload_JAR_File_Label_Id">JAR File Upload</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="padding-left:3px;background-color:#6BA9C8;color:white">
+	  	<label for="JAR_file_upload">Click here to select a .jar file...</label>
+		<input id="JAR_file_upload" type="file" title=" " name="files" style="display:none" multiple/>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<div id="JARFileLoadingDivId" style="display:none">
+			JAR file is being uploaded, unpacked and reverse engineered...<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div>	  
+    </div> <!--upload_Framework_Package_Modal -->
+
+<!-- 
+==================================================
+	Reverse Engineer from SQL Script
+================================================== 
+-->
+
+	<div id="rev_Eng_DB_Script_Modal" class="modal fade hide" role="dialog" 
+			aria-labelledby="rev_Eng_From DB_Script__Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <h3 id="rev_Eng_From DB_Script_Label_Id">SQL Script File Upload</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+		
+		<label for="revEngDbName">Database name your SQL script creates</label>
+	  	<input size="48" id="revEngDbName" type="textbox" class="form-control"/>
+	  	<p>
+	    <table class="shareModelTableClass">
+	      <tr>
+	        <td class="shareModelTDClass">
+	          <div class="checkbox checkbox-slider--b">
+				<label>
+				  <input id="appendModelCheckboxId" type="checkbox" value=""/>
+				  <span class="checkSpanClass">Append To Loaded Model</span>
+				</label>
+			  </div>
+	          <div class="checkbox checkbox-slider--b">
+				<label>
+				  <input id="sql_shareModelCheckboxId" type="checkbox" checked value="S"/>
+				  <span class="checkSpanClass">Save Model to Local Repository</span>
+				</label>
+			  </div>
+	        </td>
+	        <td class="shareModelTDClass"> 
+	    	  <div id="sql_shareModelInfoDivId" style="display:none">
+  	            <input id="sql_shareModelNameId" type="textbox" class="form-control" placeholder="Enter Name"/>
+  	            <textarea id="sql_shareModelDescriptionId" class="form-control" rows="4" cols="25" placeholder="Enter Description"></textarea>
+  	            <input id="sql_shareModelContributorId" type="textbox" class="form-control" placeholder="Your Name (optional)"/>
+  	            <input id="sql_shareModelCompanyId" type="textbox" class="form-control" placeholder="Company (optional)"/>
+  	            <input id="sql_shareModelEmailId" type="textbox" class="form-control" placeholder="Email (optional)"/>
+	          </div>
+	        </td>
+	      </tr>
+	    </table> 
+
+		<p>
+	  	<div style="color:#6BA9C8;color:white;padding:6px">
+	  	  <label for="SQL_Script_file_upload">Click here to select a .sql file...</label>
+		  <input id="SQL_Script_file_upload" type="file" name="files" style="display:none" multiple/>
+		</div>
+	  </div>  <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<div id="SQLScriptLoadingDivId" style="display:none">
+			SQL script file is being uploaded, executed and reverse engineered...<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+
+	  </div>
+	 </div>	  
+    </div> <!--rev_Eng_From DB_Script_Modal -->
+
+<!-- 
+==================================================
+	Reverse Engineer Dialog
+================================================== 
+-->
+
+	<div id="rev_Eng_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="rev_Eng_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <h3 id="rev_Eng_File_Label_Id">Reverse Engineeer Options</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <div class="checkbox checkbox-slider--b">
+		  <label>
+			<input id="appendModelCheckboxId" type="checkbox" value=""/>
+			<span class="checkSpanClass">Append To Loaded Model</span>
+		  </label>
+		</div>
+  
+		<div id="revEngDivId">
+		    <table class="revEngTableClass">
+		      <tr>
+		        <td><input value='' id="revEngUserId" type="textbox" class="form-control" placeholder="db user id"/></td>
+		      </tr>
+		      <tr>
+		        <td><input value='' id="revEngPasswordId" type="textbox" class="form-control" placeholder="db password"/></td>
+		      </tr>
+
+		      <tr>
+		        <td>
+		          <input value='' id="connectionUrlId" type="textbox" class="form-control" placeholder="connection url"/> <b>OR</b>
+		        </td>
+		      </tr>
+		      
+		      <tr> <!-- jdbc:mysql://martdb.ensembl.org:5316/caenorhabditis_elegans_funcgen_59_210a -->
+		        <td>
+		        jdbc:
+		        	<input value='mysql' style="width:128px" id="subProtocolId" type="textbox"  placeholder="subprotocol" class="form-control"/>
+		        ://
+		        	<input value='localhost' style="width:128px" id="serverNameId" type="textbox"  placeholder="server name" class="form-control"/>
+		        :
+		        	<input value='3306' style="width:32px" id="portId" type="textbox" class="form-control"  placeholder="port" />
+		        /
+		        	<input value='' placeHolder='enter database name' style="width:128px" id="databaseNameId" type="textbox" class="form-control"  placeholder="database name"/>
+		        </td>
+		      </tr>
+		      <tr>
+		        <td><select id="revEngDBNamesSelectId" type="select" class="form-control"></select></td>
+		      </tr>
+		        </td>
+		      </tr>
+		    </table>
+		</div> 
+<!--				
+		<a href="#" class="reverseEngineer" onclick="reverseEngineer('review')">
+			<button type="button" class="btn btn-dark dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+				  <span id="reviewDBSchemaLabelId">Review Database Schema</span>
+			</button>
+		</a>
+-->
+		<a href="#" class="reverseEngineer" onclick="reverseEngineer('reverse')">
+			<button type="button" class="btn btn-dark dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+				  <span id="reverseEngineerLabelId">Reverse Engineer</span>
+			</button>
+		</a>
+		
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<div id="readingSchemaDivLoadingDivId" style="display:none">
+			Connecting to database and reading its schema<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<div id="revEngDivLoadingDivId" style="display:none">
+			Connecting to database and reverse engineering tables<image src="./img/load_new.gif" width=48 height=48/>
+		</div>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div>	  
+    </div> <!--rev_End_Modal -->
+
+<!-- 
+==================================================
+	File Tree Dialog
+================================================== 
+-->
+
+	<div id="file_Tree_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="file_Tree_Label_Id" aria-hidden="true" style="background:white;color:black;width:900px">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <h3 id="file_Tree_Label_Id">Content Browser</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <table style="border:none">
+	      <tr>
+	        <td style="width:20%;vertical-align:top">
+		      <div id="fileTreeDivId" class="fileTreeClass">
+		      </div>
+		    </td>
+	        <td style="width:80%;vertical-align:top;font-size:0.9em">
+		      <div id="fileContentDivId" class="" style="display:none;">
+		      </div>
+		    </td>
+		  </tr>
+		</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div>	  
+    </div> <!--rev_End_Modal -->
+
+<!-- review db schema dialog -->
+
+	<div id="review_db_schema_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="review_db_schema_label_id" aria-hidden="true" style="background:white;color:black">
+
+	  <div class="modal-header">
+	    <h3 id="review_db_schema_label_id">DB Schema Viewer</h3>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	  	<div id="review_db_schema_div_id">
+	  	</div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div>
+	 </div>
+	 </div>	  
+    </div> <!--rev_End_Modal -->
+
+<!-- wizard dialog -->
+	<div id="Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+     <div class="modal-dialog">
+      <div class="modal-content">
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_Label_Id">
+	            App Creation Wizard
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.wand.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+	    <img src="./img/wizard.hat.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    <span style="font-size:1.4em">
+	      The wizard will guide you through a series of questions and options to best determine which Technology Stack Package will
+	      suit your requirements, along with the different ways to load and apply a model.
+	      <p><a href="#" onclick="wizardMigrateorInnovate()">Let's Get Started!!</a>
+	    </span>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+     </div>
+     </div>	  
+   </div> <!--Wizard_Modal -->
+
+<!-- migrate or innovate dialog -->
+	<div id="Migrate_Or_Innovate_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Migrate_Or_Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+     <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Migrate_Or_Innvoate_Label_Id">
+	            App Creation Option
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.wand.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+		<span style="font-size:1.4em">
+    		Are you creating a new application from scratch or creating one from an existing application?
+    	</span>
+    	<table style="width:100%">
+	  	  <tr>
+	    	<td>
+	    	  <a href="#" onclick="innovate()">
+	   			<img align="center" src="./img/innovate.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="migrate()">
+	    	    <img align="center" src="./img/cloud-migration-icon.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+		 
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div> 
+    </div> <!--Migrate_Or_Innovate_Modal -->
+
+<!-- migrate dialog -->
+	<div id="Migrate_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Migrate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Migrate_Label_Id">
+	            App Migration
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/cloud-migration-icon.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+    	<span style="font-size:1.4em">
+    		Are you migrating from an existing J2EE App, a Java code base, a database directly, or SQL Script file?
+    	</span>
+    	<table  style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="migratePojoWizard()">
+	   			<img align="center" src="./img/ejb-mini-logo.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	        <td>
+	    	  <a href="#" onclick="migratePojoWizard()">
+	   			<img align="center" src="./img/java.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="migrateDatabaseWizard()">
+	    		<img align="center" src="./img/database.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="migrateSQLScriptWizard()">
+	    		<img align="center" src="./img/sql_script.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+     </div>
+    </div>	  
+    </div> <!--Migrate_Modal -->
+
+<!-- innovate dialog -->
+	<div id="Innovate_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Innvoate_Label_Id">
+	            App Innovation
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/innovate.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+    	<span style="font-size:1.4em">
+    		Are you loading a new model from a JSON file, a UML file, an Eclipse model, or from a previously loaded/saved model?
+    	</span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="innovateJSONWizard()">
+	   			<img align="center" src="./img/json-logo.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	        <td>
+	    	  <a href="#" onclick="innovateUMLWizard()">
+	   			<img align="center" src="./img/uml.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="innovateEcoreWizard()">
+	    		<img align="center" src="./img/emf_logo.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="innovateExistingModelWizard()">
+	    		<img align="center" src="./img/repository.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Innovate_Modal -->
+
+<!-- TSP_Wizard_Modal dialog -->
+	<div id="TSP_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="TSP_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="TSP_Wizard_Label_Id">
+	            Technology Stack Package Wizard
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.wand.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <img src="./img/tech_stack_package.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    <span style="font-size:1.4em">
+    		Use this wizard to help determine the best technologies to apply the model to in order to create the application that best meets 
+    		your requirements.
+	      <br><p><a href="#" onclick="chooseTSPWizard()">Click to Continue!!</a></p>
+	    </span>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- UI_Wizard_Modal dialog -->
+	<div id="UI_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="UI_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="UI_Wizard_Label_Id">
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Does your application need a user interface?
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="UIWizard(true)">
+	   			<img align="center" src="./img/yes.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="UIWizard(false)">
+	    		<img align="center" src="./img/no.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- MVC_Wizard_Modal dialog -->
+	<div id="MVC_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="MVC_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="MVC_Wizard_Label_Id">
+	            Model/View/Controller Handler
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Select the technology that best suits how you want to handle the interaction between the UI, business data,
+    		and how the flow of logic is controlled
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('spring')">
+	    	    <center>
+	   			  <img align="center" src="./img/spring-boot.png" width="128" height="128"/>
+	   			</center>
+	    	  </a>
+	    	</td>
+	    	<td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('spark')">
+	    		<center>  
+	    		  <img align="center" src="./img/spark.png" width="128" height="128"/>
+	   			</center>
+	    		
+	    	  </a>
+	    	</td>
+	    	<td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('struts')">
+	    	    <center>
+	    		  <img align="center" src="./img/struts2.png" width="128" height="128"/>
+	   			</center>
+	    		
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- Delegate_Wizard_Modal dialog -->
+	<div id="Delegate_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Delegate_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Delegate_Wizard_Label_Id">
+	            Business Delegate Handler
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		A business delegate applies business logic while connecting the MVC layer and Pesistence layers. Choose AWS Lambda to expose
+    		this layer as a microservice architecture.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="DelegateWizard('standard')">
+	   			<center>
+	   			  <img align="center" src="./img/standard.delegate.png" width="128" height="128"/>
+	   			  <h3>Default Delegate</h3>
+	   			</center>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="DelegateWizard('lambda')">
+	 			<center>
+	    		  <img align="center" src="./img/aws.lambda.png" width="128" height="128"/>
+	   			    <h3>AWS Lambda</h3>
+	   			  </center>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- Persistence_Wizard_Modal dialog -->
+	<div id="Persistence_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Persistence_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Delegate_Wizard_Label_Id">
+	            Persistence Options
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Are you storing your data in a traditional SQL database, or in a document-centric store using NoSQL? If your data is currently stored in a SQL database
+    		and you plan on migrating the data with this application, it is suggested you continue to use a SQL database.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="PersistenceWizard('hibernate')">
+	   			<img align="center" src="./img/sql.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="PersistenceWizard('nosql')">
+	    		<img align="center" src="./img/nosql.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Persistence_Wizard_Modal -->
+
+<!-- Cache_Wizard_Modal dialog -->
+	<div id="Cache_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Cache_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Cache_Wizard_Label_Id">
+	            Caching
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+	    	If your application performs mostly read operations, choosing caching will improve performance.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="CacheWizard(true)">
+	   			<img align="center" src="./img/yes.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="CacheWizardWizard(false)">
+	    		<img align="center" src="./img/no.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Persistence_Wizard_Modal -->
+
+<!-- factory dialog -->
+	<div id="Factory_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+          <span style="font-size:1.4em" id="Factory_Label_Id">
+            Factory Migration Settings
+    	  <span>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:#6BA9C8;color:white">
+	    <img src="./img/factory.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    <span style="font-size:1.4em">
+	      The factory wizard will help setup a migration scenario.  Use this wizard when you have mutiple scenarios to
+	      migrate.  Otherwise, for single migration scenarios, <a href="#" onclick="singleMigrate()" style="color:black">click here.</a>
+	      <p style="margin-top:15px">
+	      <a href="#" onclick="factoryTSPSelect()" style="color:black">Let's Get Started!!</a></p>
+	    </span>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Factory_Modal -->
+
+<!-- App_Options_Modal dialog -->
+	<div id="App_Options_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Option_Modal_Label_Id" 
+		aria-hidden="true" style="background:white;color:black">
+	<div class="modal-dialog modal-lg">
+      <div class="modal-content">
+     
+       <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Option_Modal_Label_Id">
+	            Application Options
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/options.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.0em;padding-bottom:15px">
+	    	Apply the options which are required of the application being created.
+	    </span>
+	    <div id="optionsWizardDivId" style="overflow_y:auto">
+	    </div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div>  <!-- modal-footer -->
+	 </div>
+	</div> 
+    </div> <!--App_Options_Modal -->
+
+<!-- Wizard Done dialog -->
+	<div id="Wizard_Done_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Wizard_Done_Label_Id" aria-hidden="true" style="background:white;color:black">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Wizard_Done_Label_Id">
+	            Wizard Complete
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.hat.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.0em;padding-bottom:15px" >
+	    	The wizard session is complete.  You will now be directed to a screen allowing the setting of app options. Take note of
+	    	the GitHub options if you plan on directing cloudMigrate to push the app files to GitHub after app creation.
+	    <span>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardClose()">Done</button>
+	  </div> <!-- modal-footer -->
++	</div>
+	</div>	  
+    </div> <!--Wizard_Done_Modal-->
+
+<!-- Generate App Progression dialog -->
+	<div id="Gen_App_Progress_Modal" class="modal fade hide" style="width:800"
+		role="dialog" aria-labelledby="Gen_App_Progress_Modal_Label_Id" aria-hidden="true" style="background:white;color:black">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Wizard_Done_Label_Id">
+	            App Generation Progress
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/gears.gif" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <div id="genAppProgressDivId" class="bs-stepper">
+		  <div class="bs-stepper-header">
+		    <div class="step" data-target="#test-l-1">
+		      <a href="#">
+		        <span class="bs-stepper-circle">1</span>
+		        <span class="bs-stepper-label">Prepare</span>
+		      </a>
+		    </div>
+		    <div class="line"></div>
+		    <div class="step" data-target="#test-l-2">
+		      <a href="#">
+		        <span class="bs-stepper-circle">2</span>
+		        <span class="bs-stepper-label">Generate</span>
+		      </a>
+		    </div>
+		    <div class="line"></div>
+		    <div class="step" data-target="#test-l-3">
+		      <a href="#">
+		        <span class="bs-stepper-circle">3</span>
+		        <span class="bs-stepper-label">Commit</span>
+		      </a>
+		    </div>
+		    <div class="line"></div>
+		    <div class="step" data-target="#test-l-4">
+		      <a href="#">
+		        <span class="bs-stepper-circle">4</span>
+		        <span class="bs-stepper-label">Archive</span>
+		      </a>
+		    </div>
+		    <div class="line"></div>		    
+		    <div class="step" data-target="#test-l-5">
+		      <a href="#">
+		        <span class="bs-stepper-circle">7</span>
+		        <span class="bs-stepper-label">Done</span>
+		      </a>
+		    </div>
+		  </div>
+		  <div class="bs-stepper-content">
+		    <div id="test-l-1" class="content">
+		      <p class="text-center"></p>
+		    </div>
+		    <div id="test-l-2" class="content">
+		      <p class="text-center"></p>
+		    </div>
+		    <div id="test-l-3" class="content">
+		      <p class="text-center"></p>
+		    </div>
+		    <div id="test-l-4" class="content">
+		      <p class="text-center"></p>
+		    </div>
+		    <div id="test-l-5" class="content">
+		      <p class="text-center"></p>
+		    </div>
+		  </div>
+		</div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="genAppProgressClose()">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Generate App Progression-->
+
+
+<!-- Factory_TSP_Select_Modal dialog -->
+	<div id="Factory_TSP_Select_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_TSP_Select_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_TSP_Select_Label_Id">
+	            Technology Stack Selection
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/factory.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	  
+	    <span style="font-size:1.2em" >
+	      Choose the Tech Stack Package which best suits your target application
+	    <span>
+	    <p style="margin-top:15px">
+	    <div id="tspWizardGridId"></div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next >></button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div>	  
+    </div> <!--Factory_TSP_Select_Modal -->
+
+<!-- Factory_Schema_Modal dialog -->
+	<div id="Factory_Schema_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_Schema_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_Schema_Label_Id">
+	            Schema Location
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/sql_script.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.2em;padding-bottom:15px" >
+	      Enter the absolute directory where the SQL script files are located.  If you have more than one file in the directory, but only
+	      want a specific file loaded, enter that below as well.
+	    <span>
+	    <p style="margin-top:15px">
+        <label for"schema_dir_id">Schema directory (full path)</label>
+	    <input id="schema_dir_id" type="textbox" class="form-control" style="width:200px"/>
+	    <label for="schema_file_id">Schema file</label>
+	    <input id="schema_file_id" type="textbox" class="form-control" width="100px"/>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+<!--	  	<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="factoryTSPSelect()"><< Previous</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next >></button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Factory_Schema_Modal-->
+
+<!-- Factory_Scheduler_Modal dialog -->
+	<div id="Factory_Scheduler_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_Scheduler_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_Scheduler_Label_Id">
+	            Migration Schedule
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/schedule.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.2em;padding-bottom:15px" >
+	      Provide the frequency and unit of measure to check the schema directory location for files to load and migrate.
+	    <span>
+	    <p style="margin-top:15px">
+	    <label for"freq_check_id">Frequency Check Value:</label>
+		<input id="freq_check_id" type="textbox" class="form-control"/>
+  		<label for="freq_check_unit_id">Frequency Check Unit:</label>
+		<select id="freq_check_unit_id" class="form-control"/>
+	  		<option>second</option>
+	  		<option>minute</option>
+		  	<option>hour</option>
+		  	<option>day</option>
+		  	<option>week</option>
+	  		<option>month</option>
+		</select>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+	  	<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="factorySchema()"><< Previous</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="factoryOptions()">Next >></button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Factory_Scheduler_Modal-->
+
+
+<!-- Factory_Options_Modal dialog -->
+	<div id="Factory_Options_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_Options_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_Options_Label_Id">
+	            Migration General Options
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/options.selection.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+		<div class="checkbox checkbox-slider--b">
+		  <label>
+			<input id="build_checkbox-id" type="checkbox" value"" class="form-control" checked/>
+			  <span class="checkSpanClass">Run the build after the application files are created?</span>
+		  </label>
+		</div>
+
+		<div class="checkbox checkbox-slider--b">
+		  <label>
+			<input id="save_stats_checkbox-id" type="checkbox" value"" class="form-control"/>
+			  <span class="checkSpanClass">Save the app creation statistics?</span>
+		  </label>
+		</div>
+
+		<div class="checkbox checkbox-slider--b">
+		  <label>
+			<input id="save_working_dir_checkbox-id" type="checkbox" value"" class="form-control"/>
+			  <span class="checkSpanClass">Save the working dir used to create/build the application files?</span>
+		  </label>
+		</div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+	  	<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="factoryOptions()"><< Previous</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="fireUpFactory()">Start Migration</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Factory_Options_Modal-->
+
+  
+  </body>
+
+
+<!-- tooltip span section -->
+<!--	<span class="tooltip" data-tooltip-content="#tooltip_upload_tech_stack_button_image" style="font-size:0.9em">
+		Click to upload a technology stack package as a single zip file, containing:
+		<ul>
+		<li>framework-package.xml - tech definition including name, description, and image</li>
+		<li>options.xml - options to display in a form, allowing a user to customize the resulting app</li>
+		<li>mapping.properties - directives on how to map file types to an output dir structure</li>
+		<li>readme.html - content and usage details about the package</li>
+		</ul>
+		Download or inspect the contents of one of the provided tech stack packages for more details.
+	</span> -->
+ 
+</html>

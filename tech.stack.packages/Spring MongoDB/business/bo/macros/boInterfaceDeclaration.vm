@@ -1,0 +1,25 @@
+#macro ( getBOInterfaceDecl )
+## reuse and clear
+#set( $name = $classObject.getName() )
+#set( $parentExtension = ""	)
+#set( $parentHasIdentity = false )
+#if( $classObject.hasParent() == true )	
+#set( $parentExtension = "extends I${classObject.getParentName()}" )	    
+#end## $classObject.hasParent() == true
+## Output 
+public interface I${name} $parentExtension
+{
+#end
+
+#macro ( getInterfaceDecl )
+## reuse and clear
+#set( $name = $classObject.getName() )
+#set( $parentExtension = ""	)
+#set( $parentHasIdentity = false )
+#if( $classObject.hasParent() == true )	
+#set( $parentExtension = "extends ${classObject.getParentName()}" )	    
+#end## $classObject.hasParent() == true
+## Output 
+public interface ${name} $parentExtension
+{
+#end

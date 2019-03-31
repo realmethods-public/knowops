@@ -1,0 +1,12 @@
+#macro ( getToString $useAssociation )
+#set( $attributes = $classObject.getAttributesOrdered( true, false ) )
+#set( $output = "" )
+#foreach( $attribute in $attributes )
+##if ( $attribute.isPrimaryKey() == false )
+#if( $attribute.isFromAssociation() == false || (${attribute.isFromAssociation()} == ${useAssociation}) )
+## output the toString
+		#attributeToString( $attribute )
+#end##if( $attribute.isFromAssociation() == useAssociation )
+##end ##if ( $attribute.isPrimaryKey() == false )
+#end## for each $key in $attributes.keySet()   
+#end

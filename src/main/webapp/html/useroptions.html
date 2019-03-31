@@ -1,0 +1,326 @@
+<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
+ * This software is the proprietary information of cloudMigrate, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by cloudMigrate, Inc. and you.
+ * 
+ * Contributor
+ *     cloudMigrate, Inc - initial API and implementation
+-->
+
+<!--
+ Page content for user options
+-->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+
+	$( function() {
+    	
+    	$( "#tabs" ).tabs();    	    
+  	});
+
+
+	function logout() {
+			
+		var url = 'logoff.action';
+
+		$.ajax(
+		{
+	  		url: url,
+	  		dataType: 'json',
+		}
+		).done(function( data ) 
+		{			
+			closeOtherSlideDivs(null);
+			logoSlideDiv.slideReveal("show", true);
+			checkLogon();
+		});
+
+	}
+	
+	
+	function saveUserOptions(statusDiv) {
+	
+		if ( statusDiv == null )
+			statusDiv = $("#personalOptionsStatusDivId");
+			
+		statusDiv.text('Saving user options....');
+		
+		var notificationChecked = $("#notificationCheckboxId").is(":checked") ? "true" : "false";
+		
+		var url = 'saveUserOptions.action?firstName=' + $('#firstNameInputId').val()
+			+ '&lastName=' + $('#lastNameInputId').val()
+			+ '&email=' + $('#emailInputId').val()
+			+ '&company=' + $('#companyInputId').val()
+			+ '&userType=' + $('#select#planTypeSelectId').val()
+			+ '&notifyFlag=' + notificationChecked;
+
+		$.ajax(
+		{
+	  		url: url,
+	  		dataType: 'json',
+		}
+		).done(function( data ) 
+		{			
+			if ( data.resultCode == "SUCCESS" ) {
+				statusDiv.text("Done saving");
+			}
+			else		
+				statusDiv.text(data.processingMessage);
+		});
+  
+	}
+		
+	function generateToken() {
+		$("#generateTokenStatusDivId").text('Generating token....');
+		
+		var url = 'generateToken.action';
+		var msg = '';
+		
+		$.ajax(
+		{
+	  		url: url,
+	  		dataType: 'json'
+		}
+		).done(function( data ) 
+		{
+			if ( data.resultCode == "SUCCESS" ) {
+				$('#tokenInputId').val(data.result);
+				msg = "New token generated successfully";
+				$("#generateTokenStatusDivId").text(msg);
+			}
+			else
+				$("#generateTokenStatusDivId").text(result.processingMessage);
+		});
+		
+		
+	}
+	
+	
+	function resetPassword() {
+		document.getElementById("credentialsStatusDivId").innerHTML = 'Resetting password....';
+		
+		var url = 'resetPassword.action?password=' + $('#passwordInputId').val();
+		
+		$.ajax(
+		{
+	  		url: url,
+	  		dataType: 'json'
+		}
+		).done(function( data ) 
+		{
+			var msg		= "Password reset";
+			if ( data.resultCode != "SUCCESS" ) 
+				msg = result.processingMessage;
+					
+			document.getElementById("credentialsStatusDivId").innerHTML = msg;
+		});
+
+	}
+
+</script>
+
+<a href="#" id="userOptionsTriggerId">
+  <img class="navImageClass theToolTip" src="./img/useroptions.png" 
+    title="Display user options"/>                  
+</a>
+
+<span class="navImageTextClass">User Options</span>
+  
+<div id="userOptionsSlideId" class="slideClass">
+
+	<div id="tabs">
+
+  		<ul>
+    		<li><a href="#personalDivId">Personal</a></li>
+    		<li><a href="#credentialDivId">Credentials</a></li>
+    		<li><a href="#tokenGenerationDivId">API Token</a></li>
+  		</ul>
+  
+  		<div id="personalDivId">
+	
+			<form id="userOptionsFormId" style="background:transparent">
+		      
+		      <div class="container">
+			    
+			    <div class="row">
+			    
+			      <div class="col-lg-3">
+					<label for="firstNameInputId" style="color:black">
+						First Name
+					</label>
+			  		<input 
+						type="text" 
+						class="form-control" 
+						id="firstNameInputId" 
+						placeholder=""/>	    	
+				  </div>
+				  <div class="col-lg-3">  
+				  	<label for="lastNameInputId" style="color:black">
+						Last Name
+				  	</label>
+				  	<input 
+						type="text" 
+						class="form-control" 
+						id="lastNameInputId" 
+						placeholder=""/>
+					</div>
+				  </div>
+				  <p/>
+				  <div class="row">
+				    <div class="col-lg-3">
+					  	<label for="emailInputId" style="color:black">
+							Email
+					  	</label>
+					  	<input 
+							type="email" 
+							class="form-control" 
+							id="emailInputId" 
+							placeholder=""/>
+					  </div>
+					  <div class="col-lg-3">	    	
+					  	<label for="companyInputId" style="color:black">
+							Company
+						</label>
+						<input 
+							type="text" 
+							class="form-control" 
+							id="companyInputId" 
+							placeholder=""/>	    	
+					  </div>
+					</div>
+				
+				    <div class="row">
+					  <div class="col-lg-6" style="width:100%;display:none">	    	
+					  	<label for="planTypeSelectId" style="color:black">
+							Plan Options
+						</label>
+						<select 
+							class="form-control" 
+							id="planTypeSelectId"
+							style="width:100%">
+							<option value="PROFESSIONAL" selected="selected">Professional ($9/month)</option>
+							<option value="HOBBYIST">Hobbyist <b>($0/month)</b></option>
+						<select>	    	
+					  </div>
+				    </div>
+					<p/>
+				
+				    <div class="row">
+					  <div class="col-lg-6" style="width:100%;">				
+						<div class="checkbox checkbox-slider--b" id="notificationCheckBoxDivId">
+							<label>
+								<input 
+									id="notificationCheckboxId" 
+									type="checkbox" 
+									class="checkSpanClass theToolTip" 
+									style="text-align:right"
+									title="Receive notications of updates, news, and more"/>
+								<span style="font-size:14px;text-align:left">
+									Receive product and company notifications
+								</span>
+							</label>
+		  				</div> <!-- notificationCheckBoxDivId -->
+		  				
+		  		  	  </div> <!--col-->
+		  		  	
+		  		    </div> <!--row-->
+		  		    <div class="row">
+		  		      <div class="col-6">
+		  		         <div id="saveUserOptionsBttnDivId" style="padding-top:6px;padding-bottom:6px;text-align:text">						
+					       <button id="saveUserOptionsBttnId" type="button" class="btn btn-md  theToolTip" 
+			  		  	     title="Save changes" onclick="saveUserOptions()">		  	
+		  				     <span style="color:blue;text-align:left" class="theToolTip">
+		  					   Save
+		  				     </span>
+		  			       </button>
+		  		         </div> <!-- saveUserOptionsBttnDivId --> 		  		      
+		  		      </div>
+		  		    </div>
+		   		  </div> <!--container-->
+		  	
+			  </form>	<!--userOptionsFormId-->
+	
+		  <div id="personalOptionsStatusDivId"></div>
+	
+		</div> <!-- personalDivId -->
+
+		<div id="credentialDivId">
+		  <div class="container">
+		    <div class="row">
+			  <div class="col-lg-3">
+				<label for="userNameInputId" style="color:black">
+					UserName
+				</label>
+				<input 
+					type="text" 
+					class="form-control" 
+					id="userNameInputId"
+					readonly 
+					placeholder=""/>	 
+			  </div>
+			</div>
+			<p/>
+			<div class="row">
+			  <div class="col-lg-3">
+				<label for="passwordInputId" style="color:black">
+					Password
+				</label>
+				<input 
+					type="input" 
+					class="form-control" 
+					id="passwordInputId"
+					placeholder=""/>	
+					<div id="resetPasswordBttnDivId" style="padding-top:6px;padding-bottom:6px;text-align:text">						
+						<button id="resetPasswordBttnId" type="button" class="btn btn-md  theToolTip" 
+				  		  	title="Reset password" onclick="resetPassword()">
+				  		
+				  			<span style="color:blue;text-align:left" class="theToolTip">
+			  					Reset Password
+			  				</span>
+			  			</button> <!-- resetPasswordBttnDivId -->			  	
+			  		</div> <!-- resetPasswordBttnDivId -->
+			  	  </div>
+			  	</div>
+			 </div> 	
+		    <div id="credentialsStatusDivId"></div>
+		</div> <!-- credentialDivId -->
+
+
+		<div id="tokenGenerationDivId">
+          <div class="container col-lg-12">
+            <div class="row">
+              <div class="col-3">
+              
+				<input 
+					type="input" 
+					class="form-control" 
+					id="tokenInputId"
+					readonly 
+					placeholder=""/>	    	
+		
+			  	<div id="generateTokenBttnDivId" style="padding-top:6px;padding-bottom:6px;text-align:text">						
+					<button id="generateTokenBttnId" type="button" class="btn btn-md  theToolTip" 
+			  		  	title="Generate API Token" onclick="generateToken()">
+			  		
+			  			<span style="color:blue;text-align:left" class="theToolTip">
+		  					Generate Token
+		  				</span>
+		  			</button> <!-- generateTokenBttnId -->
+		  		</div> <!-- generateTokenBttnDivId -->
+		  	  </div>
+              <div class="col-3">
+                Generate a token to use the realMethods API or CLI...which itself uses the API
+              </div>
+		  	  
+		  	</div>
+		  </div>
+    	
+    	  <div id="generateTokenStatusDivId"></div>
+
+		</div> <!-- tokenGenerationDivId -->
+			
+	</div> <!-- tabs -->
+       
+    
+</div> <!-- userOptionsSlideId-->      

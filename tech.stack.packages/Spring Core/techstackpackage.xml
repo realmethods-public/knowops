@@ -1,0 +1,20 @@
+<tech-stack-package 
+	name="Spring Core" 
+	shortName="SpringCore"
+	description="Spring Boot/Core, Hibernate, and JUnit test facilty to deliver a web services only system.  Query at http://localhost:8080/query. Test at http://localhost:8080/test" 
+	platform="web/mobile"
+	icon-url="./img/spring.boot.png" 	
+	info-page-url="http://www.realmethods.com/infopages/spring-boot-info-page.html"
+    version="1.1"
+    app-type="webapp"
+    release-status="production">
+	<target-languages>
+		<target-language name="java"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
+		<tech-stack-component name="hibernate" description="Hibernate ORM" app-layer="data"></tech-stack-component>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>	
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>

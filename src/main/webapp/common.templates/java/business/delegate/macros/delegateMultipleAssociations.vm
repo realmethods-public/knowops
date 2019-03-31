@@ -1,0 +1,73 @@
+#*
+ Outputs all of the bean methods for all multiple associations.
+  
+ $forInterface		boolean
+*#
+#macro ( getBusinessDelegateMultipleAssociations $forInterface)	
+#set( $includePKs = false )
+#foreach( $attribute in $classObject.getAttributesOrdered( $includePKs ) )
+#if ( $attribute.isFromAssociation() == true && $attribute.isFromMultiValueAssociation() )
+#set( $source = $classObject.getName() )
+#set( $roleName = $Utils.capitalizeFirstLetter( $attribute.getAsArgument() ) )
+## call on the helper to do the acutal output work            
+#getBusinessDelegateMultipleAssociationsHelper( $forInterface $source $roleName $attribute.getSourceClassObject().getName() )
+#end##if ( $attribute.isFromAssociation() == true && $attribute.isFromMultiValueAssociation() )
+#end##foreach( $attribute in $classObject.getAttributesOrdered( $includePKs ) )
+#end
+    
+    
+#*
+ Helper to output all of the bean methods for all multiple associations.
+  
+ $forInterface		boolean
+ $source			String
+*#         
+#macro ( getBusinessDelegateMultipleAssociationsHelper $forInterface $source $roleName $childPKType )
+   /**
+	* Assigns the Collection of associated ${roleName} as Business Objects to the
+	* Business Object associated with the provided parent key.
+	* @param    parentKey
+	* @param	childPKs
+	* @param	${source}
+	* @exception ProcessingException
+    */    
+    public ${source} assign${roleName}( ${source}PrimaryKey parentKey, Collection<${childPKType}PrimaryKey> childPKs )
+#if( $forInterface )    
+    throws ProcessingException;
+#else
+    throws ProcessingException
+    {     
+    	${source} bo = null;
+    	
+        try
+        {					
+#set( $proxyTarget = $aib.getProxyTarget() )
+#if ( $proxyTarget == $proxyTarget.getToSessionBean() )        	    		        
+	        ${source}SessionBeanInterface serviceInterface   = null;        
+            serviceInterface = new ${source}Locator().create${source}SessionBeanInterface();
+            bo = serviceInterface.assign${roleName}( parentKey, childPKs );
+#elseif ( $proxyTarget == $proxyTarget.getToDAO() )   
+			${source}DAO dao = get${source}DAO();
+		
+    	    // delegate the request to the ${source}DAO directly
+        	bo = dao.assign${roleName}( parentKey, childPKs );
+        	release${source}DAO( dao );
+#elseif ( $proxyTarget == $proxyTarget.getToSOAPServer() )    
+            Collection parameters = new ArrayList();
+            parameters.add( parentKey );
+            parameters.add( childPKs  );
+            send( "add${roleName}", parameters, "${source}Service");
+#end   	                
+        }
+        catch ( Throwable exc )
+        {
+            String errMsg = "${source}BusinessDelegate:add${roleName}() - " + exc;
+            FrameworkDefaultLogger.error( errMsg);
+            throw new ProcessingException( errMsg );
+        }
+        
+        return( bo );
+    }
+#end
+#end
+

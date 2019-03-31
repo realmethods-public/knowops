@@ -1,0 +1,308 @@
+#xmlHeader()
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = "$aib.getApplicationNameFormatted()" )
+#end
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+	<modelVersion>4.0.0</modelVersion>  
+  	<groupId>${aib.getRootPackageName(true)}</groupId>  
+  
+#if ( $containerObject )
+  	<parent>
+		<groupId>${aib.getRootPackageName(true)}</groupId>
+    	<artifactId>${aib.getApplicationNameFormatted().replaceAll(" ",".")}-parent</artifactId>
+    	<version>${aib.getVersion()}</version>
+  	</parent>
+#end  
+  	<artifactId>${appName.replaceAll(" ",".")}</artifactId>  
+  	<version>${aib.getVersion()}</version>  
+  
+  	<packaging>jar</packaging>  
+    
+  	<name>${appName}-aws-lambda-jar</name>    
+  	
+#repositories()
+  
+	<properties>
+#standardProperties()
+#awslambdaProperties()
+#swaggerProperties()
+	</properties>
+
+  <build>
+  
+    <plugins>
+    
+#apacheMavenAntRunPluginGitOnlyDecl()    
+
+	  <!-- maven compiler plugin -->
+	  <plugin>
+  		<groupId>org.apache.maven.plugins</groupId>
+  		<artifactId>maven-compiler-plugin</artifactId>
+  		<version>3.7.0</version>
+  		<configuration>
+    	<excludes>
+        	<exclude>**\action\*.java</exclude>
+            <exclude>**\servlet\*.java</exclude>
+            <exclude>**\test\*.java</exclude>
+            <exclude>**\controller\*.java</exclude>
+            <exclude>**\controller\config\*.java</exclude>
+			<exclude>**\service\*.java</exclude>
+			<exclude>**\bo\*UserType.java</exclude>
+			<exclude>**\common\JsonTransformer.java</exclude>
+			<exclude>**\Application.java</exclude>
+			<exclude>**\jsp\*.jsp</exclude>
+    	</excludes>
+  		</configuration>
+	  </plugin>
+	
+<!-- shade uberjar plugin -->    
+    
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+ 			<configuration>
+          	  <filters>
+          	    <filter>
+          	      <artifact>${aib.getRootPackageName(true)}:demo</artifact>
+          	      <excludes>
+                	<exclude>**/action/*.class</exclude>
+                	<exclude>**/servlet/*.class</exclude>
+                	<exclude>**/test/*.class</exclude>
+					<exclude>**/service/*.class</exclude>
+					<exclude>**/delegate/*BusinessDelegate.class</exclude>
+					<exclude>*.xml</exclude>
+					<exclude>*.properties</exclude>					                						                					
+					<exclude>**/Application.class</exclude>		
+					<exclude>**/controller/*.class</exclude>
+					<exclude>**/controller/config/*.class</exclude>			                						                
+              	  </excludes>
+          	    </filter>
+          	    <filter>
+          	      <artifact>com.fasterxml.jackson.core:jackson-annotations</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>
+          	    <filter>
+          	      <artifact>org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>
+          	    <filter>
+          	      <artifact>org.apache.velocity:velocity</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>
+          	    <filter>
+          	      <artifact>jalopy:jalopy</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>
+          	    <filter>
+          	      <artifact>jalopy:jalopy-ant</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>          	            	   
+          	    <filter>
+          	      <artifact>org.hibernate:hibernate-core</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>          	    
+          	    <filter>
+          	      <artifact>org.hibernate:hibernate-c3p0</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>          	    
+          	    <filter>
+          	      <artifact>org.hibernate:hibernate-tools</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>          	    
+          	    <filter>
+          	      <artifact>org.hibernate:hibernate-tools</artifact>
+          	      <excludes>
+                	<exclude>**/*.*</exclude>
+                  </excludes>
+          	    </filter>          	    
+            	<filter>
+              	  <artifact>*:*</artifact>
+              	  <excludes>
+                	<exclude>META-INF/*.SF</exclude>
+                	<exclude>META-INF/*.DSA</exclude>
+                	<exclude>META-INF/*.RSA</exclude>
+              	  </excludes>
+            	</filter>
+          	  </filters>
+        	</configuration>          
+          </execution>
+        </executions>
+      </plugin>
+
+<!-- swagger plugin -->
+
+		<plugin>
+    		<groupId>com.github.kongchen</groupId>
+    		<artifactId>swagger-maven-plugin</artifactId>
+    		<version>${swagger.plugin.version}</version>
+    		<configuration>
+        		<apiSources>
+            		<apiSource>
+                		<locations>
+		                    <location>${aib.getRootPackageName(true)}.delegate</location>
+        		        </locations>
+                		<schemes>
+                    		<scheme>http</scheme>
+                    		<scheme>https</scheme>
+                		</schemes>
+                		<outputFormats>${swagger.outputformat}</outputFormats>
+                		<host>${swagger.host}</host>
+                		<basePath>${swagger.basepath}</basePath>
+                		<info>
+                    		<title>${swagger.title}</title>
+                    		<version>${swagger.version}</version>
+                    		<description>${swagger.description}</description>
+                    		<termsOfService>${swagger.termsofservice}</termsOfService>
+		                    <contact>
+        		                <email>${swagger.contact.email}</email>
+                        		<name>${swagger.contact.name}</name>
+                        		<url>${swagger.contact.url}</url>
+                    		</contact>
+                    		<license>
+                        		<url>${swagger.license.url}</url>
+                        		<name>${swagger.license.name}</name>
+                    		</license>
+                		</info>
+                		<securityDefinitions>
+                    		<securityDefinition>
+                        		<name>basicAuth</name>
+                        		<type>basic</type>
+                    		</securityDefinition>
+                		</securityDefinitions>
+                		<outputPath>${basedir}/generated/document.html</outputPath>
+                		<swaggerDirectory>${basedir}/generated/swagger-ui</swaggerDirectory>
+                		<modelConverters>io.swagger.validator.BeanValidator</modelConverters>
+            		</apiSource>
+        		</apiSources>
+    		</configuration>
+    		<executions>
+	        	<execution>
+    	        	<phase>compile</phase>
+        	    	<goals>
+                		<goal>generate</goal>
+            		</goals>
+        		</execution>
+    		</executions>
+    		<dependencies>
+	        	<!-- swagger-hibernate-validations BeanValidator as a custom model converter -->
+        		<dependency>
+            		<groupId>io.swagger</groupId>
+            		<artifactId>swagger-hibernate-validations</artifactId>
+            		<version>1.5.6</version>
+        		</dependency>
+    		</dependencies>
+		</plugin>
+
+<!-- aws lambda plugin -->
+ 	  <plugin>
+        <groupId>com.github.seanroy</groupId>
+        <artifactId>lambda-maven-plugin</artifactId>
+        <version>2.1.5</version>
+        <configuration>
+          <region>${lambda.region}</region>
+          <accessKey>${lambda.accessKey}</accessKey>
+          <secretKey>${lambda.secretKey}</secretKey>        
+          <functionCode>${lambda.functionCode}</functionCode>
+          <version>${lambda.version}</version>
+          <environmentVpcSecurityGroupsIds>${lambda.vpcSecurityGroupIds}</environmentVpcSecurityGroupsIds>
+          <environmentVpcSubnetIds>${lambda.vpcSubnetIds}</environmentVpcSubnetIds>
+          <lambdaRoleArn>${lambda.lambdaRoleArn}</lambdaRoleArn>
+          <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+          <publish>${lambda.publish}</publish>
+          <forceUpdate>${lambda.forceUpdate}</forceUpdate>
+          <environmentVariables>
+            <mongoDbServerAddresses>${aib.getParam('mongodb.server addresses')}</mongoDbServerAddresses>
+#if ( $aib.getParam('mongodb.credentials').length() > 0 )
+            <mongoDbCredentials>${aib.getParam('mongodb.credentials')}</mongoDbCredentials>     
+#end      
+		  </environmentVariables>
+		  <lambdaFunctionsJSON>
+			[
+#set( $size = $aib.getClassesWithIdentity().size() )			
+#foreach( $class in $aib.getClassesWithIdentity() )
+#set( $loopCount = $velocityCount )		
+#set( $className = $class.getName() )
+#set( $includeComposites = false )
+## handle single associations
+#foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $parentName  = $class.getName() )
+#awsLambdaFuncDecl( ${class.getName()} "get${roleName}"  "get${className}${roleName}" "get the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "save${roleName}"  "save${className}${roleName}" "save the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}"  "delete${className}${roleName}" "delete the ${roleName} for ${className}" ),
+#end ##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+## handle multiple associations
+#foreach( $multiAssociation in $class.getMultipleAssociations() )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $class.getName() )
+#awsLambdaFuncDecl( ${class.getName()} "get${roleName}"  "get${className}${roleName}" "get the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "add${roleName}"  "add${className}${roleName}" "add a ${childName} to the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "assign${roleName}"  "assign${className}${roleName}" "assign one or more ${childName} to the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}"  "delete${className}${roleName}" "delete a ${childName} from the ${roleName} for ${className}" ),
+#end ##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+## common CRUD + getAll functions
+#awsLambdaFuncDecl( ${class.getName()} "create${className}" "create${className}" "creates a $className using supplied $className data" ),
+#awsLambdaFuncDecl( ${class.getName()} "get${className}" "get${className}" "find $className by its primary key" ),
+#awsLambdaFuncDecl( ${class.getName()} "getAll${className}" "getAll${className}" "find all $className entities" ),
+#awsLambdaFuncDecl( ${class.getName()} "save${className}" "save${className}" "saves a $className using supplied $className data" ),
+#if( $loopCount < $size )
+#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" ),
+#else
+#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" )
+#end ##if( $loopCount < $size )
+#end ##foreach( $class in $aib.getClassesWithIdentity() )
+            ]
+          </lambdaFunctionsJSON>
+        </configuration>
+      </plugin>
+#testPluginDecl()
+#jfrogPluginDecl()
+#herokuPluginDecl()
+    </plugins>
+    
+  </build>
+   
+  <dependencies>  
+#awsDependencies()
+#googleGsonDependencies()
+#jacksonJsonDependencies()
+#jalopyDependencies()
+#log4jDependencies()
+#apacheCommonDependencies()
+#w3cDOMDependencies()
+#mavenInvokerDependencies()
+#junitDependencies()
+#swaggerDependencies()
+#mongoDBMorpiaDependencies()
+#mongoDBDependencies()
+  </dependencies>  
+  
+</project>  

@@ -1,0 +1,347 @@
+#xmlHeader()
+
+#set( $className = $classObject.getName() )
+#set( $lowercaseName = $Utils.lowercaseFirstLetter( $className ) )
+#set( $pkName = $classObject.getFirstPrimaryKey().getName() )
+#set( $pkExpression = "${pkName}" ) 
+#set( $jQueryClassName = "#${className}" )
+#set( $jQueryGridTableId = "${jQueryClassName}GridTableId")
+#set( $attributes = $classObject.getAttributes() )
+#set( $attributeCollections = $classObject.getAttributesOrderedAsCollectionsInHierarchy( true ) )
+#set( $pkAttributes = $attributeCollections.get(0) )
+#set( $directAttributes = $attributeCollections.get(1) )
+#set( $compositeAttributes = $attributeCollections.get(2) )
+#set( $firstAttribName = $classObject.findAttributeAsBestFitName() )
+#set( $colNames = "" )
+#set( $colModels = "" )
+
+<html>
+
+	<head>
+  		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="cache-control" content="no-cache" />
+		<link href="http://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<link href="../css/ui.jqgrid.css" rel="stylesheet" type="text/css"/>
+		<style>
+			.ui-jqgrid tr.jqgrow td,
+			.ui-jqgrid th {
+				font-size:0.8em
+			}
+		</style> 
+	</head>
+	
+<!-- commmon javascripts -->
+<script type="text/javascript" src="../js/jquery.jqGrid.min.js"/>
+<script type="text/javascript" src="../js/jquery.jqGrid.src.js"/>
+<script type="text/javascript" src="../js/dual-list-box.min.js"/>
+
+<!-- script execution -->
+<script type="text/javascript">
+
+	// *************************************************************
+	// event handler for a grid refresh forces a re-populate 
+	// *************************************************************
+ 	$( document ).on('refresh${className}Grid', function() {
+        populate${className}Grid();
+    });
+
+	// *************************************************************
+	// execution on document (page) preparation
+	// *************************************************************
+	$( document ).ready(function()
+	{
+		$('#selectFor${className}').DualListBox();
+		
+		var rowNum, height;
+		var caption = '';
+		var modelUrl = '@Html.Raw(ViewData["modelUrl"])';
+		
+		console.log( 'modelUrl is ' + modelUrl );
+		
+		// if the the modelUrl is not provided, load all ${className} models
+		if ( modelUrl == null || modelUrl == 'null' || modelUrl == '' )
+		{
+			caption 	= '${className} List';
+			modelUrl 	= '/${className}/loadAll';
+			rowNum		= 20;
+			height		= 280; 
+		}
+		else	// only show 5 rows with a minimal height, and display the multi-select button option
+		{
+			rowNum		= 5;
+			height		= 100;
+			$('#dualListButtonFor${className}DivId').show(); 
+		}
+			
+		// *************************************************************				
+		// prepare the ${className} grid
+		// *************************************************************			
+        var grid = jQuery("${jQueryGridTableId}");
+        grid.jqGrid({
+        	url: modelUrl,
+			datatype: "json",
+			#foreach( $pk in $pkAttributes )
+				#set( $modifiedName = ${Utils.noWhiteSpaceNoDots( ${pk.getName()} )} )
+				#set( $phrase = ${Utils.turnIntoPhrase( ${pk.getName()} )} )
+				#set( $colNames = "${colNames}'${phrase}'," )
+				#set( $colModels = "${colModels}{name:'${pk.getName()}',index:'${pk.getName()}',hidden:true}," )
+			#end
+			#foreach( $attribute in $directAttributes )
+				#if ( $attribute.isUserViewable() == true && $attribute.isFromAssociation() == false )
+				#set( $type = $attribute.getType() )
+				#set( $modifiedName = ${Utils.noWhiteSpaceNoDots( ${attribute.getName()} )} )
+				#set( $modifiedName = $Utils.lowercaseFirstLetter( $modifiedName ) )
+				#set( $phrase = ${Utils.turnIntoPhrase( ${attribute.getName()} )} )
+					#set( $colNames = "${colNames}'${phrase}'," )
+					#if ( $type.endsWith( "Date" ) == false )
+						#set( $colModels = "${colModels}{name:'${modifiedName}',index:'${modifiedName}',align:'center'}," )
+					#else
+						#set( $colModels = "${colModels}{name:'${modifiedName}',index:'${modifiedName}',align:'center',formatter:'date', formatoptions: { srcformat:'yyyy-mm-dd', newformat:'yyyy-mm-dd'}}," )
+					#end
+			    #end
+			#end	 
+			colNames:[ ${colNames} ],
+   			colModel:[ ${colModels} ],
+   			loadtext: "Loading ${className} List",
+			altRows:true,
+			sortable:true,
+			autowidth:true,
+			shrinkToFit : true,
+			multiselect:true,
+		    viewrecords:false,
+		    gridview:true,
+			pginput:false,
+			pgbuttons:false,
+			viewrecord:false,
+		    rowNum:rowNum,
+		    height:height,
+		    rownumbers:true,
+		    hidegrid:true,
+		    caption: caption
+		}); 
+		
+		// populate the grid
+		populate${className}Grid();
+	});
+
+	// *************************************************************
+	// double click event handler on a grid item to force an edit 
+	// event on a ${className} model
+	// *************************************************************
+	jQuery('${jQueryGridTableId}').dblclick(function () 
+	{
+		edit${className}();
+	}); 			    
+
+	// *************************************************************
+	// display the inspection dialog embedded with the 
+	// ${className} form in creation mode
+	// ************************************************************* 
+	function add${className}()
+	{
+		var title = "Add New ${className}";
+		var url	= '@Html.Raw(ViewData["addUrl"])';		
+		var parentUrl = '@Html.Raw(ViewData["parentUrl"])';
+		var eventToFire = "refresh${className}Grid";
+		
+		if( url == null || url == 'null' || url == '' )
+			url = "/${className}/Profile?action=create";
+		else // append the parent if there is an addUrl provided
+			url = url + "&parentUrl=" + parentUrl;
+			
+		inspectionDialog( title, url, eventToFire );
+	}
+
+	// *************************************************************
+	// display the inspection dialog embedded with the ${className} 
+	// form in edit mode
+	// *************************************************************
+	function edit${className}()
+	{
+		var id 	= getSelectedIdFromGrid( jQuery('${jQueryGridTableId}'), '${pkName}' );
+	
+		if ( id != null )
+		{
+			var title = "Edit ${className}";
+			var url = '/${className}/Profile?action=edit&${pkName}=' + id;
+			
+			var eventToFire = "refresh${className}Grid";
+			
+			inspectionDialog( title, url, eventToFire );
+		}
+		else
+		{
+			BootstrapDialog.alert('Please first select a ${className}');
+		}	
+	}
+	
+	// *************************************************************
+	// upon confirmation, call a ${className} controller via .ajax 
+	// to delete one or more ${className} models
+	// *************************************************************
+	function delete${className}()
+	{
+		var ids 	= getSelectedIdsFromGrid( jQuery('${jQueryGridTableId}'), '${pkName}' );
+		if ( ids == null )
+		{
+			BootstrapDialog.alert('Please first select a ${className}');
+		}
+		else
+		{
+	    	BootstrapDialog.confirm
+	    	({
+	        	title: 'WARNING',
+	        	message: 'Are you sure?',
+	            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+	            closable: true, // <-- Default value is false
+	            btnCancelLabel: 'No', // <-- Default value is 'Cancel',
+	            btnOKLabel: 'Yes', // <-- Default value is 'OK',
+	            btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+	            callback: function(result) 
+	            {
+	                // result will be true if button was click, while it will be false if 
+	                // users close the dialog directly.
+	                if(result) 
+	                {
+	                	var url = '@Html.Raw(ViewData["deleteUrl"])';
+	                	
+	                	if ( url == null || url == '' || url == 'null' )
+	                		url = '/${classObject.getName()}/delete?a=a';
+	                	
+	                	for (i = 0; i < ids.length; i++)
+	                	{
+	                		url = url + '&childIds=' + ids[i];
+	                	}
+
+						console.log( 'delete url is ' + url );
+	                							
+						jQuery.ajax(
+						{
+					  		url: url,
+					  		dataType: 'json',
+						}).always(function( data ) 
+						{
+							populate${className}Grid()
+						});		
+	                }
+	            }
+	    	});
+	    }
+	}
+
+	// *************************************************************
+	// handles calling the multi-select screen, providing details
+	// on both the source list and the receiver list
+	// *************************************************************
+	function add${className}FromAllList()
+	{
+		var sourceUrl	= '/${className}/loadAll';
+		var modelUrl 	= '@Html.Raw(ViewData["modelUrl"])';
+		var value 		= '${pkName}';
+		var text 		= '${firstAttribName}';
+		var roleName	= '@Html.Raw(ViewData["roleName"])';
+		
+		if ( roleName == null || roleName == 'null' || roleName == null )
+			roleName = 'All-${className}';
+			
+		multiselect( sourceUrl, modelUrl, roleName, value, text, assign${className}SelectionsFromAllList );  
+	}
+
+	// *************************************************************
+	// helper function to assign the provided children ids to the
+	// ${className} as the parent
+	// *************************************************************
+	function assign${className}SelectionsFromAllList( ids )
+	{
+		var url = '@Html.Raw(ViewData["parentUrl"])';
+		for (i = 0; i < ids.length; i++)
+    	{
+    		url = url + '&childIds=' + ids[i];
+    	}
+				
+		jQuery.ajax(
+		{
+	  		url: url,
+	  		dataType: 'json',
+		}).always(function( data ) 
+		{
+			populate${className}Grid()
+		});		
+	}
+	
+	// *************************************************************
+	// populate the grid triggering a reload event
+	// *************************************************************
+	function populate${className}Grid()
+	{
+		$('#loadingDivId').show();
+		$('${jQueryGridTableId}').trigger( 'reloadGrid' );
+		$('#loadingDivId').hide();			
+	}
+	
+</script>
+
+<!-- grid table declaration -->
+<table id="${className}GridTableId"></table>
+
+<div>
+  <br>
+  <table
+    <tr>
+      <td>
+      
+        <!-- grid refresh button -->
+		<a href="#" data-toggle="tooltip" data-placement="below" title="refresh" onclick="populate${className}Grid()" >
+		    <button type="button" class="btn btn-info btn-xs">
+		      <span class="glyphicon glyphicon-refresh">
+		      </span>
+			</button>
+		</a>
+		
+		<!-- button to add a new ${className} model -->
+		<a href="#" data-toggle="tooltip" data-placement="below" title="add ${classObject.getName()}" onclick="add${className}()">
+		    <button type="button" class="btn btn-info btn-xs">
+		      <span class="glyphicon glyphicon-plus">
+		      </span>
+			</button>
+		</a>
+		
+		<!-- button to edit a selected ${className} model -->
+		<a href="#" data-toggle="tooltip" data-placement="below" title="edit ${classObject.getName()}" onclick="edit${className}()" >
+		    <button type="button" class="btn btn-info btn-xs">
+		      <span class="glyphicon glyphicon-pencil">
+		      </span>
+			</button>
+		</a>
+		
+		<!-- button to delete one or more selected ${className} models -->
+		<a href="#" data-toggle="tooltip" data-placement="below" title="delete ${classObject.getName()}" onclick="delete${className}()">
+		    <button type="button" class="btn btn-info btn-xs">
+		      <span class="glyphicon glyphicon-trash">
+		      </span>
+			</button>
+		</a>
+	  </td>
+	  <td>
+	  	<!-- button to add one or more existing ${className} models -->
+		<div id="dualListButtonFor${className}DivId" style="display:none">
+		  <a href="#" data-toggle="tooltip" data-placement="below" title="add ${classObject.getName()} From List" onclick="add${className}FromAllList()">
+		    <button type="button" class="btn btn-info btn-xs">
+		      <span class="glyphicon glyphicon-th-list">
+		      </span>
+			</button>
+		  </a>
+		<div>
+ 	  </td>
+ 	</tr>
+  </table>
+
+  <!-- the indicator that the grid's contents are loading -->
+  <div id="loadingDivId" style="display:none;color:black">
+    loading all ${className} entities...<image src="../img/load_new.gif" width=48 height=48/>
+  </div>
+  				  				  
+</div>
+
+</html>

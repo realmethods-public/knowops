@@ -1,0 +1,177 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <prerequisites>
+        <maven>2.2.1</maven>
+    </prerequisites>
+
+    <groupId>hibernate.revenge.appgen.session</groupId>
+    <artifactId>rev.eng.jdbc</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <dependencies>
+         <dependency>
+            <groupId>${dbGroupId}</groupId>
+            <artifactId>${dbArtifactId}</artifactId>
+            <version>${dbVersion}</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.3.11.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.11.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>4.0.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.8</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1</version>
+        </dependency>
+    	<dependency>
+      		<groupId>commons-io</groupId>
+      		<artifactId>commons-io</artifactId>
+      		<version>1.2</version>
+		</dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-tools</artifactId>
+            <version>4.3.2.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    <dependency>  	
+    	<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+   		<version>2.4</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                    	<id>hbm2java</id>
+                        <!-- Hibernatetool will generate everything before running tests -->
+                        <phase>test-compile</phase>
+                        <configuration>
+                            <target>
+                            	<property name="compile_classpath" refid="maven.compile.classpath"/>
+				                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+				                <property name="test_classpath" refid="maven.test.classpath"/>
+				                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+				                
+				                <echo message="project build directory: ${project.build.directory}"/>
+				                <echo message="plugin classpath:  ${plugin_classpath}"/>
+				                
+                                <!--
+                                    For an introduction to the <hibernatetool> Ant Task see
+                                    http://docs.jboss.org/tools/4.1.0.Final/en/hibernatetools/html_single/index.html#ant
+                                -->
+                                <echo message="Ant target, through maven-antrun-plugin, started"/>
+
+                                <property name="maven_compile_classpath" refid="maven.compile.classpath"/>
+                                <property name="maven_test_classpath" refid="maven.test.classpath"/>
+                                <property name="target_classpath" value="${project.basedir}/target/classes"/>
+                                
+                                <path id="hibernatetool.path">
+                                	<pathelement path="${plugin_classpath}" />
+                                    <pathelement path="${maven_compile_classpath}" />
+                                    <pathelement path="${maven_test_classpath}" />
+                                    <pathelement path="${target_classpath}" />
+                                    <path location="${appCreateBuildDir}"/>       
+                                </path>
+
+                                <taskdef name="hibernatetool"
+                                         classname="org.hibernate.tool.ant.HibernateToolTask"
+                                         classpathref="hibernatetool.path" />
+
+                                <property
+                                    name="generatedByHibernate.outputDirectory"
+                                    value="${destDirForPojos}" />
+                                <mkdir
+                                    dir="${destDirForPojos}" />
+                                
+                                <hibernatetool destdir="${destDirForPojos}">
+                                    <classpath>
+                                    maven.plugin.classpath
+                                    	<path location="plugin_classpath"/>
+                                    	<path location="maven_compile_classpath"/>
+                                        <path location="${project.build.outputDirectory}"/>                                        
+                                        <path location="${project.basedir}/target/classes"/>
+                                    </classpath>
+                        			<jdbcconfiguration
+                        				packagename="com.cloudmigrate.reveng"
+                        				revengfile="${revEngXmlFile}"                        	
+                            			detectmanytomany="true"
+                   						configurationfile="${cfgXmlFile}"
+                   						reversestrategy="com.cloudmigrate.codetemplate.RealMethodsReverseEngineeringStrategy"
+                   						/>
+				                	<hbm2java 
+				                		destdir="${destDirForPojos}/src/main/java" 
+		        		        		jdk5="true" 
+		                				ejb3="false"/>
+                                </hibernatetool>
+
+                                <echo message="Ant target, through maven-antrun-plugin, terminated"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

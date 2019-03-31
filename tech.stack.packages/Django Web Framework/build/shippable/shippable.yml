@@ -1,0 +1,25 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#### CI CONFIG
+language: python
+
+python:
+  - 3.7
+
+build:
+  cache:  true
+  ci:
+
+#### Running tests using pytest
+
+    - '[ $EUID == 0 ] && SUDO="" || SUDO=sudo'
+    - $SUDO pip install pipenv
+    - pipenv install
+    - pipenv install Django
+    - pipenv install pytest-django
+    - pipenv run pytest --junitxml=shippable/testresults/junit.xml ${appName}/tests
+
+#### END CI CONFIG

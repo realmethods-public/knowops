@@ -1,0 +1,34 @@
+#xmlHeader()
+	
+<project name="jalopy_prety_print_build" default="all" basedir=".">
+
+<target name="all" depends="pretty-print"/>        
+
+<property environment="os"/>
+                    
+<!-- Jalopy / Pretty Print properties -->
+
+<!-- Jalopy Task Definition -->
+<taskdef name="jalopy"
+  classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
+	<classpath>
+		<pathelement path="${runtime_classpath}"/>
+	</classpath>
+</taskdef>    
+
+<!-- 
+****	Pretty print formats source files
+-->
+<target name="pretty-print" 
+		description="Pretty printing source files...">	
+  <jalopy 
+		failonerror="false"
+		loglevel="ERROR">
+    <fileset dir="${project.build.sourceDirectory}">
+      <include name="**/*.java"/>
+      <exclude name="**/Application.java" />
+    </fileset>
+  </jalopy>
+</target>
+    
+</project>

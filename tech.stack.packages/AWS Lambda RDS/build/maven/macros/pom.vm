@@ -1,0 +1,30 @@
+#macro( awsLambdaFuncDecl $className $funcNameToCall $funcNameToExpose $desc )
+              {
+                "functionName": "${funcNameToExpose}",
+                "description": "${desc}",
+#if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )                
+                "handler": "${aib.getRootPackageName(true)}.#getDelegatePackageName().${className}AWSLambdaDelegate::${funcNameToCall}",
+#else
+				"handler": "functions_awslambda.${funcNameToCall}",
+#end ##if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )                
+                "timeout": ${aib.getParam('aws-lambda.timeout')},
+#* commented out since this is to receive notifications
+#if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )     
+                "triggers": [
+                                  {
+                                    "integration": "Kinesis",
+#if ( ${aib.getParam('aws-lambda.append class name to stream name')} == "true" )                                    
+                                    "kinesisStream": "${aib.getParam('aws-lambda.kinesis stream name')}${className}",
+#else
+									"kinesisStream": "${aib.getParam('aws-lambda.kinesis stream name')}",
+#end ##if ( ${aib.getParam('aws-lambda.append class name to stream name')} == "true" )                                  
+                                    "batchSize": ${aib.getParam('aws-lambda.kinesis batch size')},
+                                    "startingPosition": "${aib.getParam('aws-lambda.kinesis starting position')}"
+                                  }
+                             ],
+#end ##if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" ) 
+*#                                             
+                "memorySize": ${aib.getParam('aws-lambda.memorySize')}
+
+              }
+#end ##macro( awsLambdaFuncDecl $className $funcNameToCall $funcNameToExpose $desc )

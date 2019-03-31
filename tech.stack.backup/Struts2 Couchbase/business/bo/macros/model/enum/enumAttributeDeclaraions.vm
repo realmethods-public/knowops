@@ -1,0 +1,17 @@
+#macro( getEnumAttributeDeclarations )
+#set( $commonType = $classObject.getCommonType() )
+#set( $attributes = $classObject.getAttributesOrdered(false) )
+##	public $commonType value = null;
+##	public String description = null;
+##	public Integer index = new Integer(0);
+#foreach( $attribute in $attributes )
+#set( $arg = ${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})} )
+#set( $defaultValue = $attribute.getDefaultValue() )
+#set( $index = $velocityCount - 1 )
+   /**
+    * $attribute.getAsArgument()
+    */    
+    static public final $classObject.getName() $arg = new $classObject.getName()(${defaultValue}, "${attribute.getAsArgument()}", new Integer(${index}) ); 
+        
+#end
+#end

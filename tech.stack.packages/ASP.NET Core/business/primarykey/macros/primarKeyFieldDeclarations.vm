@@ -1,0 +1,6 @@
+#macro ( getKeyFieldDeclarationsForDotNet )
+#set( $attributes = $classObject.getPrimaryKeyAttributes() )
+#foreach( $attribute in $attributes )	
+	public $Utils.mapTypeToDotNetType(${attribute.getType()}) $attribute.getName() { get; set; }
+#end## $attribute in $attributes 
+#end

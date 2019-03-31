@@ -1,0 +1,12 @@
+#macro( mappingResources )
+#if( ${containerObject} )
+#set( $classesToUse = $continerObject.getChildrenClassObjects() )
+#else
+#set( $classesToUse = $aib.getClassesWithIdentity() )
+#end	
+#foreach( $class in $classesToUse )
+#if ( $class.hasParent() == false )
+      <mapping resource="${class.getName()}.hbm.xml"/>
+#end
+#end
+#end

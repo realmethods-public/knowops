@@ -1,0 +1,9 @@
+#macro( awsLambdaFuncDecl $className $funcNameToCall $funcNameToExpose $desc )
+              {
+                "functionName": "${funcNameToExpose}",
+                "description": "${desc}",
+                "handler": "${aib.getRootPackageName(true)}.#getDelegatePackageName().${className}AWSLambdaDelegate::${funcNameToCall}",
+                "timeout": ${aib.getParam('aws-lambda.timeout')},
+                "memorySize": ${aib.getParam('aws-lambda.memorySize')}
+              }
+#end

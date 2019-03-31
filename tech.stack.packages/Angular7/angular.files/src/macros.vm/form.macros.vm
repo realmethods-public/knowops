@@ -1,0 +1,166 @@
+#macro( formFields $action )
+#set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className})} )
+#set( $formName = "${lowercaseClassName}Form" )
+<div class="panel panel-primary">
+	<div class="panel-heading">
+    	<h5>{{ title }}</h5>
+	</div>
+	
+	<div class="panel-body">
+		<form [formGroup]="${formName}" novalidate>
+###################################################
+## loop thru all attributes, excluding pks
+###################################################
+#set( $includePrimaryKeys = false )
+#set( $ngModel = "" )##default to empty, apply when action is update
+###################################################
+## loop thru all attributes, excluding pks
+###################################################
+#foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )      
+#set( $name = $attribute.getName() )
+#set( $displayName = $attribute.getDisplayName() )
+#set( $type = $attribute.getType() )
+#set( $isRequired = false )
+###################################################
+## only apply the ngModel if in update mode
+###################################################
+#if ( $action == "update" )
+#set( $ngModel = "[(ngModel)] = ${esc.q}${lowercaseClassName}.${name}${esc.q}" )
+#end##if ( $action == "update" )
+			<div class="form-group">
+###################################################
+## if not from an association
+###################################################				
+#if ( $attribute.isFromAssociation() == false )			
+###################################################
+## handle enumerated types as select with options
+###################################################				
+#if ( $attribute.isFromEnumerator() == true )
+				<mat-form-field>
+					<mat-select placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+				    	<mat-option *ngFor="let ${type} of ${type}s" [value]="${type}">
+				      		{{${type}}}
+				    	</mat-option>
+				  	</mat-select>
+				</mat-form-field>
+#else##if ( $attribute.isFromEnumerator() == true )
+###################################################
+## handle primitive types...not associations yet
+###################################################
+###################################################
+## handle booleans as a checkbox
+###################################################
+#if ( $type.endsWith( "oolean") == true )
+				<mat-checkbox formControlName="${name}" ${ngModel}>${name}</mat-checkbox>
+###################################################
+## handle date using the ngbDatePicker
+###################################################				
+#else
+#set( $isRequired = $attribute.isRequired() )
+#set( $controlsRequired = false )
+#if ( $type.endsWith( "Date" ) )
+				<mat-form-field>
+				  	<input matInput [matDatepicker]="picker" placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+	  				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+	  				<mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+###################################################
+## handle time using the nbg-timepicker
+###################################################
+#elseif ( $type.endsWith( "Time" ) )
+				<ngb-timepicker ${ngModel} class="form-control" formControlName="${name}" #${name} ${ngModel}></ngb-timepicker>
+###################################################
+## handle numerics as an input text
+###################################################
+#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+				<input type="text" mat-input placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+###################################################
+## handle all by default as input text
+###################################################
+#else
+				<input type="text" mat-input placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+#end## of all none-boolean values
+#end##if ( $type.endsWith( "Date" )
+#end##if ( $attribute.isFromEnumerator() == false )
+###################################################
+## attribute is from an association
+###################################################
+#else
+#set( $roleName = ${attribute.getAssociation().getRoleName()} )
+#set( $assocClassName = ${attribute.getAssociation().getType()} )
+#set( $lowercaseAssocClassName = ${Utils.lowercaseFirstLetter(${assocClassName})} )
+#set( $bestFitForName =  ${aib.getClassObject(${assocClassName}).findAttributeAsBestFitName()} )
+###################################################
+## attribute is a singular association 
+###################################################
+#if ( $attribute.isFromSingleValueAssociation() == true )
+#set( $multiple = "" )
+#else
+###################################################
+## attribute is a multiple association 
+###################################################
+#set( $multiple = "multiple")
+#end##if ( $attribute.isFromSingleValueAssociation() == true )
+#if ( $action == "update" ) ## only apply comparison when in update mode
+#set( $multiple = "${multiple}  [compareWith]=${esc.q}compareFn${esc.q} [(ngModel)]=${esc.q}${lowercaseClassName}.${roleName}${esc.q}" )
+#end
+				<mat-form-field>
+					<mat-select placeholder="${roleName}" formControlName="${roleName}" ${multiple}>
+				    	<mat-option *ngFor="let ${lowercaseAssocClassName} of ${lowercaseAssocClassName}s" [value]="${lowercaseAssocClassName}._id">
+				      		{{${lowercaseAssocClassName}.${bestFitForName}}}
+				    	</mat-option>
+				  	</mat-select>
+				</mat-form-field>
+#end##if ( $attribute.isFromAssociation() == false )			
+			</div><!--form-group --> 
+###################################################
+## handler at least one attribute is required
+###################################################
+#if( $isRequired == true )
+#set( $controlsRequired = true ) ## got one...used later on in declaring the button
+			<div *ngIf="${formName}.controls['${name}'].invalid && (${formName}.controls['${name}'].dirty || ${formName}.controls['${name}'].touched)" class="alert alert-danger">
+				<div *ngIf="${formName}.controls['${name}'].errors.required">
+        			${name} is required.
+				</div>
+			</div>
+#end##if( $attribute.isRequired() == true )
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+        	<div class="form-group">
+#set( $includePrimaryKeys = false )
+#set( $includeType = false )
+#set( $delim = ", " )
+#set( $suffix = ".value" )
+#set( $argsAsString = ${classObject.getAttributesAsString( ${includePrimaryKeys}, ${includeType}, ${delim}, ${suffix} )} )
+###################################################
+## disable button for all invalidated controls
+###################################################
+#set( $includePrimaryKeys = false )
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+#set( $size = $attributes.size() )
+#set( $args = "" )
+#foreach ( $attribute in $attributes )
+#set( $name = $attribute.getName() )
+#if ( $attribute.isFromAssociation() )
+#set( $name = $attribute.getAssociation().getRoleName() )
+#end
+#if( $attribute.getType().endsWith("oolean") == false ) ## checkbox handled differently
+#set( $args = "${args}${formName}.controls[${esc.singleQuote}${name}${esc.singleQuote}].value" )
+#else
+#set( $args = "${args}${formName}.controls[${esc.singleQuote}${name}${esc.singleQuote}].value == true ? true : false" )
+#end##if( $attribute.getType().endsWith("oolean") == true )
+#if ( $velocityCount < $size )
+#set( $args = "${args}, " )
+#end##if ( $velocityCount < size )      
+#end##foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )      
+				<button (click)="${action}${className}(${args})" 
+#if( $controlsRequired == true )
+					[disabled]="${formName}.pristine || ${formName}.invalid"
+#end##if( $controlsRequired == true )
+					class="btn btn-primary">${action}</button>
+        	</div>
+		</form> <!--${lowercaseClassName}Form -->
+	</div> <!-- panel body -->
+		
+</div> <!-- panel panel-primary -->
+#end##macro( formFields $action )

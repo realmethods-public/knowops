@@ -1,0 +1,17 @@
+#*
+ Outputs Java comments for all attributes in the hierarchy, optionally including
+ the required AttributeObjects.
+  
+ $includeRequiredAttribute		boolean
+ $forPrimaryKey					boolean
+*#
+#macro ( getAllAttributeJavaComments $includeRequiredAttribute $forPrimaryKey )    
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includeRequiredAttribute ) )
+#foreach( $attribute in $attributes )	
+#if( $attribute.isPrimaryKey() == $includeRequiredAttribute )
+#if( $attribute.isFinal() == false )        
+    * @param    $attribute.getAsArgument()
+#end## $attribute.isFinal() == false
+#end## $attribute.isPrimaryKey() == $includeRequiredAttribute
+#end## foreach $attribute in $attributes
+#end

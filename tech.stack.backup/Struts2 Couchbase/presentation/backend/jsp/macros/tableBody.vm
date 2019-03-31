@@ -1,0 +1,22 @@
+#macro( generateTableBody $attributes $objectListName $objectAttributeNames $addOnly )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isSingleComposite() == true )
+    #generateTableBody( $attributes $objectListName $objectAttributeNames $addOnly)
+#elseif ( $attribute.isFromAssociation() == false && $attribute.isUIViewable() == true )
+    #generateTableBodyHelper( $objectListName $objectAttributeNames $addOnly)
+#end
+#end
+#end
+
+#macro( generateTableBodyHelper $objectListName $objectAttributeNames $addOnly )
+    <s:iterator value="${objectListName}" id="currentObject">
+        <tr>
+        <s:iterator value="${objectAttributeNames}" id="currentAttributeName' status="iterStatus">	
+            <td class="<s:if test="#iterStatus.odd == true ">dataCell</s:if><s:else>dataCellHighlighted</s:else>">
+                <s:property value="#currentObject.currentAttributeName"/>
+            </td>            	
+        </s:iterator>
+        </tr>
+    </s:iterator>        
+#end
+

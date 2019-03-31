@@ -1,0 +1,128 @@
+#*
+ Outputs the formatted accessor methods for 1 to m associations,  using the
+ target of the proxy as input.
+  
+ $proxyTarget		ProxyTarget
+ $forInterface		boolean
+*#
+#macro ( getAccessorMethodsForMultipleAssociations $proxyTarget $forInterface )
+#set( $associations = $classObject.getMultipleAssociations() )
+#foreach( $association in $associations )	
+#set( $target = $association.getType() )
+#set( $source = $association.getSiblingAssociationEndObject().getType() )
+#set( $roleName = $association.getRoleName() )
+## delegate to Helper macro
+#if ( $forInterface == false )
+#getAccessorMethodsForMultipleAssociationsHelper( $proxyTarget $source $target $roleName )
+#else
+#getAccessorMethodDeclsForMultipleAssociationsHelper( $proxyTarget $source $target $roleName )
+#end
+#end        
+#end    
+
+
+#*
+ Returns a String formatted accessor methods for 1 to m associations,  using the
+ target of the proxy as input.
+  
+ $proxyTarget		ProxyTarget
+ $source			String
+ $target 			String
+ $roleName			String
+*#    
+#macro ( getAccessorMethodsForMultipleAssociationsHelper $proxyTarget $source $target $roleName )
+   /**
+	* Assigns a Collection of ${target}PrimaryKeys
+    * @param    key    	${source}PrimaryKey key
+    * @param    coll	Collection of ${source}PrimaryKey
+    * @exception ProcessingException
+    */
+	public void set${roleName}( ${source}PrimaryKey key, java.util.Collection ${target}PrimaryKeys )
+	throws ProcessingException
+	{	
+#if ( $proxyTarget == $proxyTarget.getToSessionBean() )        	
+		// Obtain the ${source}Service Remote interface
+		${source}SessionBeanInterface serviceInterface = null;
+
+		try
+		{
+			serviceInterface = new ${source}Locator().create${source}SessionBeanInterface();
+		}
+		catch ( Throwable exc )
+		{
+			throw new ProcessingException( "${target}BusinessDelegate:set${roleName}(..) - "  + exc, exc );
+	      }
+
+		// Set the collection of ${target}PrimaryKeys for this $source primary key
+		try
+		{
+	    	serviceInterface.set${roleName}( key, ${target}PrimaryKeys );
+		}
+		catch ( Throwable exc )
+		{
+	    	throw new ProcessingException( "${target}BusinessDelegate:set${roleName}(..) - Could not set ${roleName} due to - "  + exc, exc );
+		}
+	}            	
+#elseif ( $proxyTarget == $proxyTarget.getToDAO() )        
+## Obtain the ${target}DAO
+        ${target}DAO dao = ${target}Locator.create${target}DAO();
+        
+        try
+        {
+        	dao.save${roleName}( key, ${target}PrimaryKeys );
+		}
+		catch ( Throwable exc )
+		{	
+			throw new ProcessingException( "${source}BusinessDelegate:get${roleName}(..) - Could not get ${roleName} due to - "  + exc, exc );
+        }
+        finally
+        {
+        	${target}BusinessDelegate.release${target}DAO( dao );
+        }
+        
+        return returnCollection;
+	}	
+#elseif ( $proxyTarget == $proxyTarget.getToSOAPServer() )
+    	// find the collection of ${source}s for the provided ${target} primary key
+        Collection returnCollection = null;
+        
+        try
+        {
+        	// make the SOAP call
+            
+            // create the Axis parameters
+            ArrayList parameters = new ArrayList();
+            parameters.add( new FrameworkAxisSOAPParameter( "key",  key, new QName( "urn:${classObject.getName()}Session", "${target}PrimaryKey" ) );
+            parameters.add( new FrameworkAxisSOAPParameter( "keys",  ${target}PrimaryKeys, new QName( "urn:${classObject.getName()}Session", "java.util.Collection" ) );
+            returnCollection = new ArrayList((Vector)ApacheAxisHelper.makeAxisCall( "save${roleName}", parameters, "${source}Service", getMappingTypes(), null /*no need to apply an Axis return type*/ ));
+     	}
+		catch ( Throwable exc )
+		{
+        	throw new ProcessingException( "${target}BusinessDelegate:get${roleName}(..) - Could not get ${roleName} due to - "  + exc, exc );
+       	}
+      
+      	return returnCollection;
+    }
+#end## $proxyTarget type check
+#end
+
+#*
+ Returns a String formatted accessor methods for 1 to m associations,  using the
+ target of the proxy as input.
+  
+ $proxyTarget		ProxyTarget
+ $source			String
+ $target 			String
+ $roleName			String
+ $usingCMP
+*#    
+#macro ( getAccessorMethodDeclsForMultipleAssociationsHelper $proxyTarget $source $target $roleName $usingCMP )
+   /**
+	* Assigns a Collection of ${target}PrimaryKeys
+    * @param    key    	${source}PrimaryKey key
+    * @param    coll	Collection of ${source}PrimaryKey
+    * @exception ProcessingException
+    */
+	public void set${roleName}( ${source}PrimaryKey key, java.util.Collection ${target}PrimaryKeys )
+	throws ProcessingException;
+#end

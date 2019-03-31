@@ -1,0 +1,36 @@
+#macro( getEnumGettersSetters )
+#set( $commonType = $classObject.getCommonType() )
+// getter/setters for Bean purposes of serialization
+// and should avoid be used programatically.  Use the appropriate
+// static final type below.
+	public $commonType getValue()
+	{
+		return( value );
+	}
+	
+	public String getDescription()
+	{
+		return( description );
+	}
+	
+	public Integer getIndex()
+	{
+		return( index );
+	}
+
+    public void setValue( $commonType value )
+    {
+    	this.value = value;
+    }
+    
+    public void setDescription( String description )
+    {
+    	this.description = description;
+    }
+    
+    public void setIndex( Integer index )
+    {
+    	this.index = index;
+    }	
+
+#end

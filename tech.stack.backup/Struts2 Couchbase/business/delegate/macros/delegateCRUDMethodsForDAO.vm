@@ -1,0 +1,259 @@
+#macro( delegateCRUDMethodsForDAO )
+#set( $className = $classObject.getName() )
+#if ( $classObject.isAbstract() == false )
+    
+   /**
+	* ${className} Business Delegate Factory Method
+	*
+	* Returns a singleton instance of ${className}BusinessDelegate().
+	* All methods are expected to be self-sufficient.
+	*
+	* @return 	${className}BusinessDelegate
+	*/
+	static public ${className}BusinessDelegate get${className}Instance()
+	{
+	    if ( singleton == null )
+	    {
+	    	singleton = new ${className}BusinessDelegate();
+	    }
+	    
+	    return( singleton );
+	}
+
+    /**
+     * Method to retrieve the ${className} via an ${className}PrimaryKey.
+     * @param 	key
+     * @return 	${className}
+     * @exception ProcessingException - Thrown if processing any related problems
+     * @exception IllegalArgumentException 
+     */
+    public ${className} get${className}( ${className}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException
+    {
+        if ( key == null )
+        {
+            String errMsg = "${className}BusinessDelegate:get${className}( ${className}PrimaryKey key ) - null key provided.";
+            LOGGER.warning( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        ${className} returnBO = (${className})getCache().get( NAMESPACE + "${className}" + key.getFirstKey());
+        
+        if ( returnBO != null )
+        	return (returnBO );
+        
+        ${className}DAO dao = get${className}DAO();
+        
+        try
+        {
+            returnBO = dao.find${className}( key );
+        }
+        catch( FrameworkDAOException exc )
+        {
+            String errMsg = "${className}BusinessDelegate:get${className}( ${className}PrimaryKey key ) - unable to locate ${className} with key " + key.toString() + " - " + exc;
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${className}DAO( dao );
+        }        
+        
+        // cache it
+        getCache().set( NAMESPACE + "${className}" + key.getFirstKey(), expiryTimeInSeconds, returnBO );
+        
+        return returnBO;
+    }
+
+
+    /**
+     * Method to retrieve a collection of all ${className}s
+     *
+     * @return 	ArrayList<${className}> 
+     * @exception ProcessingException Thrown if any problems
+     */
+    public ArrayList<${className}> getAll${className}() 
+    throws ProcessingException
+    {
+    	String key 									= NAMESPACE + "all${className}";
+        ArrayList<${className}> array	= (ArrayList<${className}>)getCache().get(key);
+        
+        if ( array != null )
+        	return array;
+        
+        ${className}DAO dao = get${className}DAO();
+    
+        try
+        {
+            array = dao.findAll${className}();
+        }
+        catch( FrameworkDAOException exc )
+        {
+            String errMsg = "${className}BusinessDelegate:getAll${className}() - " + exc;
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${className}DAO( dao );
+        }        
+                
+        return array;
+    }
+
+   /**
+    * Creates the provided BO.
+    * @param		businessObject 	${className}
+    * @return       ${className}
+    * @exception    ProcessingException
+    * @exception	IllegalArgumentException
+    */
+	public ${className} create${className}( ${className} businessObject )
+    throws ProcessingException, IllegalArgumentException
+    {
+    	if ( businessObject == null )
+        {
+            String errMsg = "${className}BusinessDelegate:create${className}( ${className} businessObject ) - null businessObject provided.";
+            LOGGER.warning( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        // return value once persisted
+        ${className}DAO dao  = get${className}DAO();
+        
+        try
+        {
+            businessObject = (${className})dao.create${className}( businessObject );
+        }
+        catch (FrameworkDAOException exc)
+        {
+            String errMsg = "${className}BusinessDelegate:create${className}() - Unable to create ${className}" + exc;
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${className}DAO( dao );
+        }        
+        
+        // cache it
+        getCache().set( NAMESPACE + "${className}" + businessObject.get${className}PrimaryKey().getFirstKey(), expiryTimeInSeconds, businessObject );
+        
+        // delete all list from cache
+        getCache().delete( NAMESPACE + "all${className}" );
+        
+        return( businessObject );
+        
+    }
+
+   /**
+    * Saves the underlying BO.
+    * @param		businessObject		${className}
+    * @return       what was just saved
+    * @exception    ProcessingException
+    * @exception  	IllegalArgumentException
+    */
+    public ${className} save${className}( ${className} businessObject ) 
+    throws ProcessingException, IllegalArgumentException
+    {
+		if ( businessObject == null )
+        {
+            String errMsg = "${className}BusinessDelegate:save${className}( ${className} businessObject ) - null businessObject provided.";
+            LOGGER.warning( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+                
+        // --------------------------------
+        // If the businessObject has a key, find it and apply the businessObject
+        // --------------------------------
+        ${className}PrimaryKey key = businessObject.get${className}PrimaryKey();
+                    
+        if ( key != null )
+        {
+            ${className}DAO dao = get${className}DAO();
+
+            try
+            {                    
+                businessObject = (${className})dao.save${className}( businessObject );
+            }
+            catch (FrameworkDAOException exc)
+            {
+                String errMsg = "${className}BusinessDelegate:save${className}() - Unable to save ${className}" + exc;
+                LOGGER.warning( errMsg );
+                throw new ProcessingException( errMsg  );
+            }
+            finally
+            {
+                release${className}DAO( dao );
+            }
+            
+        }
+        else
+        {
+            String errMsg = "${className}BusinessDelegate:save${className}() - Unable to create ${className} due to it having a null ${className}PrimaryKey."; 
+            
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+
+        // just in case the user intends on re-using this BusinessDelegate instance
+        
+    	getCache().set( NAMESPACE + "${className}" + businessObject.get${className}PrimaryKey().getFirstKey(), expiryTimeInSeconds, businessObject );
+		        
+        return( businessObject );
+        
+    }
+   
+   /**
+    * Deletes the associatied value object using the provided primary key.
+    * @param		key 	${className}PrimaryKey    
+    * @exception 	ProcessingException
+    */
+    public void delete( ${className}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException
+    {    	
+		if ( key == null )
+        {
+            String errMsg = "${className}BusinessDelegate:delete() - null key provided.";
+            LOGGER.warning( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        ${className}DAO dao  = get${className}DAO();
+
+		boolean deleted = false;
+		
+        try
+        {                    
+            deleted = dao.delete( key );
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${className}BusinessDelegate:delete() - Unable to delete ${className} using key = "  + key + ". " + exc;
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${className}DAO( dao );
+        }
+        
+        if ( deleted == false )
+		{
+            String errMsg = "${className}BusinessDelegate:delete() - Unable to delete ${className} using key = "  + key + ". ";
+            LOGGER.warning( errMsg );
+            throw new ProcessingException( errMsg );		
+		}
+		
+		// delete from the cache
+    	getCache().delete( NAMESPACE + "${className}" + key.getFirstKey() );
+		
+        // delete all list from cache
+        getCache().delete( NAMESPACE + "all${className}" );
+
+        return;
+    }
+    
+#end
+
+#end

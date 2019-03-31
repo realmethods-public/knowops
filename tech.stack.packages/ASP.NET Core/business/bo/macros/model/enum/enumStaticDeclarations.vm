@@ -1,0 +1,11 @@
+#macro( getEnumStaticDecl )
+#set( $attributes = $classObject.getAttributesOrdered(false) )
+#set( $className = $classObject.getName() )
+#foreach( $attribute in $attributes )
+#set( $arg = ${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})} )
+        if ( ${arg}.value.toString().equalsIgnoreCase(value.toString()) )
+            return( ${arg} );
+#end
+        // it might be being referenced by name, instead of by value
+        return ( (${className})${arg}.getValues().get(value) );
+#end

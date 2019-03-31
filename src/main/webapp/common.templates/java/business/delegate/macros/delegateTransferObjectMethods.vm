@@ -1,0 +1,84 @@
+#macro( delegateTransferObjectMethods )
+## need a persist and get method for each UIClass that has this its main
+#*
+#foreach( $uiClass in $aib.getUIComponentsToGenerate() )
+#if( $uiClass.isMainAssociation( $classObject.getName() ) && $uiClass.isTabPage() == false )
+   /**
+    * Persist the components of the ${uiClass.getName()}TO.
+    * @param	to    ${uiClass.getName()}TO
+    * @return	${uiClass.getName()}TO	
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO persist${uiClass.getName()}TO( ${uiClass.getName()}TO to ) 
+    throws ProcessingException
+    {
+        // Retrieve the home interface for the ${uiClass.getName()}TOAssemblerSessionBeanInterface
+        ${uiClass.getName()}TOAssemblerSessionBeanInterface  service = null;
+
+        try
+        {
+            service = new ${classObject.getName()}Locator().create${uiClass.getName()}TOAssemblerSessionBeanInterface();
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:persist${uiClass.getName()}TO(..) - Could not get the ${classObject.getName()}TOAssemblerSessionBeanInterface." + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+                
+        // Persist the components of the ${classObject.getName()}TO 
+        try
+        {
+            to = service.persist${uiClass.getName()}TO( to );
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:persist${classObject.getName()}TO(..) - Could not retrieve the ${classObject.getName()}TO for transfer object " + to + " due to - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        return( to );
+    }
+
+   /**
+    * Return the ${classObject.getName()}TO
+    * @return    ${classObject.getName()} Transfer Object
+    * @exception ProcessingException
+    */
+    public ${uiClass.getName()}TO get${uiClass.getName()}TO( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException
+    {
+        // Retrieve the home interface for the ${uiClass.getName()}TOAssemblerSessionBeanInterface 
+        ${uiClass.getName()}TOAssemblerSessionBeanInterface  service = null;
+        ${uiClass.getName()}TO to = null;
+
+        try
+        {
+            service = new ${classObject.getName()}Locator().create${uiClass.getName()}TOAssemblerSessionBeanInterface();
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:get${uiClass.getName()}TO(..) - Could not get the ${classObject.getName()}TOAssemblerSessionBeanInterface." + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+                
+        // Retrieve the ${uiClass.getName()}TO 
+        try
+        {
+            to = service.get${uiClass.getName()}TO( key );
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:get${uiClass.getName()}TO(..) - Could not retrieve the ${classObject.getName()}TO for key " + key + " due to - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );   
+        }
+        
+        return( to );
+    }
+#end ##if( $uiClass.isMainAssociation( $classObject.getName() )
+#end ##foreach( $class in $aib.getUIComponentsToGenerate() )
+*#
+#end

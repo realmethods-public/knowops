@@ -1,0 +1,69 @@
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" 
+	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" 
+	crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+    function logon() {
+
+		var url 		= '/Startup/logon?userId=' + $('#userNameInputId').val() + "&password=" + $('#passwordInputId').val();		
+		
+		$.ajax(
+		{
+	  		url: 		url,
+	  		dataType: 	'json'
+		}
+		).done(function( data ) 
+		{
+			if ( data.resultCode != "SUCCESS" ) 
+				msg = data.processingMessage;
+					
+			document.getElementById("logonStatusDivId").innerHTML = msg;
+		});
+    }
+</script>
+
+<html>
+  <center>
+  <table border="0">
+    <tr>
+      <td align="center">        
+        <img src="./img/realMethods-Logo.gif" width="280" height="116" />
+	  </td>
+	</tr>
+	<tr>
+	  <td>        
+		<form id="logonFormId" method="post">
+			<label for="userNameInputId" style="color:black">
+				UserName:
+			</label>
+			<input 
+				type="text" 
+				class="form-control" 
+				id="userNameInputId"
+				placeholder=""/>	    	
+		    <p/>
+			<label for="passwordInputId" style="color:black">
+				Password:
+			</label>
+			<input 
+				type="password" 
+				class="form-control" 
+				id="passwordInputId"
+				placeholder=""/>
+			<p/>
+			<center>	
+	  			<a href="#" onclick="logon();">
+	  				<img src="./img/submit.button.png"/ align="center" width="120" height="30">
+	  			</a>
+	  		</center>
+		</form>
+		<p/>
+	  </td>
+	</tr>
+  </table>
+  </center>
+  
+  <div id="logonStatusDivId"/>
+  
+</html>

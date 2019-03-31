@@ -1,0 +1,7 @@
+#macro( mappingResources )
+#foreach( $class in $aib.getClassesWithIdentity() )
+#if ( $class.hasParent() == false )
+      <mapping resource="${class.getName()}.hbm.xml"/>
+#end
+#end
+#end

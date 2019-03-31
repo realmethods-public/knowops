@@ -1,0 +1,15 @@
+#macro( businessDelegateClassDeclaration )
+#if ( $classObject.isAbstract() == false )
+public class ${classObject.getName()}BusinessDelegate 
+#else
+abstract public class ${classObject.getName()}BusinessDelegate 
+#end
+#if ( $classObject.hasParent() == true )
+extends ${classObject.getParentName()}BusinessDelegate
+#else
+extends BaseBusinessDelegate
+#end
+#if ( $classObject.isAbstract() == false )
+implements I${classObject.getName()}BusinessDelegate
+#end
+#end

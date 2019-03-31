@@ -1,0 +1,77 @@
+#macro( getHibernateDAOAssociationMethods )
+#foreach( $association in $classObject.getMultipleAssociations() )
+#set( $roleName = $association.getRoleName() )
+#set( $childName = $association.getType() )
+    /**
+     * Persists the objects related to the array of pks
+     *
+     * @param	pk				${classObject.getName()}PrimaryKey		
+     * @param	childKeys		Collection<${childName}PrimaryKey>
+     * @param	businessObject	${classObject.getName()}
+     * @exception   FrameworkDAOException     
+     */
+	public ${classObject.getName()} assign${roleName}( ${classObject.getName()}PrimaryKey pk, Collection<${childName}PrimaryKey> childKeys )
+	throws FrameworkDAOException
+	{
+        if (pk == null || childKeys == null )
+        {
+            throw new FrameworkDAOException("${classObject.getName()}DAO.add${roleName}(...) cannot have a null primary key argument");
+        }
+	
+		// get the businessObject
+		${classObject.getName()} businessObject = find${classObject.getName()}( pk );
+
+		// get the current list of ${roleName}	
+		ArrayList<$childName> list = new ArrayList<$childName>();
+		int i=0;
+		Session session = null;
+		Transaction tx = null;
+		${childName}DAO childDAO = ${childName}Locator.create${childName}DAO();
+		Iterator<${childName}PrimaryKey> iter = childKeys.iterator();
+		${childName}PrimaryKey childKey = null;
+		
+		try
+		{	
+			while( iter.hasNext() )
+			{
+				try
+				{
+					childKey = iter.next();
+					list.add( childDAO.find${childName}( childKey ) );	
+				}
+				catch( FrameworkDAOException exception )
+				{
+					logInfoMessage( "${classObject.getName()}DAO.add${roleName} - failed to find $childName using primary key " +  childKey );
+				}
+			}
+            
+            session = currentSession();
+            tx = currentTransaction( session );
+		
+			// apply the list of ${roleName} back to the business object
+		    businessObject.set${roleName}( list );			
+			session.update( businessObject );
+
+            commitTransaction( tx );				 		
+		}
+		catch( Throwable exc )
+		{
+			exc.printStackTrace();		
+			throw new FrameworkDAOException( "${classObject.getName()}DAO.add${roleName} failed - " + exc );		
+		}	
+		finally
+		{
+			try
+			{
+				session.flush();
+				closeSession();			
+			}
+			catch( Throwable exc )
+			{		
+				logInfoMessage( "${classObject.getName()}DAO.add${roleName} - Hibernate failed to close the Session - " + exc );
+			}
+		}
+		return( businessObject );
+	}
+#end	
+#end

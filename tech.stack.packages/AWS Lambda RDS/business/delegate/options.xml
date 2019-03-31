@@ -1,0 +1,39 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="aws-lambda">
+	<option name="accessKey"  value="AKIAJGP7A54MM3WPRA4Q" required="true" description="AWS Access Key" type="input"/>
+	<option name="secretKey" value="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"  required="true" description="AWS Secret Key" type="input"/>
+	<option name="s3Bucket" value="goframeworkbucket" required="true" description="S3 Bucket Name" type="input"/>
+	<option name="region" value="us-west-1" required="true" description="regions" type="select"
+		selections="us-east-1,us-east-2,us-west-1,us-west-2,ap-northeast-2,ap-south-1,
+			ap-southeast-1,ap-southeast-2,ap-northeast-1,eu-central-1,eu-west-1,eu-west-2"/>
+	<option name="runtime" value="java8" required="true" description="runtime lang" type="select"
+		selections="java8,nodejs6.10,nodejs8.10"/>
+	<option name="use kinesis" value="false" description="use kinesis" type="boolean" />	
+	<option name="kinesis stream name" value="" required="true" description="stream name" type="input"/>
+<!--	<option name="append class name to stream name" value="true" description="append class name to the stream name" type="boolean"/>
+	<option name="kinesis batch size" value="100" required="true" description="batch size" type="input"/>
+	<option name="kinesis starting position" value="LATEST" required="true" description="starting position in sream" type="select"
+		selections="TRIM_HORIZON,LATEST"/>	
+-->			
+	<option name="lambdaRoleArn"  value="arn:aws:iam::110777515443:role/service-role/myRoleName" required="true" description="AWS Lambda Role ARN" type="input"/> 
+	<option name="timeout" value="30" required="true" description="timeout" type="input"/>
+	<option name="memorySize" value="512" required="true" description="memory size" type="input"/>
+	<option name="forceUpdate" value="true" description="force update" type="boolean"/>
+	<option name="publish" value="true" description="publish" type="boolean" />
+	<option name="vpcSubnetIds" value="" description="VPC Subnet Ids" type="input" />
+	<option name="vpcSecurityGroupIds" value="" description="VPC Security Group Ids" type="input" />
+	<option name="delegateDAOHost"  value="http://18.235.138.220" required="true" description="URL to Restful API for DAO Invocation" type="input"/>
+	<option name="delegateDAOPort"  value="4567" required="true" description="URL to Restful API for DAO Invocation" type="input"/>
+	
+</options>

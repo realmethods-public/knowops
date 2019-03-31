@@ -1,0 +1,24 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="gcp-functions">
+	<option name="name" value="gcp-functions" required="true" description="package.json name" type="input"/>
+	<option name="version" value="1.0.0" required="true" description="package.json version" type="input"/>
+	<option name="license" value="MIT" required="true" description="package.json license" type="input"/>
+	<option name="description" value="package description for GCP functions" required="true" description="package.json description" type="input"/>
+	<option name="runtime" value="Node.js" required="true" description="runtime lang" type="select"
+		selections="Node.js,Python"/>
+	<option name="RESTfulAPIsURL" value="35.196.20.46" required="true" description="url to the remote DAO APIs" type="input"/>
+	<option name="RESTfulAPIsPort" value="4567" required="true" description="port number" type="input"/>	
+	<option name="useFirebase"  value="true" required="true" description="use Firebase with GCP Functions" type="boolean"/>	
+	<option name="projectId" value="sharp-footing-218200" required="true" description="GCP Functions Project Id" type="input"/>
+</options>

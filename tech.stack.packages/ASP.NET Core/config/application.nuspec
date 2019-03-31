@@ -1,0 +1,90 @@
+#set( $appName = $aib.getApplicationNameFormatted() )
+#set( $description = $aib.getParam("application.description") )
+#set( $version = $aib.getParam("application.version") )
+#set( $author = $aib.getParam("application.author") )
+#set( $license = $aib.getParam("nuget.license") )
+#set( $projectUrl = $aib.getParam("nuget.projectUrl") )
+#set( $iconUrl = $aib.getParam("nuget.iconUrl") )
+#set( $requireLicenseAcceptance = $aib.getParam("nuget.requireLicenseAcceptance") )
+#set( $releaseNotes = $aib.getParam("nuget.releaseNotes") )
+#set( $copyRight = $aib.getParam("nuget.copyRight") )
+#set( $tags = $aib.getParam("nuget.tags") )
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+
+	<metadata>
+		
+		<!-- The identifier that must be unique within the hosting gallery -->
+	    <id>${appName}</id>
+
+        <!-- The package version number that is used when resolving dependencies -->	    
+	    <version>${version}</version>
+
+#if( $description == $null || $description == '' )
+#set( $description = "no description provided" )
+#end##if( $description )
+        <!-- 
+            The description can be used in package manager UI. Note that the
+            nuget.org gallery uses information you add in the portal. 
+        -->	    
+	    <description>${description}</description>
+
+#if( $author == $null || $author == '' )
+#set( $author = "no author provided" )
+#end##if( $author )
+        <!-- Authors contain text that appears directly on the gallery -->	    
+	    <authors>${author}</authors>
+
+        <!-- 
+            Owners are typically nuget.org identities that allow gallery
+            users to easily find other packages by the same owners.  
+        -->	    
+	    <owners>${author}</owners>
+
+#if( $license != $null && $license != ''  )
+         <!-- License information is displayed on the gallery -->
+	    <license type="file">${license}</license>
+#end##if( $license )
+
+#if( $projectUrl != $null && $projectUrl != '' )
+         <!-- Project URL provides a link for the gallery -->	    
+	    <projectUrl>${projectUrl}</projectUrl>
+#end##if( $projectUrl )
+
+#if( $iconUrl != $null && $iconUrl != '' )
+        <!-- The icon is used in Visual Studio's package manager UI -->	    
+	    <iconUrl>${iconUrl}</iconUrl>
+#end##if( $iconUrl )
+
+        <!-- 
+            If true, this value prompts the user to accept the license when
+            installing the package. 
+        -->	    
+	    <requireLicenseAcceptance>${requireLicenseAcceptance}</requireLicenseAcceptance>
+
+        <!-- Any details about this particular release -->	    
+	    <releaseNotes>${releaseNotes}</releaseNotes>
+
+        <!-- Copyright information -->	    
+	    <copyright>${copyRight}</copyright>
+
+        <!-- Tags appear in the gallery and can be used for tag searches -->	    
+	    <tags>${tags}</tags>
+	    
+        <!-- Dependencies are automatically installed when the package is installed -->	    
+	    <dependencies>
+			<dependency id="NHibernate" version="5.1.0"/>	<!-- object-to-relational-mapping layer -->
+			<dependency id="MySql.Data" version="6.9.12"/>	<!-- Suggest using Mysql, but nHibernate supports all major RDBMS -->
+    	</dependencies>
+
+	  	<packageTypes>
+	        <packageType name="Dependency" />
+	    </packageTypes>
+    	
+  	</metadata>
+  	    
+	<files>
+    	<file src="content\**\*.*" target="content" />
+	</files>
+	
+</package>

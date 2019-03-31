@@ -1,0 +1,22 @@
+<tech-stack-package 
+    name="AWS Lambda"
+    shortName="Lambda"
+    description="Tech stack using AWS Lambda as the service layer, and Spark web framework with Hibernate as a Restful DAO persistence layer" 
+    icon-url="./img/lambda.full.circle.png"
+    info-page-url="http://www.realmethods.com/infopages/aws-lambda-rds-info-page.html"
+    version="2.0"
+    app-type="serverless"
+    release-status="production">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="node.js"/>
+		<target-language name="javascript"/>
+	</target-languages>
+	<tech-stack>
+		<tech-stack-component name="lambda" description="servless business delegate" app-layer="business"/>
+		<tech-stack-component name="spark web" description="RESTful APIS for DAOs" app-layer="business"/>
+		<tech-stack-component name="hibernate rbms" description="ORM for persistence" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>			
+	</tech-stack>
+</tech-stack-package>

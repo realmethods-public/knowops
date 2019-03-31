@@ -1,0 +1,19 @@
+#xmlHeader()
+	
+<project name="python-django-project" default="all" basedir=".">
+
+<target name="all" depends="python-django"/>        
+
+<property environment="os"/>
+                    
+<!-- 
+****	Package the files and push (publish) to the provided PyPI repository
+-->
+	<target name="python-django" 
+			description="PyPI the package to push to the repository...">	
+	    <exec executable="bash" logError="true" failonerror="false" failifexecutionfails="false">
+	      <arg value="./python-build.sh"/>
+	    </exec>
+	</target>
+    
+</project>

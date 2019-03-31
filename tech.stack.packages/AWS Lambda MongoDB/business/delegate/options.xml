@@ -1,0 +1,29 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="aws-lambda">
+	<option name="accessKey"  value="AKIAJYOZ7C66U4ECJYYA" required="true" description="AWS Access Key" type="input"/>
+	<option name="secretKey" value="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"  required="true" description="AWS Secret Key" type="input"/>
+	<option name="s3Bucket" value="cloudmigratedemobucket" required="true" description="S3 Bucket Name" type="input"/>
+	<option name="region" value="us-east-2" required="true" description="regions" type="select"
+		selections="us-east-1,us-east-2,us-west-1,us-west-2,ap-northeast-2,ap-south-1,
+			ap-southeast-1,ap-southeast-2,ap-northeast-1,eu-central-1,eu-west-1,eu-west-2"/>
+	<option name="runtime" value="java8" required="true" description="runtime lang" type="select"
+		selections="java8,nodejs6.10,nodejs8.10"/>
+	<option name="lambdaRoleArn"  value="arn:aws:iam::110777515443:role/service-role/myRoleName" required="true" description="AWS Lambda Role ARN" type="input"/> 
+	<option name="timeout" value="30" required="true" description="timeout" type="input"/>
+	<option name="memorySize" value="512" required="true" description="memory size" type="input"/>
+	<option name="forceUpdate" value="true" description="force update" type="boolean"/>
+	<option name="publish" value="true" description="publish" type="boolean" />
+	<option name="vpcSubnetIds" value="" description="VPC Subnet Ids" type="input" />
+	<option name="vpcSecurityGroupIds" value="" description="VPC Security Group Ids" type="input" />	
+</options>

@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    function submitForm() {
+        document.getElementById('AWSChallenge').submit();
+    }
+</script>
+
+<html>
+  <center>
+  <table border="0">
+    <tr>
+      <td align="center">
+        <img src="./img/realMethods-Logo.gif" width="280" height="116" />
+        <h3>Enter the Instance Id of the AWS EC2 Instance<br> 
+    		the realMethods goFramework is running on:</h3>
+		<form id="AWSChallenge" method="post">
+	  		<input type="text" name="awsInstanceId">
+	  		<a href="javascript: submitForm();"><img src="./img/submit.button.png"/ align="center" width="120" height="30"></a>
+		</form>
+		<p/>
+	  </td>
+	  <td>
+		<img src="./img/aws.instance.id.png"/>
+	  </td>
+	</tr>
+  </table>
+  </center>
+</html>

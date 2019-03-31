@@ -1,0 +1,24 @@
+#set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} )
+<h5>${className} List</h5>
+<table class="table table-hover table-striped table-bordered table-sm">
+	<thead>
+		<tr style="color:white;background:black;text-align:center">
+#set( $includePrimaryKey = false )
+#set( $includeHierarchy = true )
+#foreach( $attribute in ${classObject.getAttributesOnly( $includeHierarchy, $includePrimaryKey )} )    
+			<td style="text-align:center">${attribute.getDisplayName()}</td>
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKey ) )
+			<td colspan="2">Actions</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let ${lowercaseClassName} of ${lowercaseClassName}s" style="text-align:center">
+#foreach( $attribute in ${classObject.getAttributesOnly( $includeHierarchy, $includePrimaryKey )} )    
+			<td style="vertical-align:middle">{{ ${lowercaseClassName}.${attribute.getName()} }}</td>
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+			<td style="vertical-align:middle"><a [routerLink]="['/edit${className}', ${lowercaseClassName}._id]" class="btn btn-primary btn-sm">Edit</a></td>
+			<td style="vertical-align:middle"><button (click)="delete${className}(${lowercaseClassName}._id)"  class="btn btn-danger btn-sm">Delete</button></td>
+		</tr>
+	</tbody>
+</table>

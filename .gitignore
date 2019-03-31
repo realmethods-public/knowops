@@ -1,0 +1,7 @@
+*target/
+ssh*
+.project
+gitpush*
+.classpath
+*.bat
+*.svn/

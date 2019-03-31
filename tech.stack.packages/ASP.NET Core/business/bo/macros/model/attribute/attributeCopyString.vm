@@ -1,0 +1,47 @@
+#*
+ Returns the text required for output of the copy() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyString $attribute )
+#if( $attribute.isFinal() == false )
+  #if ( $attribute.isFromAssociation() == false )
+        this.${attribute.getName()} = obj.${attribute.getName()};
+  #else
+    #if ( $attribute.isFromMultiValueAssociation() == true )
+    #set( $assocType = $attribute.getAssociation().getType() )    
+        if ( obj.${attribute.getName()} != null )
+        {
+    		this.${attribute.getName()} = ${attribute.getDefaultValue().replace( "HashSet", "List" )};
+        	foreach( ${assocType} listEntry in obj.${attribute.getName()} )
+        	{
+        		this.${attribute.getName()}.Add( new ${assocType}().copyShallow( listEntry ) );
+        	}
+        }
+        else
+        	this.${attribute.getName()} = null;
+    #else
+    	if ( obj.${attribute.getName()} != null)
+    	{
+    		this.${attribute.getName()} = ${attribute.getDefaultValue()};
+    		this.${attribute.getName()}.copyShallow( obj.${attribute.getName()} );
+    	}
+    	else
+    		this.${attribute.getName()} = null;
+    #end
+  #end
+#end
+#end
+
+#*
+ Returns the text required for output of the copyInto() method of the parent
+ ClassObject (the generated BO).
+ 
+ $attribute		AttributeObject
+*#  
+#macro( attributeCopyIntoString $attribute )
+#if( $attribute.isFinal() == false )
+        ((${classObject.getName()}) bo).set${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}( this.${attribute.getAsArgument()} );
+#end
+#end

@@ -1,0 +1,162 @@
+h1, h2, h3, h4, h5{
+ color : black;
+}
+
+body {
+    padding: 6px;
+    background : #ffffff;
+    color : black;
+	font-family: 'Libre Franklin', serif; 
+    border: 20px solid black;
+}
+
+
+.footer {
+    background : #cdcdcd;
+    color : black;
+    font-size : 10;
+    text-align : center;
+}
+
+.modal-body {
+ color : black
+}
+        
+.modal-header {
+  	background : #eaecef;
+}
+
+.modal-footer {
+	background : white;
+}
+	
+.sectionClass {
+  	background : white;
+  	border : 2px solid black;
+  	padding : 4px;
+}
+
+.sectionHeaderClass {
+  	background : lightblue;
+  	padding : 4px;
+  	color : black;  	
+}
+  
+.sectionTitleClass{
+  	font-size : 14;
+  	font-weight : bold;
+  	text-align : center;
+}
+
+.sectionBodyClass {
+	font-size : 12;
+	background : white;
+	color : black;
+	overflow-y : auto;
+}
+  
+  .treePanelClass, .modelTreeClass{
+  	color : black;
+	font-size : 14px;	 
+	background : white;
+	padding:10px;
+	overflow-y : auto;
+	height : 380px;
+}
+  
+  .mainSectionClass {
+  	background:white;
+  	height:400px;
+  	width:100%;
+}
+    
+.stripeOnClass {
+  background : #d3ffce;
+  color : black;
+  padding : 2px;
+  border : 2px solid white;
+}
+
+.stripeOffClass {
+    background : white;
+    color : black;
+}
+
+.inspectionDialogClass {
+    height : 300px;
+    overflow-y : auto;
+}
+
+.tableRowHightlightClass {
+    background : black;
+    color : white;
+    padding : 2px;
+}
+
+.gridDivClass {
+	width:100%;
+	height:300px;
+	padding:2px;
+	border:2px solid lightgrey;
+	overflow-y:auto;
+}
+
+.gridTableClass {
+	table-layout:fixed;
+	width:100%;
+	background:lightgrey;
+	color:black;
+}
+
+.tabMainClass {
+	padding:4px;
+	background:#898b8e;
+}
+
+.tabPanelClass {
+	padding:0px;
+	background:white;
+}
+
+.singleAssociationClass{
+}
+
+.multipleAssociationClass {
+}
+
+.sectionClass {
+  	background : white;
+  	border : 1px solid gray;
+  	padding : 4px;
+}
+
+.sectionHeaderClass {
+  	background : lightblue;
+  	padding : 4px;
+  	color : black;  	
+}
+  
+.sectionTitleClass{
+  	font-size : 13px;
+  	font-weight : normal;
+  	text-align : center;
+  	padding : 4px;
+}
+
+.sectionBodyClass {
+	font-size : 12px;
+	background : white;
+	color : black;
+	overflow-y : auto;
+	padding : 4px;
+}
+
+.formTableClass, .formTRClass {
+    padding : 4px;
+    color : black;
+    font-size:12px;
+}
+
+.formTableClass, .multipleAssociationClass, .singleAssociationClass, .associationTableClass {
+	width : 100%;
+}

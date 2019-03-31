@@ -1,0 +1,63 @@
+#macro( getListAddPersistOutput )
+#set( $className = $classObject.getName() )
+#set( $mainType = $classObject.getMainAssociation().getType() )
+#set( $association = $classObject.getOtherMultipleAssociations().get(0) )
+#set( $roleName = $association.getRoleName() )
+#set( $childSourceType = $aib.getClassObject( $mainType ).getAssociation( $roleName ).getType() )
+
+            ${mainType}BusinessDelegate delegate	= ${mainType}BusinessDelegate.get${mainType}Instance();
+			${className}TO transferObject			= (${className}TO)cache( ApplicationUSOM.current${className}TO);
+			
+            if ( $lowerMainAssociationType != null )
+            {
+ //*** 
+ // DO NOT DO IT THIS WAY...
+ // YOU SHOULD LOOK INTO CHAINING ACTIONS SO THE FIRST IS TO CREATE THE CHILD
+ // AND THEN THIS ONE ADDS IT TO THE CURRENT LIST
+                // next, save the ${childSourceType} before applying it the $roleName Collection
+ //               $lowerMainAssociationType = ${childSourceType}BusinessDelegate.get${childSourceType}Instance().create${childSourceType}(${lowerMainAssociationType});
+            
+            	// apply to ${mainType}'s $roleName List
+            	ArrayList list = new ArrayList( java.util.Arrays.asList( transferObject.get${roleName}() ) );
+            	list.add( $lowerMainAssociationType  );
+            	transferObject.set${roleName}( (${childSourceType}[])list.toArray( new ${childSourceType}[]{} ) );            	
+            	
+            	// persist the transfer object
+        	    transferObject = delegate.persist${className}TO( transferObject );
+        	    
+                // cache the transfer object
+                cache( ApplicationUSOM.current${className}TO, transferObject );
+            }
+            else
+            {
+                throw new ProcessingException("${className}::persist(...) - null business object returned from ${childSourceType}Action.acquireFormData()");
+            }
+#end
+
+
+
+#macro( getListAddLoadPersistOutput )
+#set( $mainType = ${classObject.getMainAssociation().getType()} )            
+#set( $childSourceType = $aib.getClassObject( $className ).getAssociation( $roleName ).getType() )
+#set( $className = $classObject.getName() )
+
+            // get the primary key
+            ${mainType}PrimaryKey primaryKey = getPrimaryKeyFromServletRequest();
+            ${className}TO transferObject = null;
+
+            if (primaryKey != null)
+            {
+                // use the business delegate to load the transfer object
+                ${mainType}BusinessDelegate proxy = ${mainType}BusinessDelegate.get${mainType}Instance();
+                transferObject = proxy.get${className}TO(primaryKey);
+
+                logMessage(FrameworkLogEventType.DEBUG_LOG_EVENT_TYPE, "${className}:load() - successfully loaded for - " + transferObject.get${mainType}().toString());
+
+				// get the business object from the transfer object
+                $lowerMainAssociationType = transferObject.get${mainType}();
+
+                // cache the transfer object
+                cache( ApplicationUSOM.current${className}TO, transferObject );
+            }
+
+#end

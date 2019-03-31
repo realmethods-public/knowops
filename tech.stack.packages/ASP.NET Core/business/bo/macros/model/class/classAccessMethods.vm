@@ -1,0 +1,36 @@
+#*
+ Returns a String formatted represented of the code that makes up
+ the accessor methods declarations for the contained attributes
+  
+ $includeRequiredAttribute		true/false - include primary keys
+ $declareThrowsRemoteExcpetion	true/false - declare throws remote exception
+*#
+#*
+#macro ( getBOAccessorMethodDeclarations $includeRequiredAttribute $declareThrowsRemoteExcpetion )
+#foreach( $attributes in $classObject.getAttributes() )
+#if( $attribute.isFromAssociation() == true )
+#getAccessorMethodDeclarations( $attribute $declareThrowsRemoteExcpetion false true )
+#end##if( $attribute.isFromAssociation() == true )
+#end## $key in $attributes.keySet() 
+#end
+*#
+
+#*
+ Outputs a formatted representation of the code that makes up
+ the accessor methods for the contained attributes of the current ClassObject
+ $includeRequiredAttribute		boolean
+ $throwRemoteException 			boolean
+ $hibernate						boolean
+ *#
+#*
+#macro( getBOAccessorMethods $includeRequiredAttribute $throwRemoteException $hibernate )
+#foreach( $attributes in $classObject.getAttributes() )
+#if( $attribute.isFromAssociation() == true )
+## only provide accessors for non-primary-key fields
+#if( $attribute.isFromAssociation() == true )
+## delegate to the macro that outputs the accessor method for the provided attribute
+#getAttributeAccessorMethods( $attribute true $throwRemoteException $hibernate $attribute.getAsArgument() )
+#end##if( $attribute.isFromAssociation() == true )
+#end## foreach $key in $attributes.keySet()
+#end
+*#

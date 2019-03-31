@@ -1,0 +1,61 @@
+#macro ( getDjangoAttributeDeclarations $class $useAssociations )
+#set( $includePKs = false )
+#set( $attributes = $class.getAttributesOrdered( $includePKs ) )
+#foreach( $attribute in $attributes )
+#if( $attribute.isFromAssociation() == false || $useAssociations == true )
+#getDjangoAttributeDeclaration( $attribute $class )
+#end##if( $attribute.isFromAssociation() == false || $useAssociations == true )
+#end## $attribute in $attributes
+#end
+
+#macro ( getDjangoAttributeDeclaration $attribute $parentClass )
+#set( $type = $attribute.getType() )
+#set( $varName = $attribute.getAsArgument() )
+#set( $canBeNull = "null=True" )
+#if ( $attribute.getCanBeNull() == false )
+##set( $canBeNull = "null=True" ) ## set Null to true
+#end##if ( $attribute.getCanBeNull() == true )
+##need to coerce a model type into a Django type
+#if ( $attribute.isFromAssociation() == true )
+#if ( $type == $parentClass.getName() )## use self as the type
+#set( $type = "self" )
+#end##if ( $type == $parentClass.getName() )
+#set( $association = $attribute.getAssociation() )
+#set( $relatedName = "")
+########################################################
+##need to alter the related_name of a field if the type 
+##is the same as the role name...which is common when
+##creating a model
+########################################################
+##interrogate the association 
+#if ( $association.isManyToOne() == true )
+#set( $type = "models.ForeignKey('${type}', on_delete=models.CASCADE, ${canBeNull}, blank=True, related_name='+')" )
+#elseif ( $association.isManyToMany() == true || $association.isOneToMany() == true )
+#set( $type = "models.ManyToManyField('${association.getType()}',  blank=True, related_name='+')" )
+##In a many to many scenario, Django does not like when the name of the association is also the type of the association
+#elseif ( $association.isOneToOne() == true )
+#set( $type = "models.OneToOneField('${type}', on_delete=models.CASCADE, ${canBeNull}, blank=True, related_name='+')" )
+#end##if ( $association.isManyToOne() == true )
+#else## handle as a direct attribute, not derived from an association
+#if( $type.equalsIgnoreCase("string") )
+#set( $type = "models.CharField(max_length=200, $canBeNull)" )
+#elseif( $type.equalsIgnoreCase("float") )
+#set( $type = "models.FloatField($canBeNull)" )
+#elseif( $type.equalsIgnoreCase("boolean") )
+#set( $type = "models.BooleanField($canBeNull)" )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $type = "models.CharField($canBeNull)" )
+#elseif( $type.equalsIgnoreCase("java.sql.Date") || $type.equalsIgnoreCase("Date") )
+#set( $type = "models.DateField($canBeNull)" )
+#elseif( $type.equalsIgnoreCase("int") || $type.equalsIgnoreCase("integer") )
+#set( $type = "models.IntegerField($canBeNull)" )
+#elseif( $type.equalsIgnoreCase("double") )
+#set( $type = "models.DecimalField(max_digits=12, decimal_places=4, $canBeNull)" )
+#elseif( $type.equalsIgnoreCase("short") )
+#set( $type = "models.SmallIntegerField($canBeNull)" )
+#else
+#set( $type = "models.CharField(max_length=64, $canBeNull)" )
+#end##if( $type.equalsIgnoreCase("string") )
+#end##if ( $attribute.isFromAssociation() == true )
+	${varName} = ${type}
+#end##macro ( getAttributeDeclaration $attribute)

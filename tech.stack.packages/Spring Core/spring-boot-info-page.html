@@ -1,0 +1,90 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">RESTful API with RDBMS</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px">
+<h3>Intent</h3>
+To create an application that uses:
+<ul>
+<li>Spring-Boot Plugin to help facilitate a MVC framework 
+<li>Hibernate for model to table db mapping
+<li>GitHub to push application files
+<li>Maven to build and run the application
+<li>Docker to package the app into a single platform independent image
+</ul>
+<p>
+<h4>Usage</h4>
+<p>
+<ul>
+<li>Jetty
+<p>
+To quickly execute the application, issue the following from the app root - <b><i>mvn spring-boot:run</i></b>
+<p>
+<li>Docker
+<p>
+<u>Build</u>: <b><i>docker build -t namespace/repository:version .</b></i> 
+<br>namespace - <i>your_company_name</i>
+<br>repository - <i>your_app_name</i>
+<br>version - latest 
+<p>
+The '.' at the end of the build command indicates to use the Dockerfile and content of the current directory
+<p>
+<u>Run</u>:The following usage of docker run assumes MySQL is in use by the app and is listening on port 3306 
+<p>
+<b><i>docker run -it -d -p 52000:3306 -p 8080:8080 <namespace>/<repository>:<version></i></b>
+<p>
+52000 is used by way of example for the purpose of avoiding a port conflict in the event MySQL is being run locally on the host machine. 
+<p> 
+<span style="font-size:1.1em">Note:</span><br>
+This package does not contain UI templates, making it head-less and a server-based
+RESTful implementation. Accessing the application in a browser will reveal a test harness to allow running through the high level
+CRUD methods of each entity of the model.
+
+</div>      
+      </td>
+        <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/spring.rdbms.png" align="top"/>
+		  <center><h3>Tech Stack Components</h3>
+  		    <table>
+  		      <tr><td class="topicColClass">Build</td><td class="respColClass">Apache Maven</td></tr>
+  		      <tr><td class="topicColClass">Business</td><td class="respColClass">Spring Core, Spring Boot</td></tr>
+  		      <tr><td class="topicColClass">Data</td><td class="respColClass">Hibernate, RDBMS</td></tr>
+  		      <tr><td class="topicColClass">Test</td><td class="respColClass">JUnit</td></tr>
+  		    </table>
+  		  </center>
+      	</td>
+
+    </tr>
+  </table>
+</div>

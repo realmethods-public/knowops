@@ -1,0 +1,64 @@
+#header()
+package ${aib.getRootPackageName()}.#getActionPackageName();
+
+import ${aib.getRootPackageName()}.action.*;
+import ${aib.getRootPackageName()}.tree.*;
+
+import com.jgeppert.struts2.jquery.tree.result.TreeNode;
+
+import java.util.*;
+
+/**
+	Handles Struts Action to build the association application tree, and then place the tree model
+	in the HttpSession for use later during tree rendering
+**/
+public class TreeAction
+    extends BaseStrutsAction
+{
+	public String execute() 
+	{
+		return( buildTree() );
+	}
+
+	public String getJSON() {
+		return execute();
+	}
+
+	public TreeModel getNodes() {
+		return rootNode;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}	  
+	
+
+    public TreeModel getTreeModel()
+    {
+        return (treeModel);
+    }
+
+    public String buildTree()
+    {
+        System.out.println("TreeAction:buildTheTree() starting" );
+
+    	rootNode = new TreeBuilder().buildTree();
+        
+        System.out.println("TreeAction:buildTheTree() - tree is: " + rootNode  );
+
+        return ("success");
+    }
+
+    public void refreshUser(boolean refresh)
+    {
+        refreshUser = refresh;
+    }
+
+// attributes
+    protected TreeModel treeModel = null;
+    protected boolean refreshUser = true;
+ 	private static final long serialVersionUID = -2886756982077980790L;
+	private TreeModel rootNode = new TreeModel();
+	private String id = "";
+    
+}

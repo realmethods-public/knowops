@@ -1,0 +1,7 @@
+#macro( webXMLWelcomeFileList )
+    <welcome-file-list>
+        <welcome-file>jsp/logon.jsp</welcome-file>
+        <welcome-file>jsp/homepage.jsp</welcome-file>        
+        <welcome-file>jsp/index.html</welcome-file>
+    </welcome-file-list>
+#end

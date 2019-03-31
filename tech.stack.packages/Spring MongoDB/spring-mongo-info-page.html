@@ -1,0 +1,97 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">RESTful API with NoSQL</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px">
+<h3>Intent</h3>
+To create a headless (no UI) application that uses:
+<ul>
+<li>Spring Framework for Restless Web services 
+<li>Spring-Boot for the app deployment and container 
+<li>Spy Memcached for POJO caching
+<li>MongoDB for NoSQL Document level persistence
+<li>JUnit for testing CRUD capabilities
+<li>Maven for app building, packing, and deployment
+</ul>
+
+<h4>Key Maven Elements</h4>
+
+<ul>
+<li>Spring-Boot Plugin 1.4.3 RELEASE
+<li>Spy Memcached v2.12.0
+<li>MongoDB Java Driver (Client) v3.4.1
+<li>MongoDB Morphia v1.3.1
+<li>Jetty
+<li>Tomcat Jasper
+<li>JUnit 
+</ul>
+
+<h4>Dependencies</h4>
+
+The following must be installed:
+<ul>
+<li>Java 8 - <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">download</a>
+<li>Maven 3.x - <a href="https://maven.apache.org/download.cgi">download</a>
+<li>MongoDB Server 3.x - <a href="https://www.mongodb.com/cloud/atlas?jmp=download-center">download</a>
+</ul>
+
+<h4>Special Notes</h4>
+<ul>
+<li>Uses the MongoDB Java Driver to interact with MongoDB as a Java client.
+<li>Uses Morphia as the Object to Document mapping framework to simplify persisting POJOs.
+<li>Run a created app in the Maven Jetty container using the following command: 
+<b><i>mvn spring-boot:run</i></b>
+
+<li>To deploy a created app to a different web server, build its WAR file using the following command:<p>
+<b><i>mvn clean install</i></b>
+</ul>
+</div>      
+      </td>
+        <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/spring.nosql.png" align="top"/>
+		  <center><h3>Tech Stack Components</h3>
+  		    <table>
+  		      <tr><td class="topicColClass">Build</td><td class="respColClass">Apache Maven</td></tr>
+  		      <tr><td class="topicColClass">Presentation</td><td class="respColClass">JQuery, HTML5, CSS3</td></tr>
+  		      <tr><td class="topicColClass">Business</td><td class="respColClass">Spring Boot</td></tr>
+  		      <tr><td class="topicColClass">Data</td><td class="respColClass">Mongo, Morphius</td></tr>
+  		      <tr><td class="topicColClass">Cache</td><td class="respColClass">Memcached</td></tr>
+  		      <tr><td class="topicColClass">Test</td><td class="respColClass">JUnit</td></tr>
+  		    </table>
+  		  </center>
+      	</td>
+
+    </tr>
+  </table>
+</div>

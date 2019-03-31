@@ -1,0 +1,49 @@
+#header()
+package ${aib.getRootPackageName()}.#getDelegatePackageName();
+
+import java.io.IOException;
+import java.util.*;
+
+import net.spy.memcached.AddrUtil;
+import net.spy.memcached.BinaryConnectionFactory;
+import net.spy.memcached.MemcachedClient;
+
+/**
+ * Base class for application business delegates.
+ * <p>
+ * @author ${aib.getAuthor()}
+ */
+public class BaseBusinessDelegate
+{
+    protected BaseBusinessDelegate()
+    {
+    }
+
+//************************************************************************
+// Protected / Private Methods
+//************************************************************************
+
+    static protected MemcachedClient getCache()
+    {
+        if (memCachedClient == null)
+        {
+            try
+            {
+                memCachedClient = new MemcachedClient(new BinaryConnectionFactory(), AddrUtil.getAddresses("127.0.0.1:11211"));
+            }
+            catch (IOException ioExc)
+            {
+                ioExc.printStackTrace();
+            }
+        }
+
+        return memCachedClient;
+    }
+
+    protected static final String NAMESPACE = "no_app_name_assigned:";
+    private static MemcachedClient memCachedClient = null;
+    protected static final int expiryTimeInSeconds = 3600;
+}
+
+#javaFooter()
+

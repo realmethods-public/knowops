@@ -1,0 +1,24 @@
+#propertiesHeader()
+{
+	"main": "functions_gcp.js",
+	"name": "${aib.getParam('gcp-functions.name')}",
+	"version": "${aib.getParam('gcp-functions.version')}",
+		#if ( ${aib.getParam('jfrog.inUse')} == "true" )
+		#set( $jfrogServerUrl = ${aib.getParam('jfrog.serverUrl')} )
+		#set( $jfrogNPMRepository = ${aib.getParam('jfrog."repoKey')} )
+		#set( $jfrogRepoUrl = "${jfrogServerUrl}/api/npm/${jfrogNPMRepository}/" )
+	"scripts": {
+			"prejfrogpublish": "npm run-script build",
+		    "jfrogpublish": "npm login --registry=${jfrogRepoUrl}",
+		    "postjfrogpublish" : "npm publish --registry ${jfrogRepoUrl}",
+		#end##if ( ${aib.getParam('jfrog.inUse')} == "true" )    
+		  },	
+#if (${aib.getParam('gcp-functions.useFirebase')} == "true" )		
+	"dependencies": {
+		"firebase-admin": "^6.0.0",
+		"firebase-functions": "^2.0.5"
+	 },
+#end ##if (${aib.getParam('gcp-functions.useFirebase')} == "true" )
+	"license": "${aib.getParam('gcp-functions.license')}",
+
+}

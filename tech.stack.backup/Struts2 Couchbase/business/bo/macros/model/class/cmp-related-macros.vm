@@ -1,0 +1,64 @@
+#*
+ Output the CMP accessor method declarations
+ for the current ClassObject
+*#
+#macro ( getCMPAccessorMethodDecls )
+#if( $aib.usingCMP() == true )		
+#set( $includePKs = true )
+#set( $attributes = $classObject.getAttributesOrdered( $includePKs ) )
+#set( $throwRemoteException = false )				
+#if( $aib.usingLocalInterface() == false )
+#set( $throwRemoteException = true )			
+#end## $aib.usingLocalInterface() == false
+#set( $makeAbstract = false )
+#set( $includeComments = true )
+#foreach( $attribute in $attributes )
+#if( $attribute.isFromAssociation() == false )
+#set( $attributeName = "$Utils.capitalizeFirstLetter( $attribute.getAsArgument() )" )
+#if( $attribute.isFromEnumerator() == false )
+#getAccessorMethodDeclarations( $attribute $throwRemoteException $makeAbstract $includeComments )
+#else
+	/**	
+	 * Get the enumerated type $attribute.getType value
+	 * @return	String
+	 */
+    public String get${attributeName}();
+	/**
+	 * Assigns the enumerated type $attribute.getType value
+	 * @param	value	String
+	 */    
+    public void set${attributeName}( String value );
+#end##if( $attribute.isEnumerator() == false )
+#end##if( $attribute.isFromAssociation() == false )  		
+#end## $attribute in $attributes					
+#*
+ deal with the association related get/set methods
+*#
+#set( $includePKs = false )
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includePKs ) )    	
+#foreach( $attribute in $attributes)		
+#if( $attribute.isFromAssociation() == true )	
+#set( $type = $attribute.getAssociation().getType() )
+#set( $roleName = $attribute.getAssociation().getRoleName() )
+#if( $attribute.getAssociation().isMultivalued() == false )
+	public ${type} get${roleName}();
+	public void set${roleName}( $type arg );
+    public void assign${roleName}( ${type} bo );
+#else ## $association.isMultivalued() == false
+    public java.util.Collection get${roleName}();
+	public void set${roleName}( java.util.Collection coll );
+	public void assign${roleName}( java.util.Collection coll );
+#end##if( $attribute.getAssociation().isMultivalued() == false )
+#end##if( $attribute.isFromAssociation() == true )	
+#end##foreach( $attribute in $attributes)		
+## create a parent as a relation
+#if ( $classObject.hasParent() )
+#set( $parent = $classObject.getParent() )
+#set( $parentName = $parent.getName() )
+	// declare the parent as a cmr
+	public ${parentName} get${parentName}();
+	public void set${parentName}( $parentName arg );	
+#end
+
+#end## $aib.usingCMP() == true
+#end

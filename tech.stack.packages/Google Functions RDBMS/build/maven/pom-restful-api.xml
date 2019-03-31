@@ -1,0 +1,55 @@
+#xmlHeader()
+#set( $appName = "${aib.getApplicationNameFormatted()}-restful-dao-layer" )
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+	<modelVersion>4.0.0</modelVersion>  
+  	<groupId>${aib.getRootPackageName(true)}</groupId>  
+  	<artifactId>${appName.replaceAll(" ",".")}</artifactId>  
+  	<version>${aib.getVersion()}</version>  
+  
+  	<packaging>jar</packaging>  
+    
+  	<name>${appName}</name>    
+
+#repositories()
+
+  	<properties>
+#standardProperties()
+	</properties>
+
+
+  	<build>
+  
+    	<plugins>
+    	
+#set( $exclusion = "**${esc.backslash}delegate${esc.backslash}*AWSLambdaDelegate.java" )
+#mavenCompilerPluginDecl( $exclusion )
+#herokuPluginDecl()
+#apacheMavenAssemblyPluginDecl()  
+#eclipseJettyMavenPluginDecl()
+#apacheMavenAntRunPluginDecl( $exclusion )    
+#jfrogPluginDecl()		  	
+#testPluginDecl()		  
+#sparkWebMicroframeworkPluginDecl()
+    	
+		</plugins>    
+	</build>
+   
+	<dependencies>  
+#mySQLDependencies()
+#googleGsonDependencies()
+#jacksonJsonDependencies()
+#hibernateDependencies()
+#jalopyDependencies()
+#log4jDependencies()
+#velocityDependencies()
+#apacheCommonDependencies()
+#junitDependencies()
+#w3cDOMDependencies()
+#mavenInvokerDependencies()
+#sparkMicroframeworkDependencies()
+#slf4jDependencies()
+  </dependencies>
+    
+</project>  

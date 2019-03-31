@@ -1,0 +1,78 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $workingDir = $appName )
+version: 2.1
+jobs: 
+
+  # job to build out the environment
+  build_env:
+
+    # assign the working directory
+    working_directory: ~/projectHome
+
+    # run the steps with Docker as the primary container
+    # job commands run in this container
+    # CircleCI Node.js image
+    # mongodb image - runs in a common network where ports exposed
+    #          on the primary container are available on localhost
+    docker:
+      - image: circleci/node:8.12.0-jessie
+      - image: mongo:4.0.5
+        command: [mongod, --smallfiles]
+
+    # steps that comprise the `build-env` job
+    steps:
+
+      # check out source code to working directory
+      - checkout
+
+      # restore the saved cache after the first run or if `pom.xml` has changed
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - restore_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+      # install the Angular CLI
+      - run: 'sudo npm install -g @angular/cli'
+
+      # create an appRoot directory to install into 
+      - run: mkdir ~/appRoot
+
+      # create a new Angular project shell
+      - run: cd ~/appRoot && ng new ${appName} --defaults
+
+      # copy the application files from the working directory
+      - run: ls ~/projectHome && cp -r ~/projectHome/. ~/appRoot/
+
+      # setup the application, copies generated app files to the project directory
+      - run: cd ~/appRoot/${appName} && npm run setup
+
+      # cache the entire project since it covers the npm_modules
+      # and the files created during ng new,
+      # using checksum of pom.xml as the cache-key
+      - save_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "pom.xml" }}
+          paths:
+              - ~/projectHome
+
+      # run mongoose server in the background
+      - run:
+          name: mongoose
+          command: cd ~/appRoot/${appName} && node server.js
+          background: true
+
+      # run development server server in the background
+      - run:
+          name: dev_server
+          command: cd ~/appRoot/${appName} && ng serve
+          background: true
+
+# simple workflow to build out the environment
+workflows:
+  version: 2
+  build-prepare-start:
+    jobs:
+      - build_env
+ 

@@ -1,0 +1,43 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+dist: xenial
+language: node_js
+node_js:
+  - "8"
+cache: npm
+
+before_install: 
+  - "echo -e \"machine github.com\\n  login $GITHUB_TOKEN\" > ~/.netrc"
+  - "git lfs pull"
+
+  
+before_install: 
+  - "echo -e \"machine github.com\\n  login $GITHUB_TOKEN\" > ~/.netrc"
+  - "git lfs pull"
+    
+git: 
+  depth: false
+  quiet: true
+
+env:
+  - APP_NAME=${appName} APP_ROOT_DIR=appRoot FULL_APP_DIR=$TRAVIS_BUILD_DIR/appRoot/${appName}
+  
+install: 
+  - "npm install -g @angular/cli"
+  - "mkdir -p $APP_ROOT_DIR"
+  - "cd $APP_ROOT_DIR"
+  - "ng new $APP_NAME --defaults"
+  - "ls $TRAVIS_BUILD_DIR"
+  - "cp -r $TRAVIS_BUILD_DIR/$APP_NAME/. $FULL_APP_DIR"
+  - "cd $FULL_APP_DIR"
+  - "npm install --prod"
+  - "npm run setup"
+    
+script: 
+    - "ng build"
+  
+services:
+  - mongodb

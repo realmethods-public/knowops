@@ -1,0 +1,27 @@
+#*
+ Struts Forward Declaration Output
+*#
+#macro( strutsForwardDeclarationsOutput )
+#foreach( $class in $aib.getUIComponentsToGenerate() )
+#if ( $class.isSelectPage() || $class.isListAddPage() )
+    <forward
+        name="${class.getName()}"
+        redirect="true"
+        path="/LOAD_${class.getName().toUpperCase()}"/>
+#end##if ( $class.isSelectPage() || $class.isListAddPage() )
+#end##foreach( $class in $aib.getUIComponentsToGenerate() )
+#end
+
+#*
+ Struts Global Forward Declaration Output
+*#
+#macro( strutsGlobalForwards )
+    <global-forwards>
+        <forward   name="homepage"             path="/Homepage.do" redirect="true"/>
+#if ( $aib.usingPortalLogon() == false )
+        <forward   name="logoff"               path="/Logoff.do"/>
+        <forward   name="logon"                path="/Logon.do"/>
+#end    
+    </global-forwards>
+#end
+

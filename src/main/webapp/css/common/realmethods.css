@@ -1,0 +1,603 @@
+/* height and color related...convenient to place on top for the purpose of making changes */
+
+
+html {
+  height : 100%;
+}
+
+* {
+  box-sizing: content-box;
+}
+
+.checkSpanClass
+{
+	font-size:0.9em;
+}
+
+.fileTreeClass
+{
+	width: 300px;
+	height: 400px;
+	border-top: solid 1px #BBB;
+	border-left: solid 1px #BBB;
+	border-bottom: solid 1px #FFF;
+	border-right: solid 1px #FFF;
+	background: #FFF;
+	overflow: scroll;
+	padding: 5px;
+}
+			
+.appGenOptionsDivClass {
+  overflow-y : auto;
+  height:500px;
+}
+
+.modelImageClass {
+  width : 100px;
+  height : 100px;
+}
+
+.modelContainerRow {
+  height : 160px;
+  align: center
+}
+
+.mainTableClass {
+  	width : 100%;
+  	height : 100%;
+  	background: transparent;
+  	color : white;
+  	font-size : 0.8em;
+  	table-layout:fixed;
+  	padding:0px;
+  	border-spacing:4px;
+}
+
+.panelClass {
+  font-size:1.0em;
+  color:#222222;
+}
+
+.sideNavBarClass {
+	height : 100%;
+	width : 96px;
+	background: #d7dee8;
+	padding-top : 15px;
+}
+
+.sideNavImageTableClass {
+  	width : 100%;
+  	height : 100%;
+  	background: black
+  	color : white;  
+}
+
+.sideNavBarImageClass {
+  height : 50px;
+  width : 100%;
+  vertical-align : middle;
+  text-align : left;
+  padding-left : 24px;
+  padding-top : 16px;
+}
+
+.sideNavImageTableRowClass {
+  padding : 4px;
+}
+
+.mainPanelClass {
+  	width : 100%;
+  	height : 100%;
+}
+
+.slideClass {
+  padding-top : 5px;
+  padding-right : 10px;
+  text-align : left;
+  overflow-y : auto;
+  height : 450px;
+}
+
+.navImageClass {
+  height : 32px;
+  width : 32px;
+  align : center;
+  text-align : center;
+}
+
+.navImageTextClass {
+	font-size:0.8em;
+	color:black;
+	text-align:center;
+	display:none;
+}
+
+.glyphicon.glyphicon-question-sign{
+    font-size: 20px;
+    padding: 4px;
+    background: #888888;
+    color: #ffffff;
+/*    color: #F0F4F5;
+    background: #515254;
+    padding: 4px;
+    border : 6px solid #F0F4F5;*/ 
+}
+
+.glyphicon.glyphicon-chevron-right{
+    font-size: 28px;
+    color: #F0F4F5;
+    background: #515254;
+    padding: 4px;
+    border : 6px solid #F0F4F5; 
+}
+
+.glyphicon.glyphicon-chevron-left{
+    font-size: 28px;
+    color: #F0F4F5;
+    background: #515254;
+    padding: 4px;
+    border : 6px solid #F0F4F5;
+}
+
+/*input:focus{
+    outline: none;
+}
+
+input{
+    border: none;
+    height: 20px;
+}*/
+
+body, .statusTableClass .mainTableClass, mainDivClass,
+.nav-tabs > li.active > a, 
+.nav-tabs > li.active > a:focus,  
+.nav-tabs > li.active > a:hover {
+    background : white; 
+}
+
+.mainNavTabClass, .statusTableClass {
+    background:#d7dee8;
+    border:0px;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus  {
+	border-left : 1px solid #72A3C2;
+	border-right : 1px solid #72A3C2;
+	border-top : 1px solid #72A3C2;
+}
+
+body {
+    /*padding: 6px;*/
+    color : white;
+	font-family: 'Libre Franklin', serif;
+	height : 100%; 
+    /*border: 6px solid black;*/
+}
+
+.mainNavTabClass{
+    padding:0px;
+}
+
+.mainDivClass {
+	padding:0px;
+}
+
+.mainTableClass {
+	width:100%;
+	border:0;
+	padding:0;
+}
+
+.statusTableClass {
+  	color : #f2f2f2;
+    border-spacing: 2px;
+    /*padding : 4px;*/
+    color : black;
+    table-layout:fixed;
+    width : 100%;
+  
+}
+
+.packageDivClass  {
+	height: 250px;
+	width: 1000px;
+	overflow : hidden;
+}
+
+.componentDivClass {
+	height : 450px;
+	overflow-y : auto;
+	border : 2px solid black;
+}
+
+.modelTreeDivClass  {
+	height : 500px;
+}
+
+.modelTreeClass {
+  height : 400px;
+  border : 2px solid #cdcdcd;
+  background : white;
+}
+.appGenTabClass, .packageTabClass, .optionsTabClass, .modelTabClass {
+    height : 460px;
+}
+
+h2, h3, h4
+{
+ color : black;
+}
+
+.packageDivClass {
+	overflow-y:auto;
+padding:0px 10px 0px 0px;
+}
+
+.packageRowClass, .sharedModelRowClass {
+  background : #d3d8e2;
+  color : black;
+  padding : 2px;
+}
+
+.packageRowClass, .sharedModelRowClass{
+  	border : 2px solid white;
+}
+
+.packageColumnClass {
+	padding : 2px;
+	text-align: center;
+	font-size: 1.1em;
+}
+  
+
+.modelTreeTableClass, .appGenTableClass, .packageTableClass, 
+.shareModelTableClass,  .genResultsTable, 
+.sharedModelTableClass, .revEngTableClass {
+    border-spacing: 2px;
+    padding : 4px;
+    background : transparent;
+    color : black;
+    table-layout:fixed;
+    width : 100%;
+}
+
+.modelTreeDivClass {
+	overflow-y:auto;
+	padding:0px 10px 0px 0px;
+	display : none;
+	background : white;
+}
+
+.sharedModelTableClass
+{
+	font-size : 12px;
+}
+
+.statusTableClass {
+    color : white;
+}
+
+.statusTDClass, .appGenTDClass, .shareModelTDClass, .revEngTDClass {
+	width:50%;
+	padding:4px;
+	vertical-align:top;
+}
+
+.packageTDClass
+{
+	/*width:50%;*/
+	/*padding:4px;*/
+	vertical-align:top;
+    text-align:center
+}
+
+.packageSummaryTDClass
+{
+	width:50%;
+	padding:4px;
+	vertical-align:top;
+    text-align:center
+}
+
+.modelTDClass {
+	width:100%;
+	padding:4px;
+	vertical-align:top;
+
+}
+
+td {
+	padding : 4 px;
+}
+
+tr td:second-child,
+tr th:second-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+/*
+tr td:last-child,
+tr th:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+tr td:first-child,
+tr th:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+tr td:last-child,
+tr th:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+*/
+
+ tr {
+    color: black;
+    font-size : 12;
+}
+
+thead th {
+	background : #000000;
+  	color : white;	  	
+   	font-size : 12;
+    text-align : center;
+}
+
+.packageRowClass, .sharedModelRowClass{
+  	border : 2px solid white;
+  }
+        
+.modal-body {
+ color : black
+}
+        
+  .modal-header {
+  	background : #eaecef;
+  }
+
+  .modal-footer {
+	background : white;
+  }
+	
+  .appGenTabClass, .packageTabClass, .optionsTabClass, .modelTabClass {
+    padding : 2px;
+    background : white;
+}
+  
+  .componentLibraryTabClass {
+    padding : 2px;
+    background : white;
+    color : black;
+    width : 100%;
+    font-size : 12px
+  }
+ 
+ .componentLibraryRowClass1 {
+  background : #546474;
+  color : white;
+  padding : 2px;
+  border : 2px solid white;
+  font-size : 12px;
+}
+  
+  componentLibraryRowClass2 {
+  background : #cccccc;
+  color : black;
+  padding : 2px;
+  border : 2px solid white;
+  font-size : 12px;
+}
+
+.appGenResultsClass {
+    background : white;
+    color : black;
+    font-size : 12;
+  	border:1px solid black; 
+  }
+  
+.genOutputClass {
+  padding:4px;
+  font-size:0.9em;
+  background : #333333;
+  color : #ffffff;
+  overflow-y : auto;
+  height : 200px;
+  width : 100%;
+  border:4px solid blue;
+  }
+
+.modelOptionsTableClass {
+  	overflow-y : auto;
+    width : 100%;
+    padding : 4px;
+    font-size : 11;
+    color : white;
+  }
+  
+.modelOptionsTDClass .optionsInputClass .optionsSelectClass .optionsCheckboxClass{
+    color : white;
+    font-size : 0.9em;
+    text-align: center;
+  }
+  
+.modelContentTableClass {
+  	width : 100%;
+  	background: black
+  	color : white;
+  	font-size : 14px;
+  	table-layout:fixed;
+  	padding:4px;
+  	border-spacing:4px
+  }
+
+.modelContentTableClass td {
+  	padding : 4px;
+	text-align : left;
+	background : white;
+	border : 2px solid lightgrey;
+	color : black;
+	font-size : 14;
+}
+
+.modelTableRowHighlight {
+    background : #9ba1a9;
+    color : white;
+
+}
+  
+.modelTableClass{
+      background : black;
+      font-size : 12;
+      border-spacing: 8px 2px;
+}
+  
+.modelTreeClass {
+	color : black;
+	font-size : 14px;	 
+	background : transparent;
+	padding:10px;
+	overflow-y : auto;
+}  	  
+  
+.sectionClass {
+  	background : transparent;
+  	border : 2px solid black;
+  	padding : 4px;
+  	align : top;
+	height : 200px;
+  	width : auto;
+  	overflow-y : auto;
+
+}
+
+.sectionHeaderClass {
+  	background : black;
+  	padding : 4px;
+  	color : white;
+  	text-align : center;
+}
+  
+.sectionTitleClass{
+  	font-size : 1.6em;
+  	font-weight : bold;
+  	text-align : center;
+  	padding-bottom : 6px;
+}
+
+.sectionBodyClass {
+	font-size : 1.3em;
+	background : transparent;
+	color : black;
+	text-align : left;
+	padding : 4px;
+}
+  
+  /* Custom container */
+.container {
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+.container > hr {
+    margin: 60px 0;
+}
+
+  /* Main marketing message and sign up button */
+.jumbotron {
+    margin: 80px 0;
+    text-align: center;
+}
+
+.jumbotron h1 {
+    font-size: 100px;
+    line-height: 1;
+}
+
+.jumbotron .lead {
+    font-size: 24px;
+    line-height: 1.25;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+  /* Supporting marketing content */
+.marketing {
+    margin: 60px 0;
+}
+
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+  /* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+    padding: 0;
+}
+
+.navbar .nav {
+    margin: 0;
+    display: table;
+    width: 100%;
+    font-size: 14px;
+}
+
+.navbar .nav li {
+    display: table-cell;
+    width: 1%;
+    float: none;
+}
+
+.navbar .nav li a {
+    font-weight: bold;
+    text-align: center;
+}
+
+.navbar .nav li:first-child a {
+    border-left: 2px;
+    border-radius: 3px 0 0 3px;
+}
+
+.navbar .nav li:last-child a {
+    border-right: 0px;
+    border-radius: 0 3px 3px 0;
+}
+       
+.nav-tabs > li > a{
+	color : white;
+}
+ 
+.nav-tabs > li > a:hover{
+	background-color:light-gray;
+	color:black;
+}
+
+.nav-tabs > li.active > a {
+	font-weight : bold;
+}
+    
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus {
+	color:white;
+}
+	
+.tooltip_templates 
+{ 
+	display: none; 
+} 	
+
+/* tabs styling */
+	.etabs { margin: 0; padding: 0; }
+	.tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
+	.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+	.tab a:hover { text-decoration: underline; }
+	.tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
+	.tab a.active { font-weight: bold; }
+	.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }

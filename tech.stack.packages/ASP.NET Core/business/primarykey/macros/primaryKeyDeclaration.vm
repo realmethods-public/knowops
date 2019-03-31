@@ -1,0 +1,4 @@
+#macro( getPrimaryKeyClassDecl )
+        public class ${classObject.getName()}PrimaryKey #getPrimaryKeyParentNameOutput()
+        {
+#end

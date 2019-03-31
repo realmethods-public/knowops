@@ -1,0 +1,15 @@
+#*
+ Servlet Init Param Output, differs depending upon
+ the Presentation Tier type selected
+*#
+#macro( servletInitParams )
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>convertNull</param-name>
+            <param-value>true</param-value>
+        </init-param>             
+#end
+

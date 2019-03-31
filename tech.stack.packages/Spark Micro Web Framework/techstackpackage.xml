@@ -1,0 +1,22 @@
+<tech-stack-package 
+	name="Spark Micro Web Framework" 
+	shortName="SparkMicroWeb"
+	description="Uses Spark Java web micro framework with JQuery/Bootstrap and Hibernate" 
+	icon-url="./img/spark.png" 	
+	info-page-url="http://www.realmethods.com/infopages/spark-web-framework-info-page.html"
+    version="1.1"
+    app-type="webapp"
+    release-status="production">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="javascript"/>
+		<target-language name="html5"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="jquery/bootstrap/css3/html" description="front-end components" app-layer="presentation"/>
+		<tech-stack-component name="spark" description="RESTful API services layer" app-layer="business"/>
+		<tech-stack-component name="hibernate" description="ORM persistence" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>			
+	</tech-stack>
+</tech-stack-package>

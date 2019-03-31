@@ -1,0 +1,37 @@
+#* 
+ Outputs the method implementation formatted according to the input args.
+ 
+ $method		MethodObject
+ $className		String
+*#      
+#macro( getAsImplementation $method $className )
+#set( $hasReturn = $method.hasReturnValue() )    
+#getAsInterfaceDeclaration( $method )
+    {    
+    	// declare a temp variable
+#if( $hasReturn == true )
+#set( $returnType = $method.getReturnType() )
+        $returnType tempVar = null;
+#end## $hasReturn      
+#if ( $method.isFindAllBy() )
+        // delegate to the ${className}DAO
+        try
+        {
+        	tempVar = get${className}DAO().${method.getName()}( $method.getArgumentList() );
+        }
+	    catch ( Throwable exc)
+	    {
+			throw new ProcessingException( "${className}BusinessDelegate: $method.getName()(..) - "  + exc );
+	    }        
+#else
+        //////////////////////////////////////////
+        // To Do!!
+        //////////////////////////////////////////
+#set( $argList = $method.getArgumentList() )        
+#end ##if ( $method.isFindAllBy() )
+
+#if( $hasReturn == true )   
+        return( tempVar );
+#end## $hasReturn == true
+	}	    
+#end 

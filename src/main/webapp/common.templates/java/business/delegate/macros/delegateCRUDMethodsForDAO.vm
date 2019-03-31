@@ -1,0 +1,283 @@
+#macro( delegateCRUDMethodsForDAO )
+#if ( $classObject.isAbstract() == false )
+    
+   /**
+	* ${classObject.getName()} Business Delegate Factory Method
+	*
+	* Returns a singleton instance of ${classObject.getName()}BusinessDelegate().
+	* All methods are expected to be self-sufficient.
+	*
+	* @return 	${classObject.getName()}BusinessDelegate
+	*/
+	static public ${classObject.getName()}BusinessDelegate get${classObject.getName()}Instance()
+	{
+	    if ( singleton == null )
+	    {
+	    	singleton = new ${classObject.getName()}BusinessDelegate();
+	    }
+	    
+	    return( singleton );
+	}
+ 
+  /**
+	* ${classObject.getName()} Business Delegate Factory Method
+	*
+	* Returns a singleton instance of ${classObject.getName()}BusinessDelegate().
+	* All methods are expected to be self-sufficient.
+	* 
+	* @param	${classObject.getName()}
+	* @return 	${classObject.getName()}BusinessDelegate
+	*/
+	static public ${classObject.getName()}BusinessDelegate get${classObject.getName()}Instance( ${classObject.getName()} obj )
+	{
+	    if ( singleton == null )
+	    	singleton = new ${classObject.getName()}BusinessDelegate( obj );
+	    else
+	    	singleton.setFrameworkBusinessObject( obj );
+	    	
+	    return( singleton );
+	}
+	 
+    
+
+    /**
+     * Method to retrieve the ${classObject.getName()} via an ${classObject.getName()}PrimaryKey.
+     * @param 	key
+     * @return 	${classObject.getName()}
+     * @exception ProcessingException - Thrown if processing any related problems
+     * @exception IllegalArgumentException 
+     */
+    public ${classObject.getName()} get${classObject.getName()}( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException
+    {
+    	preGetBO( key );
+    	
+        if ( key == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:get${classObject.getName()}( ${classObject.getName()}PrimaryKey key ) - null key provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        ${classObject.getName()} returnBO   = null;
+        ${classObject.getName()}DAO dao                          = get${classObject.getName()}DAO();
+        
+        try
+        {
+            returnBO = dao.find${classObject.getName()}( key );
+        }
+        catch( FrameworkDAOException exc )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:get${classObject.getName()}( ${classObject.getName()}PrimaryKey key ) - unable to locate ${classObject.getName()} with key " + key.toString() + " - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${classObject.getName()}DAO( dao );
+        }        
+        
+        returnBO = (${classObject.getName()})postGetBO( returnBO );
+        
+        return returnBO;
+    }
+
+
+    /**
+     * Method to retrieve a collection of all ${classObject.getName()}s
+     *
+     * @return 	ArrayList<${classObject.getName()}> 
+     * @exception ProcessingException Thrown if any problems
+     */
+    public ArrayList<${classObject.getName()}> getAll${classObject.getName()}() 
+    throws ProcessingException
+    {
+    	preGetAllBOs();
+    	
+        ArrayList<${classObject.getName()}> array	= null;
+        ${classObject.getName()}DAO dao = get${classObject.getName()}DAO();
+    
+        try
+        {
+            array = dao.findAll${classObject.getName()}();
+        }
+        catch( FrameworkDAOException exc )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:getAll${classObject.getName()}() - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${classObject.getName()}DAO( dao );
+        }        
+                
+        //array = (${classObject.getName()}[])postGetAllBOs( array );
+        
+        return array;
+    }
+
+   /**
+    * Creates the provided BO.
+    * @param		businessObject 	${classObject.getName()}
+    * @return       ${classObject.getName()}
+    * @exception    ProcessingException
+    * @exception	IllegalArgumentException
+    */
+	public ${classObject.getName()} create${classObject.getName()}( ${classObject.getName()} businessObject )
+    throws ProcessingException, IllegalArgumentException
+    {
+    	businessObject = (${classObject.getName()})preCreateBO( businessObject);
+    	
+		if ( businessObject == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:create${classObject.getName()}( ${classObject.getName()} businessObject ) - null businessObject provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        // return value once persisted
+        ${classObject.getName()}DAO dao                          = get${classObject.getName()}DAO();
+        
+        try
+        {
+            businessObject = (${classObject.getName()})dao.create( businessObject );
+        }
+        catch (FrameworkDAOException exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:create${classObject.getName()}() - Unable to create ${classObject.getName()}" + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${classObject.getName()}DAO( dao );
+        }        
+        
+        businessObject = (${classObject.getName()})postCreateBO( businessObject );
+        
+        return( businessObject );
+        
+    }
+
+   /**
+    * Saves the underlying BO.
+    * @param		businessObject		${classObject.getName()}
+    * @return       what was just saved
+    * @exception    ProcessingException
+    * @exception  	IllegalArgumentException
+    */
+    public ${classObject.getName()} save${classObject.getName()}( ${classObject.getName()} businessObject ) 
+    throws ProcessingException, IllegalArgumentException
+    {
+	    businessObject = (${classObject.getName()})preSaveBO( businessObject );
+	    
+		if ( businessObject == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:save${classObject.getName()}( ${classObject.getName()} businessObject ) - null businessObject provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+                
+        // --------------------------------
+        // If the businessObject has a key, find it and apply the businessObject
+        // --------------------------------
+        ${classObject.getName()}PrimaryKey key = businessObject.get${classObject.getName()}PrimaryKey();
+                    
+        if ( key != null )
+        {
+            ${classObject.getName()}DAO dao = get${classObject.getName()}DAO();
+
+            try
+            {                    
+                businessObject = (${classObject.getName()})dao.save( businessObject );
+            }
+            catch (FrameworkDAOException exc)
+            {
+                String errMsg = "${classObject.getName()}BusinessDelegate:save${classObject.getName()}() - Unable to save ${classObject.getName()}" + exc;
+                FrameworkDefaultLogger.error( errMsg );
+                throw new ProcessingException( errMsg  );
+            }
+            catch (VersionUpdateException exc)
+            {
+                String errMsg = "${classObject.getName()}BusinessDelegate:save${classObject.getName()}() - Unable to save ${classObject.getName()} - " + exc;
+                FrameworkDefaultLogger.error( errMsg );
+                throw new ProcessingException( errMsg );
+            }      
+            finally
+            {
+                release${classObject.getName()}DAO( dao );
+            }
+            
+        }
+        else
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:save${classObject.getName()}() - Unable to create ${classObject.getName()} due to it having a null ${classObject.getName()}PrimaryKey."; 
+            
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+
+        // just in case the user intends on re-using this BusinessDelegate instance
+        if ( businessObject != null )
+        {
+            // assign back internally 	
+            setFrameworkBusinessObject( businessObject );
+        }
+        
+        businessObject = (${classObject.getName()})postSaveBO( businessObject );
+        
+        return( businessObject );
+        
+    }
+   
+   /**
+    * Deletes the associatied value object using the provided primary key.
+    * @param		key 	${classObject.getName()}PrimaryKey    
+    * @exception 	ProcessingException
+    */
+    public void delete( ${classObject.getName()}PrimaryKey key ) 
+    throws ProcessingException, IllegalArgumentException
+    {    	
+    	preDeleteBO( key );
+    	
+		if ( key == null )
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:delete() - null key provided.";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new IllegalArgumentException( errMsg );
+        }
+        
+        ${classObject.getName()}DAO dao  = get${classObject.getName()}DAO();
+
+		boolean deleted = false;
+		
+        try
+        {                    
+            deleted = dao.delete( key );
+        }
+        catch (Throwable exc)
+        {
+            String errMsg = "${classObject.getName()}BusinessDelegate:delete() - Unable to delete ${classObject.getName()} using key = "  + key + ". " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+        finally
+        {
+            release${classObject.getName()}DAO( dao );
+        }
+        
+        if ( deleted == false )
+		{
+            String errMsg = "${classObject.getName()}BusinessDelegate:delete() - Unable to delete ${classObject.getName()} using key = "  + key + ". ";
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );		
+		}
+		
+		postDeleteBO( key );
+		
+        return;
+    }
+#end
+
+#end

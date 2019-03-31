@@ -1,0 +1,90 @@
+#xmlHeader()
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<!-- Definitions for Tiles documentation   -->
+
+<tiles-definitions>
+
+<!-- Generic (base) template tiles -->
+
+    <definition name="layout.mainLayout" path="/templates/tiles/frametemplate.jsp">
+	  <put name="title"  value="${aib.getApplicationName()} Application" />
+	  <put name="header" value="/header.jsp" />
+	  <put name="footer" value="/footer.jsp" />
+	  <put name="body"   value="/homepage.jsp" />
+	  <put name="menu"   value="${aib.getApplicationName()}.menu.bar" />
+    </definition>
+    
+    <definition name="layout.bodyLayout" path="/templates/tiles/bodytemplate.jsp">
+	  <put name="body"   value="" />
+	  <put name="title"   value="" />
+	  <put name="header" value="" />
+	  <put name="footer" value="" />	  
+    </definition>
+    
+
+    <definition name="layout.mainTableLayout" extends="layout.mainLayout">
+	  <put name="title"  value="" />
+	  <put name="body"   value="" />
+    </definition>
+
+    <definition name="layout.mainFormLayout" extends="layout.mainLayout">
+	  <put name="title"  value="" />
+	  <put name="body"   value="" />
+    </definition>
+
+    <definition name="layout.mainTabLayout" extends="layout.mainLayout">
+	  <put name="title"  value="" />
+	  <put name="body"   value="" />
+    </definition>
+    
+    <definition name="layout.subLayout" extends="layout.bodyLayout">
+	  <put name="title"  value="" />
+	  <put name="body"   value="" />
+    </definition>
+    
+
+<!-- Standard display tiles-->
+
+    <definition name="HOMEPAGE_TILE" extends="layout.mainLayout">
+	    <put name="body"   value="/homepage.jsp" />
+    </definition>
+    
+    <definition name="LOGOFF_TILE" extends="layout.mainLayout">
+	  <put name="title"  value="Log Off" />
+	  <put name="body" value="/logoff.jsp" />
+    </definition>
+
+    
+    <definition name="UNAUTHORIZED_USER_TILE" extends="layout.mainLayout">
+	  <put name="title"  value="Authorization Error" />
+	  <put name="body" value="/AuthorizationError.jsp" />
+    </definition>
+      
+    <definition name="UNAUTHENTICATED_USER_TILE" extends="layout.mainLayout">
+	  <put name="title"  value="Authentication Error" />
+	  <put name="body" value="/AuthenticationError.jsp" />
+    </definition>
+      
+    <definition name="ERROR_TILE" extends="layout.mainLayout">
+	  <put name="title"  value="General Error" />
+	  <put name="body" value="/Error.jsp" />
+    </definition>
+
+    <definition name="DATA_VALIDATION_ERROR_TILE" extends="layout.mainLayout">
+	  <put name="title"  value="Data Validation Error" />
+	  <put name="body" value="/DataValidationError.jsp" />
+    </definition>
+    
+    <!-- Application specific display tile definitions-->
+    
+<!-- AIB : \#tilesDefinitionOutput() -->
+#tilesDefinitionOutput()
+<!-- ~AIB -->
+
+</tiles-definitions>
+
+#xmlFooter()

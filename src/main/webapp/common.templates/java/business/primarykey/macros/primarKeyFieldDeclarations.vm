@@ -1,0 +1,6 @@
+#macro ( getKeyFieldDeclarations )
+#set( $attributes = $classObject.getPrimaryKeyAttributes() )
+#foreach( $attribute in $attributes )	
+	public $attribute.getType() $attribute.getAsArgument();
+#end## $attribute in $attributes 
+#end

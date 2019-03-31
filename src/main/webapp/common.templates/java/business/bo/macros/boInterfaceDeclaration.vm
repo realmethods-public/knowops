@@ -1,0 +1,37 @@
+#macro ( getBOInterfaceDecl )
+## reuse and clear
+#set( $name = $classObject.getName() )
+#set( $parentName = "I"	)
+#set( $parentHasIdentity = false )
+#if( $classObject.hasParent() == true )	
+#set( $parentName = "${parentName}${classObject.getParentName()}" )	    
+#else ## no parent, so come directly off of the IFrameworkBusinessObject
+#if( $aib.hasIdentity( $classObject ) == true )
+#set( $parentName = "${parentName}FrameworkBusinessObject" )
+#else    ## make it a FrameworkBusinessObject
+#set( $parentName = "${parentName}FrameworkBusinessObject" )
+#end## $aib.hasIdentity( $classObject ) == true
+#end## $classObject.hasParent() == true
+## Output 
+public interface I${name} extends $parentName
+{
+#end
+
+#macro ( getInterfaceDecl )
+## reuse and clear
+#set( $name = $classObject.getName() )
+#set( $parentName = ""	)
+#set( $parentHasIdentity = false )
+#if( $classObject.hasParent() == true )	
+#set( $parentName = "${parentName}${classObject.getParentName()}" )	    
+#else ## no parent, so come directly off of the IFrameworkBusinessObject
+#if( $aib.hasIdentity( $classObject ) == true )
+#set( $parentName = "${parentName}FrameworkBusinessObject" )
+#else    ## make it a FrameworkBusinessObject
+#set( $parentName = "${parentName}FrameworkBusinessObject" )
+#end## $aib.hasIdentity( $classObject ) == true
+#end## $classObject.hasParent() == true
+## Output 
+public interface ${name} extends $parentName
+{
+#end

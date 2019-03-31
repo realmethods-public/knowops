@@ -1,0 +1,42 @@
+#*
+ Test related
+*#
+
+#*
+ Returns a String representing the code for creating a value object with default
+ values.  Used to primarily create a TestXXXBusinessDelegate.
+*#
+#macro ( defaultTestBOOutput )
+#set( $attributes = $classObject.getAttributesOrdered(true) )
+#foreach( $attribute in $attributes )
+#if( $attribute.isPrimaryKey() == false && $attribute.isFinal() == false && $attribute.isFromAssociation() == false )
+newBO.set${Utils.capitalizeFirstLetter( $attribute.getAsArgument() )}(
+## Check the Type
+    #defaultTestBOOutputType( $attribute ) );
+#end## $attribute.isFinal() == false && $attribute.isPrimaryKey() == false
+#end## foreach $attribute in $attributes
+#end
+
+#macro( defaultTestBOOutputType $attribute )
+#set( $type = $attribute.getType() )
+#if( $type.equals( "java.util.Date" ) || $type.equals( "java.sql.Date" ) )
+java.util.Calendar.getInstance().getTime()
+#elseif( $type.equals( "java.sql.Time" ) )
+new java.sql.Time( new java.util.Date().getTime() )
+#elseif ( $type.equals( "java.util.Calendar" ) )
+java.util.Calendar.getInstance()
+#elseif ( $type.endsWith( "String" ) )
+new String( org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) )
+#elseif ( $type.equals( "java.sql.Timestamp" ) )
+new java.sql.Timestamp( new java.util.Date().getTime() )
+#elseif( $attribute.isFromEnumerator() )
+${Utils.capitalizeFirstLetter(${attribute.getType()})}.getDefaultValue()
+#elseif ( $attribute.isFromMultiValueAssociation() == true )
+null
+#elseif( $attribute.isFromAssociation() == true )	## must be single association if here
+new ${type}()
+#elseif( $type.endsWith( "[]" ) )
+null
+#else
+new ${type}( new String(org.apache.commons.lang3.RandomStringUtils.randomNumeric(3) )  )
+#end#end

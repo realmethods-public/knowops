@@ -1,0 +1,16 @@
+#macro( subclass $class )
+#set( $children = $class.getChildren() )
+#foreach( $child in $children )
+#set( $childName = "${child.getName()}" )    
+    <joined-subclass name="${aib.getRootPackageName(${child})}.#getBOPackageName().${childName}" 
+                     table="${childName.toLowerCase()}" 
+                     extends="${aib.getRootPackageName(${child.getParent()})}.#getBOPackageName().${child.getParentName()}">
+#set( $pks = $class.getAllPrimaryKeysInHierarchy() )    
+#foreach( $pk in $pks )	
+    <key column="fk_${pk.getAsArgument()}"/>
+#end ##foreach( $pk in $pks )	
+
+#hibernate( $child "" )
+    </joined-subclass>
+#end ##foreach( $child in $children )
+#end

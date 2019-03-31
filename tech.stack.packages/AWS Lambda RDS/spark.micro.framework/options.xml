@@ -1,0 +1,19 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="Spark Restful">
+	<option name="buildAndCopyResultLayer"  value="true" required="true" description="build and push DAO layer as an executable jar file" type="boolean"/>
+	<option name="securityRemoteUrl"  value="ec2-user@18.235.138.220" required="true" description="security account with URL to copy DAO restful API" type="input"/>
+	<option name="fileLocation"  value="/usr/share/realmethods" required="true" description="security account with URL to copy DAO restful API" type="input"/>	
+	<option name="privateKeyFileLocation"  value="C:\Users\srand\Downloads\business\technical\pem.files\realmethods-key-pair.pem" required="true" description="private key file location" type="input"/>
+	<option name="passphrase"  value="" required="true" description="passphrase for key file, leave empty if none" type="input"/>
+</options>

@@ -1,0 +1,51 @@
+#macro( hibernateClassDeclaration )
+#set( $appName = $aib.getApplicationNameFormatted() )
+#set( $className = $classObject.getName() )
+#set( $pkClassName = "${aib.getRootPackageName(true)}.#getPrimaryKeyPackageName().${className}PrimaryKey" )
+#################################################	
+#set( $pks = $classObject.getPrimaryKeyAttributes() )
+#set( $children = $classObject.getChildren() )
+  <class name="${className}" 
+         table="${className.toLowerCase()}"
+#if ( $classObject.isAbstract() == true )
+         abstract="true">
+#else
+         abstract="false">         
+#end ##if ( $classObject.isAbstract() == true )    
+#if ( $classObject.hasSimplePrimaryKey() == true )
+#set( $pk = $pks.get(0) )	
+    <id name="${pk.getAsArgument()}" type="${pk.getType().toLowerCase()}" >
+      <generator class="native"/>    
+    </id>
+#else ## using compound keys
+    <composite-id name="frameworkPrimaryKey" class="${pkClassName}" access="field">    
+#foreach( $pk in $pks )	
+      <key-property name="${pk.getAsArgument()}" type="${pk.getType().toLowerCase()}" column="${pk.getAsArgument()}"/>
+#end ##foreach( $pk in $pks )	
+    </composite-id>    
+#end ##if ( $classObject.hasSimplePrimaryKey() == true )
+##if ( $children.size() > 0 )
+##    <discriminator column="class_name"/> 
+###end          
+#if ( $classObject.isAuditable() == true )
+<!-- No need to apply this since the createTimestamp 
+     and lastUpdateTimestamp attributes are added directly
+     to any class modeled with the 'Auditable' stereotype
+    <timestamp name="lastUpdateTimestamp" />
+-->    
+#end ##if ( $classObject.isAuditable() == true )
+#hibernate( $classObject "" )
+    </class>
+#end
+
+
+#macro( getHibernateDAOClassDecl )
+#set( $parentName = "" )        
+#if( $classObject.hasParent() == true )    
+#set( $parentName = "${parentName}${classObject.getParentName()}DAO" )   
+##set( $parentName = "${parentName}BaseDAO" )
+#else ## no parent, so come directly off of the FrameworkBusinessObject
+#set( $parentName = "${parentName}BaseDAO" )		
+#end
+public class ${classObject.getName()}DAO extends $parentName
+#end

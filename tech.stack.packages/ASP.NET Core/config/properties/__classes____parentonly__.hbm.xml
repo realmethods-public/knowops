@@ -1,0 +1,23 @@
+<!--  
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+#set( $appName = $aib.getApplicationNameFormatted() )
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   assembly="${appName}" 
+                   namespace="${appName}.Models">
+
+<!-- AIB : \#hibernateClassDeclaration() -->        
+#hibernateClassDeclaration()
+<!-- ~AIB -->
+
+</hibernate-mapping>

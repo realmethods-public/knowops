@@ -1,0 +1,43 @@
+#macro( jspPageDecl )
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
+<%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags"%>
+#end
+
+#macro( jspTagLibIncludes )
+#end
+
+#macro( jspImports )
+#*<%@
+    page import="
+    com.cloudmigrate.framework.common.namespace.*"
+%>*#
+#end
+
+#macro( jspIncludes )
+<%@ include file="commonfunctions.jsp" %>	
+#end
+
+#macro ( getCommonFunctionsDecls )
+    isrMPresentationTier   = ${aib.usingRealMethodsPresentationTier()};
+    servletName            = "${aib.getServletName()}";
+#end
+
+#macro( styleSheetDecl )
+<LINK REL="stylesheet" TYPE="text/css" HREF="css/stylesheet.css">
+#end
+
+#macro( javascriptIncludes )
+#*
+<script>
+function confirmDelete()
+{
+	var agree=confirm("Are you sure?");
+	if (agree)
+	{
+		formname.submit();
+	}
+}
+</script>
+*#
+#end

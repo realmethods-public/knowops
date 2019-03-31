@@ -1,0 +1,100 @@
+#xmlHeader()
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+	<modelVersion>4.0.0</modelVersion>  
+  
+	<groupId>${aib.getRootPackageName(true)}</groupId>  
+	<artifactId>${aib.getApplicationName().replaceAll(" ",".")}</artifactId>  
+	<version>${aib.getVersion()}</version>  
+	<packaging>war</packaging>  
+    
+	<name>${aib.getApplicationName()}</name>    
+  
+#repositories()  
+
+	<properties>
+#standardProperties()
+#strutsProperties()
+	</properties>
+
+  <build>
+  
+    <plugins>
+
+#standardMavenWarPlugin()      
+#eclipseJettyMavenPluginDecl()
+#testPluginDecl()
+#jfrogPluginDecl()
+#herokuPluginDecl()	
+#set( $exclusion = "" )
+#mavenCompilerPluginDecl( $exclusion )
+#apacheMavenAntRunPluginDecl( $exclusion )
+
+    </plugins>
+    
+  </build>
+   
+  <dependencies>  
+
+#googleGsonDependencies()
+#hibernateDependencies()
+#memcachedDBDependencies()
+#mySQLDependencies()
+#jalopyDependencies()
+#jacksonJsonDependencies()
+#junitDependencies()
+#strutsDependencies()
+#velocityDependencies()
+#jeeDependencies()    
+#log4jDependencies()
+#apacheCommonDependencies()
+#mavenInvokerDependencies()
+#w3cDOMDependencies()
+#jbossJavaxTransactionDependencies()
+
+<!-- 
+	===============================================================================
+	The following Dependent jar files ARE NOT FOUND in the remote maven repository 
+    =============================================================================== 
+-->
+
+<!-- eclipse ecore/ECF dependencies 
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>common</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>ecore</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>ecore-xmi</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf.codegen</groupId>
+		<artifactId>ecore</artifactId>
+   		<version>2.3.0-v200706262000</version>
+		<scope>compile</scope>  
+    </dependency>
+-->
+
+  </dependencies>  
+ 
+</project>  

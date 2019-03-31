@@ -1,0 +1,185 @@
+#macro( generateFormFields $attributes $parentPrefix )
+<table class="formTableClass">
+#foreach( $attribute in $attributes )
+	<tr class="formTRClass">
+	  <td class="formTDClass">${attribute.getDisplayName()}</td>
+	  <td class="formTDClass">#outputFormField( $attribute $parentPrefix )</td>
+	</tr>
+#end 
+</table>
+#end
+
+#macro( outputFormField $attribute $parentPrefix )
+#set( $lowercaseClassName 		= ${Utils.lowercaseFirstLetter( ${classObject.getName()} )} )
+#set( $attributeName 	= ${Utils.lowercaseFirstLetter( ${attribute.getName()} )} )
+#set( $type 			= $attribute.getType() )
+#set( $displayName 		= $attribute.getDisplayName() )
+#set( $required			= "required" )
+#set( $toolTip			= "" )
+#if( $attribute.canBeNull() == true )
+#set( $required = "" )
+#end
+#if ( $parentPrefix.length() > 0 )
+	#set( $attributeName = "${lowercaseClassName}.${parentPrefix}.${attributeName}" )
+#else
+	#set( $attributeName = "${lowercaseClassName}.${attributeName}" )
+#end
+#set( $name = ${attributeName} )
+#set( $id = ${attributeName} ) 
+	#if ( $attribute.isFromEnumerator() == true )
+	
+	<select id="${id}" name="${name}" class="form-control selectizing_class fieldSelectClass" style="display:none">
+	    #foreach( $enum in $aib.getEnumClassObject(${attribute.getType()}).getAttributes() )
+	    	<option value='$velocityCount'>${enum.getName()}</option>
+	    #end
+	</select>
+	#elseif ( $type.endsWith( "Boolean") == true )
+	<div class="checkbox checkbox-slider--a-rounded">
+	  <label><input type='checkbox' id='${id}' name='${name}' class="form-control" />
+	  		<span></span>
+	  </label>	
+	</div>
+	#elseif ( $type.endsWith( "Date" ) )
+<input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime form-control">
+	#elseif ( $type.endsWith( "Time" ) )
+<input type='date' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}"/>
+	#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="maskedTextField form-control" />
+
+	#else
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="form-control" />	
+	#end
+#end
+
+#macro( generateFormFields_Struts $attributes $parentPrefix )
+#foreach( $attribute in $attributes )
+	#outputFormField_Struts( $attribute $parentPrefix )
+#end 
+#end
+
+#macro( outputFormField_Struts $attribute $parentPrefix )
+#set( $lowercaseClassName 		= ${Utils.lowercaseFirstLetter( ${classObject.getName()} )} )
+#set( $attributeName 	= ${Utils.lowercaseFirstLetter( ${attribute.getName()} )} )
+#set( $type 			= $attribute.getType() )
+#set( $displayName 		= $attribute.getDisplayName() )
+#set( $required			= "required" )
+#set( $toolTip			= "" )
+
+#if( $attribute.canBeNull() == true )
+#set( $required = "" )
+#end
+#if ( $parentPrefix.length() > 0 )
+	#set( $attributeName = "${lowercaseClassName}.${parentPrefix}.${attributeName}" )
+#else
+	#set( $attributeName = "${lowercaseClassName}.${attributeName}" )
+#end
+
+#set( $id = ${attributeName} ) ## need to be the same for the purpose of using Tetlaw's validation
+#**
+  #if ( $attribute.isFromEnumerator() == true )
+	<s:if test="%{#parameters.readOnly}">
+		<s:textfield size="50" id="${id}" name="${attributeName}" label="${displayName}" readonly="true"/>	
+	</s:if>
+	<s:else>
+		<s:select id="${id}" name="${attributeName}" list="${attributeName}.values" label="${displayName}"/>	
+	</s:else>	
+  #else
+  **#
+#outputCommonFormField( $type $id $attributeName $displayName $required )
+ ## #end
+  #if ( $attribute.getToolTip().length() > 0 )
+    <span dojoType="tooltip" connectId="${id}" caption="$attribute.getToolTip()" toggle="fade" toggleDuration="500"></span>
+  #end
+#end
+
+#macro( outputCommonFormField $type $id $name $displayName $required )
+	#if ( $attribute.isFromEnumerator() == true )	
+		<s:if test="%{#parameters.readOnly}">
+			<s:textfield size="50" 
+				id="${id}" 
+				name="${name}" 
+				label="${displayName}" 
+				required="true"/>	
+		</s:if>
+		<s:else>
+			<s:select 
+				id="${id}" 
+				name="${name}" 
+				list="appNameSpace.${type}Values" 
+				label="${displayName}"/>	
+		</s:else>	
+	#elseif ( $type.equalsIgnoreCase( "Boolean") == true )
+		<s:if test="%{#parameters.readOnly}">
+			<s:textfield size="50" 
+				id="${id}" 
+				name="${name}" 
+				label="${displayName}" 
+				required="true"/>	
+		</s:if>
+		<s:else>        	
+	   	    <s:checkbox 
+	   	    	id="${id}" 
+	   	    	name="${name}" 
+	   	    	label="${displayName}" 
+	   	    	fieldValue="true"/>	    
+	   	</s:else>
+	#elseif ( $type.endsWith( "Date" ) )
+		<s:if test="%{#parameters.readOnly}">
+			<s:textfield size="50" 
+				id="${id}" 
+				name="${name}" 
+				label="${displayName}" 
+				readonly="true"/>	
+		</s:if>
+		<s:else>  
+		  <sj:datepicker 
+		  	id="${id}" 
+		  	name="${name}" 
+		  	label="${displayName}" 
+		  	required="${required}" 
+		  	displayFormat="MM/dd/yyyy" 
+		  	type="date"/>
+	    </s:else>	  
+	#elseif ( $type.endsWith( "Time" ) )
+		<s:if test="%{#parameters.readOnly}">
+			<s:textfield size="50" 
+				id="${id}" 
+				name="${name}" 
+				label="${displayName}" 
+				readonly="true"/>	
+		</s:if>
+		<s:else>  
+		  <sj:datepicker 
+		  	id="${id}" 
+		  	name="${name}" 
+		  	label="${displayName}" 
+		  	displayFormat="hh:mm:ss" 
+		  	required="${required}" 
+		  	type="time"/>
+	    </s:else>	  
+	#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+	      <s:textfield size="50" 
+	    	id="${id}" 
+	    	name="${name}" 
+	    	label="${displayName}" 
+	    	readonly="false" 
+	    	required="${required}" 
+	    	validate="true"/>	
+	#elseif ( $type.endsWith( "Float" ) || $type.endsWith( "Double" ) )
+	      <s:textfield size="50" 
+	      	id="${id}" 
+	      	name="${name}" 
+	      	label="${displayName}" 
+	      	readonly="false" 
+	      	required="${required}" 
+	      	validate="true"/>	  
+	#else
+	      <s:textfield size="50" 
+	      	id="${id}" 
+	      	name="${name}" 
+	      	label="${displayName}" 
+	      	readonly="false" 
+	      	required="${required}" 
+	      	validate="${required}"/>	    
+	#end	
+#end

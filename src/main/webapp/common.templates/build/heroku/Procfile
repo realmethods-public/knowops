@@ -1,0 +1,2 @@
+#set( $appName = "${aib.getApplicationNameFormatted()}-restful-dao-layer" )
+web: java -jar ./target/${appName}-${aib.getVersion()}-jar-with-dependencies.jar

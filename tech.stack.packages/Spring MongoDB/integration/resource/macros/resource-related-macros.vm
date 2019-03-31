@@ -1,0 +1,82 @@
+#*
+ Application Resource outputs
+*#
+#macro ( fieldFormsResourceOutput )
+#set( $classes = $aib.getClassesToGenerate() )
+#set( $includesPKs = false )
+#foreach( $class in $classes )
+#if( $aib.hasIdentity( $class ) == true )
+#set( $attributes = $class.getUserModifiableAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.formFields=#getResourceForFormFields($attributes)
+#end## $aib.hasIdentity( $class ) == true
+#end## $class in $classes
+#set( $classes = $aib.getUIComponentsToGenerate() )
+#foreach( $class in $classes )
+#if( $class.isListAddPage() == true )
+#set( $mainType = $class.getMainAssociation().getType() )
+#set( $attributes = $class.getMainAssociation().getAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.${mainType}.formFields=#getResourceForFormFields($attributes)
+#elseif ( $class.isSelectPage() == true )
+#set( $mainType = $class.getMainAssociation().getType() )
+#set( $attributes = $class.getMainAssociation().getAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.${mainType}.formFields=#getResourceForFormFields($attributes)
+## now iterate through each of its single associations
+#foreach( $singleAssociation in $class.getOtherSingleAssociations() )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $attributes = $singleAssociation.getAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.${roleName}.formFields=#getResourceForFormFields($attributes)
+#end ##foreach( $singleAssociation in $class.getOtherSingleAssociations() )
+#end ##if( $class.isListAddPage() )
+#end ##foreach( $class in $classes )
+#end
+
+#macro ( getResourceForFormFields $attributes )
+#set( $output = "" )
+#set( $attributesSize = $attributes.size() )
+#foreach( $attribute in $attributes )
+## don't need to deal with AIB generated attributes nor PKs
+## discovered and assigned during XML parsing
+#set( $phrase = $attribute.turnIntoPhrase() )
+#set( $separator = "" )
+#if( $velocityCount < $attributesSize )
+#set( $separator = "|" )
+#end## $velocityCount < $attributesSize
+## assign/concat the phrase and the separator
+#set( $output = "${output}${phrase}${separator}" )
+#end## foreach $attribute in $attributes
+## Output the form fields
+$output.trim()
+#end
+
+
+#*
+ Delegates to the getResourceForFormFields
+*#
+#macro ( getResourceForListHeaders $attributes )          	
+#getResourceForFormFields( $attributes )	
+#end
+
+#macro( listHeadersResourceOutput )
+#set( $classes = $aib.getClassesToGenerate() )	
+#set( $includesPKs = false )
+#foreach( $class in $classes )	
+#if( $aib.hasIdentity( $class ) == true )	    
+#set( $attributes = $class.getUserModifiableAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.listHeaders=#getResourceForListHeaders( $attributes )
+#end## $aib.hasIdentity( $class ) == true
+#end## foreach $class in $classes
+#set( $classes = $aib.getUIComponentsToGenerate() )
+#foreach( $class in $classes )
+#if( $class.isListAddPage() == true )
+#set( $multiAssociation = $class.getOtherMultipleAssociations().get(0) )
+#set( $attributes = $multiAssociation.getAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.${multiAssociation.getRoleName()}.listHeaders=#getResourceForListHeaders($attributes)
+#elseif ( $class.isSelectPage() == true )
+## iterate through each of its multiple associations
+#foreach( $multiAssociation in $class.getOtherMultipleAssociations() )
+#set( $attributes = $multiAssociation.getAttributes() )
+${Utils.capitalizeFirstLetter( $class.getName() )}.${multiAssociation.getRoleName()}.listHeaders=#getResourceForListHeaders($attributes)
+#end ##foreach( $multiAssociation in $class.getOtherMultipleAssociations() )
+#end ##if( $class.isListAddPage() )
+#end## foreach $class in $classes
+#end

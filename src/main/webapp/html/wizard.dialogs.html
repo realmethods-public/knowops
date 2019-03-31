@@ -1,0 +1,676 @@
+<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
+ * This software is the proprietary information of cloudMigrate, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by cloudMigrate, Inc. and you.
+ * 
+ * Contributor
+ *     cloudMigrate, Inc - initial API and implementation
+-->
+
+<!----------------------------------------------------
+ Wizard Dialogs
+------------------------------------------------------>
+
+<!----------------------------------------------------
+Start Wizard Dialog
+------------------------------------------------------>
+
+<div id="Wizard_Modal" class="modal fade hide" 
+	role="dialog" aria-labelledby="Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+	    	<table>
+	      		<tr>
+	        		<td style="text-align:center">
+	          			<span style="font-size:1.4em" id="Factory_Label_Id">
+	            			App Creation Wizard
+	    	  			<span>
+	        		</td>
+					<td style="text-align:center">	      
+	          			<img src="./img/wizard.wand.png" height="32" width="32"/>
+	        		</td>
+	      		</tr>
+	    	</table>
+	  	</div> <!-- modal-header -->
+
+		<div class="modal-body" style="background-color:white" id="wizard_body_id">
+	    	<img src="./img/wizard.hat.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    	<span style="font-size:1.4em">
+	      		The wizard will guide you through a series of questions and options to best 
+	      		determine which Technology Stack Package will
+	      		suit your requirements, along with the different ways to load and apply a model.
+	      		<p><a href="#" onclick="wizardMigrateorInnovate()">Let's Get Started!!</a>
+	    	</span>
+	  	</div> <!-- modal-body -->
+
+	  	<div class="modal-footer">
+			<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  	</div> <!-- modal-footer -->
+	  	
+	</div> <!-- modal-content -->
+	
+</div> <!-- modal-dialog -->
+
+</div> <!--Wizard_Modal -->
+
+<!----------------------------------------------------
+ Choose Migrate or innovate Dialog
+------------------------------------------------------>
+
+<div id="Migrate_Or_Innovate_Modal" class="modal fade hide" 
+	role="dialog" aria-labelledby="Migrate_Or_Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+	<div class="modal-dialog">
+    	<div class="modal-content">
+
+		  	<div class="modal-header">
+		    	<table>
+		      		<tr>
+		        		<td style="text-align:center">
+		          			<span style="font-size:1.4em" id="Migrate_Or_Innvoate_Label_Id">
+		            			App Creation Option
+		    	  			<span>
+		        		</td>
+						<td style="text-align:center">	      
+		          			<img src="./img/wizard.wand.png" height="32" width="32"/>
+		        		</td>
+		      		</tr>
+		    	</table>
+		  	</div> <!-- modal-header -->
+	
+		  	<div class="modal-body" style="background-color:white" id="wizard_body_id">
+				<span style="font-size:1.4em">
+	    			Are you creating a new application from scratch or creating one from an existing application?
+	    		</span>
+	    		<table style="width:100%">
+		  	  		<tr>
+		    			<td>
+		    	  			<a href="#" onclick="innovate()">
+		   						<img align="center" src="./img/innovate.png" width="128" height="128"/>
+		    	  			</a>
+		    			</td>
+		    			<td>
+		    	  			<a href="#" onclick="migrate()">
+		    	    			<img align="center" src="./img/cloud-migration-icon.png" width="128" height="128"/>
+		    	  			</a>
+		    			</td>
+		   	  		</tr>
+		 		</table> 
+		  </div> <!-- modal-body -->
+	
+		  <div class="modal-footer">
+			<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+		  </div> <!-- modal-footer -->
+	</div> <!-- modal-content -->
+</div> <!-- modal-dialog -->
+</div> <!--Migrate_Or_Innovate_Modal -->
+
+
+<!----------------------------------------------------
+ Migrate dialog
+------------------------------------------------------>
+<div id="Migrate_Modal" class="modal fade hide" 
+	role="dialog" aria-labelledby="Migrate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+	    	<table>
+	      		<tr>
+	        		<td style="text-align:center">
+	          			<span style="font-size:1.4em" id="Migrate_Label_Id">
+	            			App Migration
+	    	  			<span>
+	        		</td>
+					<td style="text-align:center">	      
+	          			<img src="./img/cloud-migration-icon.png" height="32" width="32"/>
+	        		</td>
+	      		</tr>
+	    	</table>
+	    </div> <!-- modal-header -->
+
+		<div class="modal-body" style="background-color:white" id="wizard_body_id">
+    		<span style="font-size:1.4em">
+    			Are you migrating from an existing J2EE App, a Java code base, a database directly, or SQL Script file?
+    		</span>
+    		<table  style="width:100%">
+	  	  		<tr>
+	        		<td>
+	    	  			<a href="#" onclick="migratePojoWizard()">
+	   						<img align="center" src="./img/ejb-mini-logo.png" width="128" height="128"/>
+	    	  			</a>
+	    			</td>	
+	        		<td>
+	    	  			<a href="#" onclick="migratePojoWizard()">
+	   						<img align="center" src="./img/java.png" width="128" height="128"/>
+	    	  			</a>
+	    			</td>
+	    			<td>
+	    	  			<a href="#" onclick="migrateDatabaseWizard()">
+	    					<img align="center" src="./img/database.png" width="128" height="128"/>
+	    	  			</a>
+	    			</td>
+	    			<td>
+	    	  			<a href="#" onclick="migrateSQLScriptWizard()">
+	    					<img align="center" src="./img/sql_script.png" width="128" height="128"/>
+	    	  			</a>
+	    			</td>
+	   	  		</tr>
+	 		</table>
+		</div> <!-- modal-body -->
+
+		<div class="modal-footer">
+			<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div> <!-- modal-footer -->
+	</div> <!-- modal-content -->
+</div><!-- modal-dialog -->
+</div> <!--Migrate_Modal -->
+
+<!----------------------------------------------------
+ Innovate Diaog
+------------------------------------------------------>
+
+	<div id="Innovate_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Innvoate_Label_Id">
+	            App Innovation
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/innovate.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+    	<span style="font-size:1.4em">
+    		Are you loading a new model from a JSON file, a UML file, an Eclipse model, or from a previously loaded/saved model?
+    	</span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="innovateJSONWizard()">
+	   			<img align="center" src="./img/json-logo.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	        <td>
+	    	  <a href="#" onclick="innovateUMLWizard()">
+	   			<img align="center" src="./img/uml.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="innovateEcoreWizard()">
+	    		<img align="center" src="./img/emf_logo.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="innovateExistingModelWizard()">
+	    		<img align="center" src="./img/repository.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Innovate_Modal -->
+
+<!-- TSP_Wizard_Modal dialog -->
+	<div id="TSP_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="TSP_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="TSP_Wizard_Label_Id">
+	            Technology Stack Package Wizard
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.wand.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <img src="./img/tech_stack_package.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    <span style="font-size:1.4em">
+    		Use this wizard to help determine the best technologies to apply the model to in order to create the application that best meets 
+    		your requirements.
+	      <br><p><a href="#" onclick="chooseTSPWizard()">Click to Continue!!</a></p>
+	    </span>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- UI_Wizard_Modal dialog -->
+	<div id="UI_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="UI_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="UI_Wizard_Label_Id">
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Does your application need a user interface?
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="UIWizard(true)">
+	   			<img align="center" src="./img/yes.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="UIWizard(false)">
+	    		<img align="center" src="./img/no.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- MVC_Wizard_Modal dialog -->
+	<div id="MVC_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="MVC_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="MVC_Wizard_Label_Id">
+	            Model/View/Controller Handler
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Select the technology that best suits how you want to handle the interaction between the UI, business data,
+    		and how the flow of logic is controlled
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('spring')">
+	    	    <center>
+	   			  <img align="center" src="./img/spring-boot.png" width="128" height="128"/>
+	   			</center>
+	    	  </a>
+	    	</td>
+	    	<td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('spark')">
+	    		<center>  
+	    		  <img align="center" src="./img/spark.png" width="128" height="128"/>
+	   			</center>
+	    		
+	    	  </a>
+	    	</td>
+	    	<td style="vertical-align:top">
+	    	  <a href="#" onclick="MVCWizard('struts')">
+	    	    <center>
+	    		  <img align="center" src="./img/struts2.png" width="128" height="128"/>
+	   			</center>
+	    		
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- Delegate_Wizard_Modal dialog -->
+	<div id="Delegate_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Delegate_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Delegate_Wizard_Label_Id">
+	            Business Delegate Handler
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		A business delegate applies business logic while connecting the MVC layer and Pesistence layers. Choose AWS Lambda to expose
+    		this layer as a microservice architecture.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="DelegateWizard('standard')">
+	   			<center>
+	   			  <img align="center" src="./img/standard.delegate.png" width="128" height="128"/>
+	   			  <h3>Default Delegate</h3>
+	   			</center>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="DelegateWizard('lambda')">
+	 			<center>
+	    		  <img align="center" src="./img/aws.lambda.png" width="128" height="128"/>
+	   			    <h3>AWS Lambda</h3>
+	   			  </center>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--TSP_Wizard_Modal -->
+
+<!-- Persistence_Wizard_Modal dialog -->
+	<div id="Persistence_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Persistence_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Delegate_Wizard_Label_Id">
+	            Persistence Options
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+    		Are you storing your data in a traditional SQL database, or in a document-centric store using NoSQL? If your data is currently stored in a SQL database
+    		and you plan on migrating the data with this application, it is suggested you continue to use a SQL database.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="PersistenceWizard('hibernate')">
+	   			<img align="center" src="./img/sql.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="PersistenceWizard('nosql')">
+	    		<img align="center" src="./img/nosql.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Persistence_Wizard_Modal -->
+
+<!-- Cache_Wizard_Modal dialog -->
+	<div id="Cache_Wizard_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Cache_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Cache_Wizard_Label_Id">
+	            Caching
+	    	  <span>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
+
+	    <span style="font-size:1.4em">
+	    	If your application performs mostly read operations, choosing caching will improve performance.
+	    </span>
+    	<table style="width:100%">
+	  	  <tr>
+	        <td>
+	    	  <a href="#" onclick="CacheWizard(true)">
+	   			<img align="center" src="./img/yes.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	    	<td>
+	    	  <a href="#" onclick="CacheWizardWizard(false)">
+	    		<img align="center" src="./img/no.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	   	  </tr>
+	 	</table>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Persistence_Wizard_Modal -->
+
+<!-- factory dialog -->
+	<div id="Factory_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+          <span style="font-size:1.4em" id="Factory_Label_Id">
+            Factory Migration Settings
+    	  <span>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body" style="background-color:#6BA9C8;color:white">
+	    <img src="./img/factory.png" height="192" width="192" style="margin:10px;float:left;margin:0 10px 10px 0;"/>
+	    <span style="font-size:1.4em">
+	      The factory wizard will help setup a migration scenario.  Use this wizard when you have mutiple scenarios to
+	      migrate.  Otherwise, for single migration scenarios, <a href="#" onclick="singleMigrate()" style="color:black">click here.</a>
+	      <p style="margin-top:15px">
+	      <a href="#" onclick="factoryTSPSelect()" style="color:black">Let's Get Started!!</a></p>
+	    </span>
+
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+    </div> <!--Factory_Modal -->
+
+<!-- App_Options_Modal dialog -->
+	<div id="App_Options_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Option_Modal_Label_Id" 
+		aria-hidden="true" style="background:white;color:black">
+	<div class="modal-dialog modal-lg">
+      <div class="modal-content">
+     
+       <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Option_Modal_Label_Id">
+	            Application Options
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/options.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.0em;padding-bottom:15px">
+	    	Apply the options which are required of the application being created.
+	    </span>
+	    <div id="optionsWizardDivId" style="overflow_y:auto">
+	    </div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next</button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div>  <!-- modal-footer -->
+	 </div>
+	</div> 
+    </div> <!--App_Options_Modal -->
+
+<!-- Wizard Done dialog -->
+	<div id="Wizard_Done_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Wizard_Done_Label_Id" aria-hidden="true" style="background:white;color:black">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Wizard_Done_Label_Id">
+	            Wizard Complete
+	    	  </span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/wizard.hat.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	    <span style="font-size:1.0em;padding-bottom:15px" >
+	    	The wizard session is complete.  You will now be directed to a screen allowing the setting of app options. Take note of
+	    	the GitHub options if you plan on directing cloudMigrate to push the app files to GitHub after app creation.
+	    <span>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardClose()">Done</button>
+	  </div> <!-- modal-footer -->
+	</div>
+	</div>	  
+</div> <!--Wizard_Done_Modal-->
+
+
+<!-- Factory_TSP_Select_Modal dialog -->
+	<div id="Factory_TSP_Select_Modal" class="modal fade hide" 
+		role="dialog" aria-labelledby="Factory_TSP_Select_Label_Id" aria-hidden="true" style="background:white;color:black">
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+	  <div class="modal-header">
+	    <table>
+	      <tr>
+	        <td style="text-align:center">
+	          <span style="font-size:1.4em" id="Factory_TSP_Select_Label_Id">
+	            Technology Stack Selection
+	    	  <span>
+	        </td>
+			<td style="text-align:center">	      
+	          <img src="./img/factory.png" height="32" width="32"/>
+	        </td>
+	      </tr>
+	    </table>
+	  </div> <!-- modal-header -->
+
+	  <div class="modal-body">
+	  
+	    <span style="font-size:1.2em" >
+	      Choose the Tech Stack Package which best suits your target application
+	    <span>
+	    <p style="margin-top:15px">
+	    <div id="tspWizardGridId"></div>
+	  </div> <!-- modal-body -->
+
+	  <div class="modal-footer">
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next >></button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
+	  </div> <!-- modal-footer -->
+	 </div>
+	 </div>	  
+</div> <!--Factory_TSP_Select_Modal -->
+
+

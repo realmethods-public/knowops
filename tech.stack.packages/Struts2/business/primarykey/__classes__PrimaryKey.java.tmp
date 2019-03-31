@@ -1,0 +1,100 @@
+#header()
+package ${aib.getRootPackageName(true)}.#getPrimaryKeyPackageName();
+
+import java.util.*;
+
+import ${aib.getRootPackageName()}.#getPrimaryKeyPackageName().*;
+
+/**
+ * ${classObject.getName()} PrimaryKey class.
+ * 
+ * @author    $aib.getAuthor()
+ */
+// AIB : \#getPrimaryKeyClassDecl() 
+#getPrimaryKeyClassDecl()
+// ~AIB
+
+//************************************************************************
+// Public Methods
+//************************************************************************
+
+    /** 
+     * default constructor - should be normally used for dynamic instantiation
+     */
+    public ${classObject.getName()}PrimaryKey() 
+    {
+    }    
+    
+    /** 
+     * Constructor with all arguments relating to the primary key
+     * 	        
+// AIB : \#getAllAttributeJavaComments( true true )
+#getAllAttributeJavaComments( true true )
+// ~AIB     
+     * @exception IllegalArgumentException
+     */
+    public ${classObject.getName()}PrimaryKey(    
+// AIB : \#getAllPrimaryKeyArguments( \$classObject false )
+#getAllPrimaryKeyArguments( $classObject false )
+// ~AIB
+                         ) 
+    throws IllegalArgumentException
+    {
+    	super();
+// AIB : \#getKeyFieldAssignments()
+#getKeyFieldAssignments()
+// ~AIB 
+    }   
+
+    
+//************************************************************************
+// Access Methods
+//************************************************************************
+
+// AIB : \#getKeyFieldAccessMethods()
+#getKeyFieldAccessMethods()
+// ~AIB 	         	     
+
+#if ( $classObject.hasParent() == false )
+    /**
+     * Retrieves the value(s) as a single List
+     * @return List
+     */
+    public List keys()
+    {
+		// assign the attributes to the Collection back to the parent
+        ArrayList keys = new ArrayList();
+        
+#foreach( $primaryKey in $classObject.getAllPrimaryKeysInHierarchy() )
+		keys.add( $primaryKey.getAsArgument() );
+#end## foreach $primaryKey in $classObject.getAllPrimaryKeysInHierarchy()
+
+        return( keys );
+    }
+
+	public Object getFirstKey()
+	{
+		return( ${classObject.getAllPrimaryKeysInHierarchy().get(0)} );
+	}
+#end
+
+ 
+//************************************************************************
+// Protected / Private Methods
+//************************************************************************
+
+    
+//************************************************************************
+// Attributes
+//************************************************************************
+
+ 	
+
+// DO NOT ASSIGN VALUES DIRECTLY TO THE FOLLOWING ATTRIBUTES.  SET THE VALUES
+// WITHIN THE ${classObject.getName()} class.
+
+// AIB : \#getKeyFieldDeclarations()
+#getKeyFieldDeclarations()
+// ~AIB 	        
+
+}

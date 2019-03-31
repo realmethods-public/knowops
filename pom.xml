@@ -1,0 +1,532 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  
+  <modelVersion>4.0.0</modelVersion>  
+  
+  <groupId>com.realmethods</groupId>  
+  <artifactId>realmethods</artifactId>  
+  <version>1.1</version>  
+  <packaging>war</packaging>  
+    
+  <name>realmethods</name>
+  <description>core capabilities code generation for Serverless, RESTful, and WebApp scenarios</description>
+  <repositories>
+  	<repository>
+      <id>repomaven</id>
+      <url>https://repo.maven.apache.org/maven2/</url> 
+    </repository>
+  </repositories>
+
+ <properties>      
+      <jettyVersion>9.4.0.v20161208</jettyVersion>
+      <sonar.scm.provider>git</sonar.scm.provider>
+      <sonar.exclusions>**/Httx*.class,**/js/**,**/css/**,**/*.php,**/common.templates/**</sonar.exclusions>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <struts2.version>2.5.5</struts2.version>
+      <hibernate.version>4.3.11.Final</hibernate.version>
+  </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.4.0.905</version>
+       </plugin>
+<!--   
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
+		  <packagingExcludes>
+            archived/
+          </packagingExcludes>          
+          <webResources>
+            <resource>
+              <directory>/src/main/webapp/</directory>
+              <directory>/src/main/java/com/cloudmigrate/</directory>
+            </resource>
+          </webResources>        
+          <httpConnector>
+            <port>8888</port>
+          </httpConnector>  
+        </configuration>
+      </plugin>
+-->      
+
+<!-- Eclipse Maven Jetty Plugin            
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jettyVersion}</version>
+        <configuration>
+          <systemProperties>
+
+      		<systemProperty>
+        	  <name>AWSInstanceId</name>
+        	  <value>${AWSInstanceId}</value>
+             </systemProperty>
+             <systemProperty>
+        	  <name>aws.region</name>
+        	  <value>us-east-1</value>
+             </systemProperty>
+
+             <systemProperty>
+        	  <name>aws.accessKeyId</name>
+        	  <value>AKIAJGP7A54MM3WPRA4Q</value>
+             </systemProperty>
+
+             <systemProperty>
+        	  <name>aws.secretAccessKey</name>
+        	  <value>MjvWLCJ1yQhwbbI4/vCipoHcXVN7arzXdrlZo7cP</value>
+             </systemProperty>
+
+			 <systemProperty>
+        	  <name>AWS_S3_BUCKET_NAME</name>
+        	  <value>goframework-cli-bucket</value>
+             </systemProperty>
+
+			 <systemProperty>
+        	  <name>S3_USERS_SUBDIR</name>
+        	  <value>private/users/</value>
+             </systemProperty>    
+			 
+			 <systemProperty>
+        	  <name>PUBLIC_RM_TECH_STACKS_ROOT_DIR</name>
+        	  <value>public/realMethods/techstacks/</value>
+             </systemProperty>    
+
+			 <systemProperty>
+        	  <name>AWS_S3_SERVER_NAME</name>
+        	  <value>s3.amazonaws.com/</value>
+             </systemProperty>
+
+			 <systemProperty>
+        	  <name>AWS_PROTOCOL</name>
+        	  <value>https://</value>
+             </systemProperty>
+
+    	  </systemProperties>
+          <httpConnector>
+            <port>9900</port>
+          </httpConnector>
+        </configuration>
+      </plugin>
+               -->
+<!-- ant plugin to run github --> 
+	  <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+		<executions>
+          <execution>
+            <id>git</id>
+            <phase>clean</phase>
+            <inherited>false</inherited>
+            <configuration>
+            	<build_dir>${project.basedir}</build_dir>
+              <target>
+                <ant antfile="gitpush.xml">
+                  <target name="gitpush"/>
+                </ant>
+			  </target>                
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>  
+    	</executions>
+      </plugin>    
+
+      
+    </plugins>
+  </build>
+   
+  <dependencies>  
+
+<!-- Jackson JSON parser -->
+  
+  <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.9.7</version>
+  </dependency>
+  
+<!-- AWS SDK -->
+  	<dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk</artifactId>
+      <version>1.11.283</version>
+	</dependency>
+
+<!-- Eclipse Jetty -->
+   
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    
+<!-- MySQL -->
+
+	<dependency>
+	  <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.47</version>
+	</dependency>
+
+	<dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>jta</artifactId>
+      <version>1.1</version>
+	</dependency>
+<!--
+	<dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+      <version>1.0.1.Final</version>
+    </dependency>
+-->
+<!-- zip/unzip Dependency -->
+
+	<dependency>
+    	<groupId>net.lingala.zip4j</groupId>
+    	<artifactId>zip4j</artifactId>
+    	<version>1.3.2</version>
+	</dependency>
+
+<!-- Log4J Dependency --> 
+
+  <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.11.1</version>
+  </dependency>
+
+
+<!-- Apache Struts2 Dependencies -->
+
+	<dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-core</artifactId>
+      <version>${struts2.version}</version>
+   </dependency>
+
+   <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-convention-plugin</artifactId>
+      <version>${struts2.version}</version>
+    </dependency>
+
+   <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-json-plugin</artifactId>
+      <version>${struts2.version}</version>
+    </dependency>	
+    
+	<dependency>
+      <groupId>javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.8.1.GA</version>
+	</dependency>
+
+<!-- Struts dependency for json support -->
+
+	<dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <version>2.3</version>
+      <classifier>jdk15</classifier>
+	</dependency>
+	
+<!-- Velocity dependencies -->
+
+	<dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.7</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>org.apache.velocity</groupId>    	
+    	<artifactId>velocity-tools</artifactId>    	
+    	<version>2.0</version>
+	</dependency>
+
+	<dependency>
+      <groupId>ognl</groupId>
+      <artifactId>ognl</artifactId>
+      <version>3.1.15</version>
+	</dependency>
+
+<!-- Apache Common Dependencies -->
+
+	<dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+
+	<dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2</version>
+	</dependency>
+
+	<dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <version>1.6</version>
+	</dependency>
+	
+	<dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.6</version>
+	</dependency>
+	
+
+	<dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.2</version>
+	</dependency>
+
+	<dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.0</version>
+	</dependency>	
+
+	<dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+	</dependency>
+
+	<dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.4</version>
+	</dependency>
+
+	<dependency>
+    	<groupId>org.apache.commons</groupId>
+    	<artifactId>commons-compress</artifactId>
+    	<version>1.5</version>
+	</dependency>
+
+	<dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+	</dependency>  
+
+	<dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>2.0</version>
+	</dependency>
+
+	<dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.5.1</version>
+	</dependency>
+
+	<dependency>
+    	<groupId>org.apache.commons</groupId>
+    	<artifactId>commons-text</artifactId>
+    	<version>1.1</version>
+	</dependency>
+
+	<dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.3.1</version>
+	</dependency>
+
+	<dependency>
+      <groupId>oro</groupId>
+      <artifactId>oro</artifactId>
+      <version>2.0.7</version>
+	</dependency>
+    
+<!-- DOM Node -->
+
+	<dependency>
+    	<groupId>org.w3c</groupId>
+    	<artifactId>dom</artifactId>
+    	<version>2.3.0-jaxb-1.0.6</version>
+	</dependency>
+
+<!-- ibatis dependency -->
+
+	<dependency>
+      <groupId>org.apache.ibatis</groupId>
+      <artifactId>ibatis-sqlmap</artifactId>
+      <version>2.3.4.726</version>
+	</dependency>
+	
+<!-- Google Gson dependency -->
+
+    <dependency>  	
+    	<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+   		<version>2.4</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+<!-- eclipse ecore/uml/ECF dependencies 
+
+	<dependency>
+	    <groupId>org.eclipse.uml2</groupId>
+	    <artifactId>org.eclipse.uml2.uml</artifactId>
+    	<version>3.1.0.v201006071150</version>
+	</dependency>
+
+<dependency>
+    <groupId>org.eclipse.uml2.codegen</groupId>
+    <artifactId>ecore</artifactId>
+    <version>1.3.0-v200706251652</version>
+</dependency>
+-->
+
+    <dependency>  	
+    	<groupId>org.apache.maven.shared</groupId>
+		<artifactId>maven-invoker</artifactId>
+   		<version>2.2</version>
+		<scope>compile</scope>  
+    </dependency>
+
+
+<!-- JUnit dependency -->
+
+    <dependency>  
+      <groupId>junit</groupId>  
+      <artifactId>junit</artifactId>  
+      <version>4.12</version>  
+      <scope>compile</scope>  
+    </dependency>  
+
+<!-- hibernate dependency -->
+    
+    <dependency>  
+	  <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>  
+
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-c3p0</artifactId>
+	    <version>${hibernate.version}</version>
+	    <exclusions>
+          <exclusion>
+            <artifactId>jboss-logging</artifactId>
+            <groupId>org.jboss.logging</groupId>
+          </exclusion>        
+         </exclusions>
+	</dependency>
+
+    <dependency>  
+		<groupId>org.hibernate</groupId>
+      	<artifactId>hibernate-tools</artifactId>
+      	<version>4.3.5.Final</version>
+	  	<exclusions>
+        	<exclusion>
+          		<artifactId>freemarker</artifactId>
+          		<groupId>freemarker</groupId>
+         	</exclusion>
+       	</exclusions>
+	</dependency>  
+    
+<!-- portal dependency -->
+
+	<dependency>
+      <groupId>org.apache.portals.bridges</groupId>
+      <artifactId>portals-bridges-struts</artifactId>
+      <version>1.2.4-1.0</version>
+	</dependency>
+
+   <dependency>
+      <groupId>portlet-api</groupId>
+      <artifactId>portlet-api</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+   <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.10</version>
+    </dependency>
+    
+<!-- Xalan dependency -->
+			
+	<dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+	</dependency>
+
+<!-- eclipse ecore/ECF dependencies -->
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>common</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>ecore</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf</groupId>
+		<artifactId>ecore-xmi</artifactId>
+   		<version>2.2.3</version>
+		<scope>compile</scope>  
+    </dependency>  
+
+    <dependency>  	
+    	<groupId>org.eclipse.emf.codegen</groupId>
+		<artifactId>ecore</artifactId>
+   		<version>2.3.0-v200706262000</version>
+		<scope>compile</scope>  
+    </dependency>
+
+<!-- javax mail -->
+	<dependency>
+    	<groupId>com.sun.mail</groupId>
+    	<artifactId>javax.mail</artifactId>
+    	<version>1.5.6</version>
+	</dependency>
+
+  </dependencies>  
+ 
+  
+</project>  

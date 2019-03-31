@@ -1,0 +1,21 @@
+<tech-stack-package 
+	name="ASP.NET Core"
+	shortName="ASPNETCore" 
+	description="Uses ASP.NET framework for an MVC design pattern, jQuery/HTML5/CSS3/.cshtml for view adornment, and nHibernate for storage to build ASP.NET Core Web Applications" 
+	icon-url="./img/asp.net.mvc.png" 	
+	info-page-url="http://www.realmethods.com/infopages/asp.net-info-page.html"	
+    version="1.0"
+    app-type="webapp"
+    release-status="production">
+	<target-languages>
+		<target-language name="C#"/>
+		<target-language name="javascript"/>
+		<target-language name="HTML5"/>
+		<target-language name=".cshtml"/>
+	</target-languages><!-- target languages -->
+	<tech-stack>
+		<tech-stack-component name="jQuery/CSS3/.cshtml" description="view" app-layer="presentation"/>
+		<tech-stack-component name="ASP.NET Core 2.0" description="model and controller" app-layer="business"/>
+		<tech-stack-component name="nHibernate" description="ORM for persistence" app-layer="data"/>
+	</tech-stack>
+</tech-stack-package>

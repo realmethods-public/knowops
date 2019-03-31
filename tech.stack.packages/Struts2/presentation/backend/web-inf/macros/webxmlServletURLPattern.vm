@@ -1,0 +1,9 @@
+#*
+ Servlet URL pattern, differs depending upon the 
+ Presentation Tier type selected
+*#
+#macro( servletURLPattern )
+        <url-pattern>
+            *.do
+        </url-pattern>
+#end

@@ -1,0 +1,52 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="application">
+	<option name="name" value="demo" required="true" 
+		description="app display name" type="input"/>
+	<option name="description" value="" required="false"
+		description="app description" type="input"/>
+	<option name="author" value="" required="false"
+		description="app's author" type="input"/>
+	<option value="" required="false" name="corporate logo URL"
+		description="link to company logo" type="input"/>
+	<option value="./img/turnstone.biologics.png" name="application logo URL"
+		description="link to app logo" type="input"/>
+	<option value="Turnstone Biologics" required="true" modifiable="false" name="company name"
+		description="your company name" type="input"/>
+	<option value="0.0.1-alpha" required="true" name="version"
+		description="app version" type="input"/>		
+	<option name="package name" value="com.occulue" modifiable="false" required="true"
+		description="package prefix to apply(com.xyz format)" type="input"/>
+</options>
+
+<options name="nuget">
+	<option name="userName" value="" required="true" description="" type="input"/>
+	<option name="password" value="" required="true" description="" type="password"/>	
+	<option name="serverUrl" value="" 
+		required="true" description="context Url" placeHolder="ex: http://localhost:8081/artifactory, etc.." type="input"/>		
+	<option name="repoKey" value="" placeHolder="local-nuget-repo" required="false" description="repository key" type="input"/>	
+	<option name="licenseUrl" value="" required="true" 
+		description="License file Url" type="input"/>
+	<option name="projectUrl" value="" required="true" 
+		description="URL of the application project" type="input"/>
+	<option name="iconUrl" value="" required="true" 
+		description="URL of the application icon" type="input"/>
+	<option name="releaseNotes" value="" required="true" 
+		description="release notes" type="textarea"/>
+	<option name="copyRight" value="Copyright 2019" required="true" 
+		description="application copyright phrase" type="input"/>
+	<option name="tags" value="" required="true" 
+		description="meta tags used to help search for this app pkg" type="input"/>
+	<option name="requireLicenseAcceptance" value="false" required="true" 
+		description="Require license acceptance on install" type="boolean"/>
+</options>

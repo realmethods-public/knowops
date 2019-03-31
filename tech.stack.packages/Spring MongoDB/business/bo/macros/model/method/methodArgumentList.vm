@@ -1,0 +1,18 @@
+#*
+ Outputs a comma-delimited String of the method argument names.
+  
+ $method		MethodObject
+*#
+#macro( getArgumentList $method )
+#set( $arguments = $method.getArguments().args )
+#set( $numArgs = $arguments.size() )
+#set( $output = "" )		
+#foreach( $arg in $arguments )
+#set( $output = "${output}${arg.name}" )                    
+#if( $velocityCount < $numArgs )        
+#set( $output = "${output}, " )        
+#end## velocityCount > $numArgs
+#end## $arg in $arguments
+## output the argument list
+$output    
+#end

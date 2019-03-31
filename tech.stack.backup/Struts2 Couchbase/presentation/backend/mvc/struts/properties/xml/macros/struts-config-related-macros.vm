@@ -1,0 +1,98 @@
+#macro( strutsConstants )
+    <!-- Some or all of these can be flipped to true for debugging -->
+    <constant name="struts.i18n.reload" value="true" />
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.custom.i18n.resources" value="globalMessages" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+    <constant name="struts.serve.static" value="true" />
+    <constant name="struts.serve.static.browserCache" value="false" />   
+    <constant name="struts.codebehind.defaultPackage" value="action" /> 	
+    <constant name="struts.convention.default.parent.package" value="json-default"/>
+#end
+
+#macro( strutsDefaultPackage )
+    <package name="default" extends="struts-default, json-default" namespace="/" >
+       <interceptors>
+          <interceptor-stack name="interceptorStack">          
+            <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="i18n"/>                
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+				</interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+          </interceptor-stack>
+
+            <interceptor-stack name="myParamsPrepareParamsStack">
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+	            </interceptor-ref>
+                <interceptor-ref name="servletConfig"/>
+				<interceptor-ref name="i18n"/>                
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="checkbox"/>
+            	<interceptor-ref name="params" >
+            		<param name="excludeParams">rm\..*,dojo\..*</param>
+	            </interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="interceptorStack"/>          
+
+		<global-results>
+		  <result name="authentication_error">/jsp/AuthenticationError.jsp</result>
+		  <result name="authorization_error">/jsp/AuthorizationError.jsp</result>
+		  <result name="error">/jsp/error.jsp</result>
+		  <result name="general_error">/jsp/error.jsp</result>
+		  <result name="duplicate_name">/jsp/duplicate_name.jsp</result>	  
+		</global-results>
+        
+        <global-exception-mappings>
+            <exception-mapping exception="com.cloudmigrate.framework.common.exception.AuthenticationException" result="authentication_error"/>
+            <exception-mapping exception="com.cloudmigrate.framework.common.exception.AuthorizationException" result="authorization_error"/>
+            <exception-mapping exception="com.cloudmigrate.framework.common.exception.DuplicateNameException" result="duplicate_name_error"/>
+        </global-exception-mappings>
+
+        <action name="">
+            <result name="success">/jsp/logon.jsp</result>
+        </action>
+
+        <action name="test" class="${aib.getRootPackageName()}.#getActionPackageName().TestAction" method="noOp" >
+            <result name="success">/jsp/startTest.jsp</result>
+        </action>
+
+        <action name="runTest" class="${aib.getRootPackageName()}.#getActionPackageName().TestAction" method="execute" >
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">results</param>
+	    	</result>    
+        </action>
+
+        <action name="logon" class="${aib.getRootPackageName()}.#getActionPackageName().LogonAction" method="execute" >
+            <result name="success">/jsp/homepage.jsp</result>
+            <result name="successUsingBackdoor">admin_homepage.jsp</result>
+            <result name="LOGON_FAILURE">/jsp/logon.jsp</result>
+        </action>
+
+        <action name="logoff" class="${aib.getRootPackageName()}.#getActionPackageName().LogoffAction" method="execute">
+            <result>/jsp/logoff.jsp</result>
+            <result name="LOGOFF_FAILURE">logoff.jsp</result>
+        </action>
+
+        <action name="homepage" class="${aib.getRootPackageName()}.#getActionPackageName().HomePageAction" method="homepage">
+            <result>/jsp/homepage.jsp</result>
+        </action> 
+    </package>	
+#end

@@ -1,0 +1,102 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">Angular 7 and MongoDB</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px">
+			<h3>Intent</h3>
+			<p>
+			To create an application that uses:
+			<ul>
+			<li>Angular7 with an MVC design pattern
+			<li>Fully functional front-end with a mix of HTML5, JQuery, Bootstrap, Javascript and Typescript 
+			<li>Mongo for document based storage
+			<li>A Git repository to commit application files
+			</ul>
+			<p>
+			<h3>Usage</h3>
+			<p>
+			<h4>To get started</h4>
+			The following instructions assume NPM is installed. If not, you can download it by installing Node.js at https://nodejs.org/en/download/.
+			</p>
+			<p>
+			<h4>Install the Angular CLI</h4>
+			npm install -g @angular/cli
+			
+			<p>
+			Create a new project by the name used to generate the application.
+			Note: It is important to use this name because the next step expects this name.
+			</p>
+			
+			ng new ${aib.getApplicationName()}
+
+			<h4>Copying generated files</h4>
+			<p>
+				Either pull the generated files from your Git repository, or download the generated application archive file and 
+				unzip into the root directory of the application.
+			</p>
+			
+			<h4>Development server</h4>
+			<p>
+			Run ng serve for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you 
+			change any of the source files.
+			</p>
+
+			<h4>Build</h4>		
+			<p>
+			Run ng build to build the project. The build artifacts will be stored in the dist/ directory. 
+			Use the --prod flag for a production build.
+			</p>
+			
+			<h4>MongoDB setup</h4>
+			<p>
+			It is assumed MongoDB is running at the specified host url you provided as part of the application options.
+			See file ./config/mongoDb.js to make changes to the database location
+			</p>
+
+			<h4>Running unit tests</h4>
+			<p>
+			Run ng test to execute the unit tests via Karma.
+			</p>
+
+			<h4>Running end-to-end tests</h4>
+			<p>
+			Run ng e2e to execute the end-to-end tests via Protractor.
+			</p>
+      </td>
+      <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/angular.png" align="top"/>
+      </td>
+    </tr>
+  </table>
+</div>

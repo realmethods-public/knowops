@@ -1,0 +1,82 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<style type="text/css">
+
+  .topicColClass {
+  	color:blue;
+  	font-size:1.0em;
+  	vertical-align:center;
+  	text-align:left;
+        padding-left:10px;
+  }
+  
+  .respColClass, .respCenterColClass {
+    text-align:left;
+    padding-left:10px;
+    font-size:1.0em;
+  }  
+</style>
+<div style="border-style:outset;border-color:#eeeeee">
+	<h2 style="text-align:center">Microsoft ASP.NET Tech Stack</h2>
+
+    <table> 
+      <tr>
+        <td style="padding:10px">
+          <div style="background:#eeeeee;height:450px;overflow:auto;padding:10px;">
+
+<h3>Intent</h3>
+To create an application that uses:
+<ul>
+<li>ASP.NET Core 2.0 and .NET Framework v4x for full MVC support
+<li>Fully functional front-end using .cshtml with embedded JQuery and Bootstrap 
+<li>nHibernate for model to table db mapping
+<li>GitHub to push application files
+</ul>
+<p>
+<h4>Usage</h4>
+<p>
+<h4>Step 1</h5>
+From Visual Studio, create an ASP.NET Core 2.0 project that uses .NET Framework. (not the .NET Core)
+<h5>Step 2</h5>
+Use NuGet within Visual Studio to load MySQL and nHibernate.
+<h5>Step 3</h5>
+Run cloudMigrate to create an app and save the app to a directory using the same name as the VS project.
+<h5>Step 4</h5>
+Download from GitHub (or copy) the cloudMigrate files overwriting into the Visual Studio project normally located at<p>
+<center><i>C:\Users\<your_user_name>\source\repos\<project_name></i></center>
+<h5>Step 5</h5>
+Notice if Visual Studio auto-refreshes the project with the goFramework created application files. If the project does not auto-refresh, force it to.  If the files still do not
+appear, re-check they were copied into the correct directory.
+<h5>Step 6</h5>
+Locate the hibernate.cfg.xml fle, right-click it and assign <i>Build Action</i> to <i>Embedded Resource</i> and <i>Copy to Output</i> to <i>Copy Always</i>.  
+<h5>Step 7</h5>
+Build then run the project.  Visual Studio will launch the app in the browser.
+</div>
+      
+        </td>
+      
+        <td style="vertical-align:top;width:250px;padding:20px">
+  	  	  <!-- image -->
+  	  	  <img src="./img/aspdotnet.png" align="top"/>  	  	  
+  		  <center><h3>Tech Stack Components</h3>
+  		    <table>
+  		      <tr><td class="topicColClass">Presentation</td><td class="respColClass">ASP.NET MVC</td></tr>
+  		      <tr><td class="topicColClass">Business</td><td class="respColClass">ASP.NET MVC</td></tr>
+  		      <tr><td class="topicColClass">Data</td><td class="respColClass">ASP.NET MVC, nHibernate, RDBMS</td></tr>
+  		    </table>
+  		  </center>
+      	</td>
+
+    </tr>
+  </table>
+</div>

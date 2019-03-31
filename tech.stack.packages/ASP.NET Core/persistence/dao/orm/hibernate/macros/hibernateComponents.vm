@@ -1,0 +1,26 @@
+#################################################
+## output components
+#################################################
+#macro( components $class )
+#set( $attributes = $class.getAttributesOrdered(false) )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isFromAssociation() && $attribute.isComposite() && $attribute.isFromSingleValueAssociation() )
+#set( $association = $attribute.getAssociation() )
+#set( $cascade = "none" )
+#if ( $association.isComposite() )
+#set( $cascade = "all" )
+#end ##if ( $association.isComposite() )
+### determine multiplicity value
+#if( $association.isManyToOne() )
+#set( $hibernateMultiplicity = "many-to-one" )
+#else
+#set( $hibernateMultiplicity = "one-to-one" )
+#end
+#set( $src = $attribute.getSourceClassObject() )
+      <component name="${attribute.getAsArgument()}" class="${aib.getRootPackageName( $src )}.#getBOPackageName().${src.getName()}">
+#set( $colPrefix = "${attribute.getAsArgument()}_" )
+#hibernate( $attribute.getSourceClassObject() $colPrefix )
+      </component>
+#end ##if ( $attribute.isFromAssociation() && $attribute.isComposite() )
+#end ##foreach( $attribute in $attributes)
+#end

@@ -1,0 +1,12 @@
+#macro ( getDjangoToString $class $useAssociation )
+#set( $attributes = $class.getAttributesOrdered( true, false ) )
+#set( $output = "" )
+	def toString(self):
+		str = ""
+#foreach( $attribute in $attributes )
+#if( $attribute.isFromAssociation() == false || (${attribute.isFromAssociation()} == ${useAssociation}) )
+		str = str + self.${attribute.getAsArgument()}
+#end##if( $attribute.isFromAssociation() == useAssociation )
+#end##for each $key in $attributes.keySet()   
+		return str;
+#end ##macro ( getToString $class $useAssociation )

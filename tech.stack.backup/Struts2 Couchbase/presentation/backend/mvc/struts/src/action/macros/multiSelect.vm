@@ -1,0 +1,149 @@
+#macro( applyMultipleAssociationActionHandlers )
+#set( $multiAssociations = $classObject.getOtherMultipleAssociations() )
+#set( $parentName  = $classObject.getMainAssociation().getType() )
+#foreach ( $multiAssociation in $multiAssociations )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+			else if ( "Create_${childName}_For_${parentName}_${roleName}".equalsIgnoreCase(actionName) )
+			{
+				create${childName}For${parentName}${roleName}();
+				
+                // delegate to the base class to figure out whether to return
+                // 'success' or the value indicated by a "forward" parameter
+                forward = whereToNext(mapping, request);
+				
+			}			      
+			else if ( "Display_MultiSelect_${roleName}_For_${parentName}".equalsIgnoreCase(actionName) )
+			{
+				displayMultiSelect${roleName}For${parentName}();
+			}
+    		
+#end ##foreach ( $multiAssociation in $multiAssociations )
+#end
+
+#macro( getMultiAssociationActionHandlers )
+#set( $multiAssociations = $classObject.getOtherMultipleAssociations() )
+#set( $mainType = ${classObject.getMainAssociation().getType()} )
+#foreach ( $multiAssociation in $multiAssociations )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $classObject.getName() )
+#set( $methodName = "create${childName}For${mainType}${roleName}" )
+
+    /**
+     * Handles creating the ${childName} and applying it 
+     * to ${parentName}'s ${roleName}.
+     *
+     * @exception       Exception
+     */
+    public String ${methodName}()
+    throws Exception
+	{
+	/*
+		${mainType}BusinessDelegate proxy = ${mainType}BusinessDelegate.get${mainType}Instance();
+		${classObject.getName()}TO to 	= null;
+		${childName} childBO	= null;
+		
+		// first, get the ${className}TO from the cache
+		to = (${classObject.getName()}TO)cache( ApplicationUSOM.current${classObject.getName()}TO );
+
+		// next, delegate to the ${childName}Action to get the ${childName} data
+		performParameters.bo 	= childBO;
+		performParameters    	= ${childName}Action.acquireFormData(performParameters);
+
+		// next, save the ${childName} before applying it the ${roleName} Collection
+		childBO = (${childName})${childName}BusinessDelegate.get${childName}Instance().create${childName}( childBO );
+		
+		// next, add the ${childName} to the ${roleName} array		
+		ArrayList list = new ArrayList(java.util.Arrays.asList( to.get${roleName}() ));
+		list.add( childBO );		
+		to.set${roleName}( (${multiAssociation.getType()}[])list.toArray( new ${multiAssociation.getType()}[]{} ) );
+		
+		// next, save throught the ${mainType} Business Delegate
+        to = proxy.persist${classObject.getName()}TO(to);		
+        
+        // cache the transfer object
+        cache( ApplicationUSOM.current${classObject.getName()}TO, to);
+ */       
+        return SUCCESS;
+	}    
+
+#set( $methodName = "displayMultiSelect${roleName}For${mainType}" )
+    /**
+     * Handles getting the Collection of all $childName and 
+     * a Collection of $roleName from $mainType.  The results are cached
+     * to be displayed by the multi-selection JSP page handler.
+     *
+     * @exception       Exception
+     */
+    public String ${methodName}()
+    throws Exception
+	{
+	/*
+		BaseActionForm form 				= getTheForm(performParameters);
+		MultiSelectContext selectContext 	= new MultiSelectContext();
+		${childName}[] array				= null;
+		Collection all						= null;
+		
+		// first, put the Collection $roleName from $parentName into the cache
+        ${mainType}PrimaryKey primaryKey    		= getPrimaryKeyFromServletRequest();
+		${classObject.getName()}TO transferObject	= (${classObject.getName()}TO)cache(ApplicationUSOM.current${classObject.getName()}TO);
+
+		array = transferObject.get${roleName}();
+//		selectContext.setSelected( java.util.Arrays.asList( array ) );
+		selectContext.setSelected( array );
+				
+		// next, remove all already associated with
+		List childList = java.util.Arrays.asList( array );
+		Collection fullList = java.util.Arrays.asList( ${childName}BusinessDelegate.get${childName}Instance().getAll${childName}() );
+		fullList.removeAll( childList );        		
+		
+		// next, remove the parent from the list
+		Iterator iter = fullList.iterator();
+		boolean match = false;
+		FrameworkBusinessObject bo = null;
+		
+		while( iter.hasNext() && !match )
+		{
+			bo = (FrameworkBusinessObject)iter.next();
+			
+			match = bo.getFrameworkPrimaryKey().equals( primaryKey );
+			if ( match )
+				fullList.remove( bo );
+		}
+		
+		// next, put the collection of all ${childName}s
+		selectContext.setSelectFrom( fullList );
+		
+		// next, apply the primary key fields to the form's selection array
+		// so they show up as selected in the table of selectables
+		String [] selections 	= new String[fullList.size()];
+		iter 					= fullList.iterator();
+		int index				= 0;
+		
+		while( iter.hasNext() )
+		{
+			bo = (FrameworkBusinessObject)iter.next();
+			selections[ index ] = bo.getFrameworkPrimaryKey().keyFieldsDelimitted();
+			index++;
+		}
+		form.setSelections( selections );
+		
+
+		// apply the attribute names to use
+		Collection attributes = new ArrayList();
+#foreach( $attribute in $multiAssociation.getAttributes() )
+#if( $attribute.isPrimaryKey() == false && $attribute.isFromUserModel() == true && $attribute.isComposite() == false && $attribute.isFromAssociation() == false )
+        attributes.add( "$attribute.getAsArgument()" );
+#end        
+#end		
+		selectContext.setAttributes( attributes );
+		
+		// cache it 
+		cache( FrameworkNameSpace.MULTI_SELECT_COLLECTIONS, selectContext );
+*/		
+		return( SUCCESS );
+	}    
+#end ##foreach ( $multiAssociation in $multiAssociations )
+#end
+

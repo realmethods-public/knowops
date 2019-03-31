@@ -1,0 +1,27 @@
+#xmlHeader()
+#set( $appName = $aib.getApplicationNameFormatted() )
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>  
+	<groupId>${aib.getRootPackageName(true)}</groupId>  
+	<artifactId>${appName.replaceAll(" ",".")}-parent</artifactId>  
+	<version>${aib.getVersion()}</version>  
+
+    <packaging>pom</packaging>
+
+	<name>${appName}-parent</name>
+	
+    <modules>
+    	<module>pom-restful-api.xml</module>
+    	<module>pom-aws-lambda.xml</module>
+    </modules>
+
+#repositories()
+
+	<properties>
+#compilerProperties()
+  	</properties>
+
+</project>

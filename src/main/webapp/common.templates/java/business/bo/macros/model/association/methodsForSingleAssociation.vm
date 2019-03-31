@@ -1,0 +1,188 @@
+#*
+ Outputs all of the bean methods for all single associations.
+  
+ $forInterface		ClassObject
+ $usingCMP			boolean
+*#        
+#macro ( getBeanMethodsForSingleAssociations $forInterface $usingCMP )
+#set( $includePKs = false )
+#foreach( $attribute in $classObject.getAttributesOrdered( $includePKs ) )
+#if ( $attribute.isFromAssociation() == true && $attribute.isFromMultiValueAssociation() == false)
+#set( $target = $attribute.getSourceClassObject().getName() )
+#set( $source = $classObject.getName() )
+#set( $roleName = $Utils.capitalizeFirstLetter( $attribute.getAsArgument() ) )
+## Delegate to the internal helper
+#getBeanMethodsForSingleAssociationsHelper( $forInterface $target $source $roleName $usingCMP )
+#end ##if ( $attribute.isFromAssociation() == true && $attribute.isFromMultiValueAssociation() == false )
+#end ##foreach( $attribute in $classObject.getAttributesOrdered( $includePKs ) )
+#end
+
+    
+#*
+ Helper macro to output all of the bean methods for all single associations.
+  
+ $forInterface	boolean
+ $child			String
+ $parent		String
+ $usingCMP		boolean
+*#          
+#macro( getBeanMethodsForSingleAssociationsHelper $forInterface $target $source $roleName $usingCMP )
+    /**
+    * Returns an ${target}
+    * @param    key    ${source}PrimaryKey    
+#if( ${usingCMP} == false )
+    * @exception FrameworkEJBFinderException
+#end## ${usingCMP} == false      
+    * @exception RemoteException
+    */    
+    public ${target} get${roleName}( ${source}PrimaryKey key )
+#set( $throwsClause = "throws " )    
+#if( ${usingCMP} == false )
+#set( $throwsClause = "${throwsClause} FrameworkEJBFinderException, " )
+#end## ${usingCMP} == false
+#set( $throwsClause = "${throwsClause} RemoteException" )	
+#if( $forInterface == true )    
+#set( $throwsClause = "${throwsClause};" )
+#end## $forInterface == true	
+## output the throws clause    	
+    $throwsClause	
+#if( $forInterface == true )	        
+#if( $usingCMP == true )	## apply a set method        
+   /**
+    * Assigns a ${target}
+    * @param keyOfOwner
+    * @param keyToOwn			        
+    * @exception RemoteException
+    */            	
+    public void set${roleName}( ${source}PrimaryKey keyOfOwner, ${target}PrimaryKey keyToOwn )
+    throws RemoteException;	    
+#end## $usingCMP == true           
+#else ## $forInterface == false   
+    {
+	    ${target} businessObject = null;
+    	try
+	    {        
+    		// delegate to the DAO...
+    		businessObject = get${source}DAO().get${roleName}( key );
+        }
+        catch( FrameworkDAOException exc )
+        {
+        	throw new FrameworkEJBFinderException( "${target}SessionBean::findAll${roleName}(key) - " + exc, exc);
+        }
+        finally
+        { 
+        	releaseFrameworkDAO();
+        }
+        
+        return businessObject;
+    }                    
+
+## need to also put down a set method     
+   /**
+    * Assigns a ${target}
+    * @param	keyOfOwner	${source}PrimaryKey
+    * @param	keyToOwn	${target}PrimaryKey
+    * @exception RemoteEx(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreadable)(unreada + exc, exc);
+    	}
+    	finally{}
+    }
+#end## end else for class        
+#end
+        
+
+#*
+ Returns a String formatted accessor methods for 1 to 1 associations
+  
+ $forInterface		boolean
+ $usingCMP			boolean
+*#
+#macro ( getAccessorMethodsForSingleAssociations $forInterface $usingCMP )
+#set( $associations = $classObject.getSingleAssociations() )
+#foreach( $association in $associations )
+#set( $name = $association.getName() )
+#set( $type = $association.getType() )
+#set( $roleName = $association.getRoleName() )
+#set( $throwsClause = "throws ProcessingException" )
+#set( $siblingType = $association.getSiblingAssociationEndObject().getType() )
+#if( $forInterface	== true )
+#set( $throwsClause = "${throwsClause};" )
+#end## $forInterface	== true	
+## first, create the get method
+   /**
+    * Returns the Associated ${name}
+    * @param	businessObject		${classObject.getName()}
+    * @return	${type}
+    * @throws ProcessingException    
+    */			    
+    public ${type} get${roleName}( ${classObject.getName()} businessObject )
+    $throwsClause	
+#if( $forInterface == false )
+    {	        	
+#if( $usingCMP == false )	        		        			    
+        return ${type}BusinessDelegate.getInstance().get${type}( businessObject.get${roleName}PrimaryKey() );
+    }	        	
+#else	## usingCMP == true	        	
+        ${siblingType}SessioInterface serviceInterface   = null;
+        ${type} retVO                   = null;
+		
+        try
+        {					
+            serviceInterface = new ${siblingType}Locator().create${association.getSiblingAssociationEndObject().getType()}SessionBeanInterface();
+            retVO = serviceInterface.get${roleName}( businessObject.get${siblingType}PrimaryKey() );
+        }
+        catch ( Throwable exc )
+        {
+            String errMsg = "${siblingType}BusinessDelegate:get${roleName}() - " + exc;
+            FrameworkDefaultLogger.error( errMsg);
+            throw new ProcessingException( errMsg );
+        }
+        return ( retVO);
+    }
+#end	## usingCMP == false	        			            
+#end	## forInterface == false            
+## finally, create the set method            
+#if( $usingCMP == true )
+            
+   /**    
+    * Assigns the associated ${roleName} 
+    *
+    * @param	businessObject ${classObject.getName()} 
+    * @param 	keyToOwn 	${type}
+    * @throws ProcessingException
+    */
+    public void set${roleName}( ${classObject.getName()} businessObject, ${type}PrimaryKey keyToOwn )
+    $throwsClause	
+#else	## not using CMP            
+   /**
+    * Assigns the association ${roleName}
+    * 
+    * @param    $roleName    ${type}
+    * @throws   ProcessingException
+     */			    
+	public void set${roleName}( ${type} ${roleName} )
+	$throwsClause
+#end	        
+#if( $forInterface == false )
+    {	        	
+#if( $usingCMP == false )	        			    
+        ${type}BusinessDelegate.get${type}Instance().save${type}( ${roleName} );	
+    }
+#else	        	
+        ${siblingType}SessionBeanInterface serviceInterface = null;
+					
+        try
+        {
+            serviceInterface = new ${siblingType}Locator().create${siblingType}SessionBeanInterface();
+            serviceInterface.set${roleName}( businessObject.get${siblingType}PrimaryKey(), keyToOwn );
+        }
+        catch ( Throwable exc )
+        {
+            String errMsg = "${siblingType}BusinessDelegate:set${roleName}() - " + exc;
+            FrameworkDefaultLogger.error( errMsg );
+            throw new ProcessingException( errMsg );
+        }
+    }		
+#end## usingCMP == false	        		
+#end	## interface == false	        
+#end## $association in $associations
+#end

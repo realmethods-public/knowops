@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE hibernate-reverse-engineering 
+  SYSTEM "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+
+	<type-mapping>
+		<sql-type jdbc-type="DECIMAL" scale="0" hibernate-type="java.lang.Long" />
+		<sql-type jdbc-type="DECIMAL" hibernate-type="java.lang.Double" />
+	</type-mapping>
+
+  <!-- BIN$ is recycle bin tables in Oracle -->
+  <table-filter match-name="BIN$.*" exclude="true" /> 
+	
+</hibernate-reverse-engineering>

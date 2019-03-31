@@ -1,0 +1,11 @@
+#macro( strutsDataTypeConversionOutput)
+## apply the enum related classes to the file
+#set( $enumClasses = ${aib.getEnumClassesToGenerate()} )
+#foreach( $enumClass in $enumClasses )
+#set( $enumClassName = ${enumClass.getName()} )
+${aib.getRootPackageName(true)}.#getBOPackageName().${enumClassName}=com.cloudmigrate.framework.presentation.struts.FrameworkStrutsEnumConverter
+#end ##foreach( $enumClass in $enumClasses )
+java.util.Date=com.cloudmigrate.framework.presentation.struts.FrameworkStrutsDateTimeConverter
+java.sql.Timestamp=com.cloudmigrate.framework.presentation.struts.FrameworkStrutsDateTimeConverter
+#end
+

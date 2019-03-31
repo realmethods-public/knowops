@@ -1,0 +1,62 @@
+#* Struts Form Declaration Output
+*#
+#macro( strutsFormDeclarationsOutput )
+#foreach( $class in $aib.getClassesWithIdentity() )
+
+#set( $name = $class.getName() )
+## need to generate one for the create, load, and save
+    <form-bean name="Display_${name}_Form" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/>
+    <form-bean name="Create_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/>
+    <form-bean name="Load_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/>
+    <form-bean name="Save_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/> 
+    <form-bean name="Delete_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/>        
+#set( $multiAssociations = $class.getMultipleAssociations() )
+#foreach ( $multiAssociation in $multiAssociations )
+#set( $roleName = $multiAssociation.getRoleName() )
+    <form-bean name="Persist_${roleName}_For_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${name}Form"/>
+#end ##foreach ( $multiAssociation in $multiAssociations )
+
+#set( $singleAssociations = $class.getSingleAssociations() )
+#foreach ( $singleAssociation in $singleAssociations )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $target = $singleAssociation.getType() )
+    <form-bean name="Copy_${roleName}_For_${name}" type="${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getFormPackageName().${target}Form"/>
+
+#end ##foreach ( $singleAssociation in $singleAssociations )
+#end## foreach $class in $aib.getClassesWithIdentity()
+
+#foreach( $class in $aib.getUIComponentsToGenerate() )
+#if ( $class.isSelectPage() == true || $class.isListAddPage() )
+#set( $mainType = $class.getMainAssociation().getType() )
+#set( $mainClass = $aib.getClassObject( $mainType ) )
+#if ( $class.isSelectPage() == true )
+	#set( $classToUse = $mainClass )
+#else
+	#set( $association = $class.getOtherMultipleAssociations().get(0) )
+	#set( $classToUse = $aib.getClassObject( $mainClass.getAssociation( $association.getRoleName() ).getType() ) )
+#end ##if ( $class.isSelectPage() == true )
+    <form-bean name="Persist_${class.getName()}" type="${aib.getRootPackageName()}.${classToUse.getFormattedPackageName()}#getFormPackageName().${classToUse.getName()}Form"/>
+    <form-bean name="Load_${class.getName()}" type="${aib.getRootPackageName()}.${classToUse.getFormattedPackageName()}#getFormPackageName().${classToUse.getName()}Form"/> 
+#if ( $class.isSelectPage() == true )
+#set( $multiAssociations = $class.getOtherMultipleAssociations() )
+#foreach ( $multiAssociation in $multiAssociations )
+#set( $mainType = $class.getMainAssociation().getType() )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $class.getName() )
+#set( $mainClass = $aib.getClassObject( $mainType ) )
+#set( $childClass = $aib.getClassObject( $childName ) )
+    <form-bean name="Display_MultiSelect_${roleName}_For_${mainType}" type="${aib.getRootPackageName()}.${mainClass.getFormattedPackageName()}#getFormPackageName().${mainType}Form"/>
+    <form-bean name="Create_${childName}_For_${mainType}_${roleName}" type="${aib.getRootPackageName()}.${childClass.getFormattedPackageName()}#getFormPackageName().${childName}Form"/>
+#end ##foreach ( $multiAssociation in $multiAssociations )
+#elseif ( $class.isListAddPage() == true )
+#set( $multiAssociation = $class.getOtherMultipleAssociations().get(0) )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $class.getName() )
+    <form-bean name="Display_MultiSelect_${roleName}_For_${mainType}" type="${aib.getRootPackageName()}.${mainClass.getFormattedPackageName()}#getFormPackageName().${mainType}Form"/>    
+#end##if ( $class.isSelectPage() == true )
+#end##if ( $class.isSelectPage() == true || $class.isListAddPage() )
+#end##foreach( $class in $aib.getUIComponentsToGenerate() )
+#end
+

@@ -1,0 +1,28 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#### CI CONFIG
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+#### force usage of MySQL for the purpose of testing with mvn test  
+env:
+  - DATABASE_USERNAME=shippable DATABASE_PASSWORD= DATABASE_DIALECT=org.hibernate.dialect.MySQL8Dialect DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
+
+build:
+  cache: true
+  ci:
+    - mysql -e "CREATE USER shippable@localhost IDENTIFIED BY ''; GRANT ALL ON *.* TO shippable@localhost; FLUSH PRIVILEGES;"
+    - mvn test
+    - mkdir -p shippable/testresults
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} shippable/testresults/ \;
+
+services:
+  - mysql    
+      
+#### END CI CONFIG

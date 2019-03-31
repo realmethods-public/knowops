@@ -1,0 +1,136 @@
+<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
+ * This software is the proprietary information of cloudMigrate, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by cloudMigrate, Inc. and you.
+ * 
+ * Contributor
+ *     cloudMigrate, Inc - initial API and implementation
+-->
+
+<div id="newModelDivId">
+
+  <a href="#" id="modelTriggerId">
+    <img class="navImageClass theToolTip" 
+        	src="./img/model-2.png" title="Display options to use a model for a new `app"/>                	
+  </a>
+  
+  <div class="container-fluid slideClass 2" id="modelSlideId">
+
+    <div class="row 3">
+
+      <div class="col col-lg-8 4">
+
+<!-- file related columns -->
+
+        <div class="container 5">
+          
+          <h3>Load model from file</h3>
+          
+          <div class="row modelContainerRow">
+		  
+<!-- JSON column -->
+            <div class="col col-lg-3 7">
+              <a href="#" class="toggle-json-panel" onclick="showLocalModelModal('json')">
+                <img class="modelImageClass theToolTip" src="./img/json-circle.png"
+              	  title="Load model from an appropriately formed JSON file"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7" -->
+
+<!-- UML column -->                       
+            <div class="col col-lg-3 7">
+              <a href="#" class="toggle-uml-panel" onclick="showLocalModelModal('xmi')">
+                <img class="modelImageClass theToolTip" src="./img/uml-circle.png"
+                	title="Load model from an XMI 1.x file(.xmi) or UML 2.x file (.uml)"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7" -->
+              
+<!-- Ecore column -->                      
+            <div class="col col-lg-3 7">
+              <a href="#" class="toggle-ecore-panel" onclick="showLocalModelModal('ecore')">
+                <img class="modelImageClass theToolTip" src="./img/eclipse-circle.png"
+                	title="Load an Eclipse Modeling Framework file (.core or .ecore)"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7" -->
+               
+          </div> <!-- class="row 6" -->
+      
+        </div> <!-- container 5-->
+
+<!-- reverse engineering columns -->
+
+        <div class="container 5">
+
+          <div class="row modelContainerRow 6" id="modelLibraryDivId" style="vertical-align:top">
+          
+<!-- J2EE column -->
+			
+            <div class="col col-lg-3 7">
+              <a href="#" class="toggle-j2ee-jar-panel" onclick="showLocalModelModal('jar')">
+                <img class="modelImageClass theToolTip" src="./img/ejb-circle.png"
+                  	title="Load bean classes stored in an EJB Module's .jar file"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7" -->
+              
+<!-- POJO column -->
+
+            <div class="col col-lg-3 7">
+              <a href="#" class="toggle-java-jar-panel" onclick="showLocalModelModal('jar')">
+                <img class="modelImageClass theToolTipe" src="./img/java-circle.png"
+                	title="Load POJOs from a .jar file"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7" -->				
+
+<!-- SQL script column -->
+            <div class="col col-lg-3 7">                
+              <a href="#" class="toggle-sql-script-panel" onclick="showLocalModelModal('sql')">
+                <img class="modelImageClass theToolTip" src="./img/sqlscript-circle.png"
+                	title="Load mode from a SQL script file (.sql)"/>
+              </a>
+            </div> <!-- class="col col-lg-3 7"-->
+
+          </div> <!-- class="row 6" -->
+      
+        </div> <!-- container 5-->
+
+<!-- library related column -->
+
+        <div class="container 5">
+
+          <h3>Model Repository</h3>
+
+          <div class="row 6 modelContainerRow" style="vertical-align:top">
+      
+<!-- share library column -->                      
+
+            <div class="col col-lg-3 7">
+             <a href="#" class="toggle-repository-panel" onclick="showSharedModelModal()">
+               <img class="modelImageClass theToolTip" src="./img/catalog-circle.png"
+                 title="Load a previously saved model"/>
+              </a>
+            </div> <!-- class="col col-lg-12 7" -->
+
+          </div><!-- class="row 6" -->
+
+      </div> <!-- container 5-->
+		  
+    </div> <!-- class="col col-lg-8  4" -->
+
+<!-- model tree column -->              
+
+    <div class="col col-lg-3 4">
+  
+      <div id="modelTreeDivId" class="modelTreeDivClass">
+        <div id="modelTreeId" class="modelTreeClass" style="background:white">
+        </div>
+        <div id="modelTreeResultsId" style="color:blue;font-size:0.9em">
+        </div>
+      </div> <!-- modelTreeDivId -->
+      
+      </div> <!-- class="col col-lg-3 4" -->
+      
+    </div> <!-- class="row 3" -->
+
+  </div> <!-- class="container 2" -->
+  
+</div> <!-- newModelDivId 1-->
+

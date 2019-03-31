@@ -1,0 +1,17 @@
+#macro( generateTableHeader $attributes $addOnly )
+    <tr>
+        <!-- Account for the select, edit, and copy/delete columns -->
+        <th colspan=1 align="left">&nbsp</th>
+#generateTableHeaderHelper( $attributes )
+    </tr>
+#end
+
+#macro( generateTableHeaderHelper $attributes )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isSingleComposite() == true )
+    #generateTableHeaderHelper( $attribute.getAttributes() )
+#elseif ( $attribute.isFromAssociation() == false && $attribute.isUIViewable() == true )
+    <th>${attribute}.getDisplayName()</th>
+#end    
+#end    
+#end

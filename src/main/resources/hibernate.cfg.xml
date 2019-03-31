@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+<hibernate-configuration>
+
+    <!-- a SessionFactory instance listed as /jndi/name -->
+    <session-factory>
+        	
+		<property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">false</property>
+           	
+        <!-- properties -->      
+<!-- AIB : #hibernateMappingParameters() -->      
+		<property name="hibernate.c3p0.validate">true</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">600</property>
+		<property name="hibernate.c3p0.timeout">1800</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.preferredTestQuery">SELECT 1;</property>
+		<property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+		<property name="hibernate.c3p0.idle_test_period">3000</property>  
+        <property name="hibernate.max_fetch_depth">1</property>        
+		<property name="hibernate.current_session_context_class">thread</property> 
+        <property name="hibernate.connection.username">root</property>        
+        <property name="hibernate.connection.password">6969Cutlass!!</property>        
+        
+        <!-- use for mysql -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>  
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>                
+        <property name="hibernate.connection.url">jdbc:mysql://35.238.135.228:3306/realmethods?createDatabaseIfNotExist=true&amp;autoReconnect=true&amp;useSSL=false</property>        
+
+<!-- ~AIB -->          
+   
+<!-- mapping files -->
+
+      <mapping resource="/hibernate/BaseTransactionalEntity.hbm.xml"/>
+	  <mapping resource="/hibernate/User.hbm.xml"/>
+	  <mapping resource="/hibernate/DBSchemaHelper.hbm.xml"/>
+
+    </session-factory>
+
+</hibernate-configuration>

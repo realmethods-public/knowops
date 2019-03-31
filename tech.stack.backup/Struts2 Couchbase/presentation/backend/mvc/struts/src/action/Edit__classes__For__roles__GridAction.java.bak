@@ -1,0 +1,74 @@
+#header()
+#set( $parentType = ${classObject.getName()} )
+#set( $roleName = ${currentAssociation.getRoleName()} )
+#set( $className = ${currentAssociation.getClassObject().getName()} )
+#set( $lowerClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
+package ${aib.getRootPackageName(true)}.#getActionPackageName();
+
+import javax.servlet.http.*;
+
+import java.util.*;
+
+import com.framework.common.exception.*;
+import com.framework.common.event.*;
+import com.framework.common.misc.Utility;
+import com.framework.common.namespace.FrameworkNameSpace;
+
+import com.framework.presentation.struts.*;
+
+#set( $imports = [ "#getPrimaryKeyPackageName()", "#getDelegatePackageName()", "#getBOPackageName()" ] )
+#importStatements( $imports )
+
+import ${aib.getRootPackageName()}.#getActionPackageName().*;
+
+import org.apache.struts2.convention.annotation.Result;
+
+/** 
+ * Implements Struts action processing for business entity ${className}.
+ *
+ * @author $aib.getAuthor()
+ */
+@Result(name = "success", type = "json") 
+public class Edit${className}For${roleName}GridAction extends Edit${className}GridAction
+{
+
+    protected ${parentType} getParent()
+    {
+    	return (${parentType}) getFocusObjectFromCache();
+    }
+    
+	protected void add( ${className} $lowerClassName )
+	{
+		${parentType}BO parent = getParent();
+		List<${className}> list = parent.get${roleName}();
+		
+        if ( list == null)
+				list = new ArrayList<${className}>(); 
+						
+		if ( list.add( $lowerClassName ) )
+		{
+			getParent().set${roleName}( list );
+
+            ${parentType}BusinessDelegate delegate = ${parentType}BusinessDelegate.get${parentType}Instance();
+            parent = delegate.save${parentType}( parent );
+		}
+	}
+	
+	protected void remove( ${className} $lowerClassName )
+	{
+		${parentType} parent = getParent();
+		List<${className}> list = parent.get${roleName}();
+		
+		if ( list.remove( $lowerClassName ) )
+		{
+			getParent().set${roleName}( list );
+
+            ${parentType}BusinessDelegate delegate = ${parentType}BusinessDelegate.get${parentType}Instance();
+            parent = delegate.save${parentType}( parent );
+            
+            if ( parent != null )
+                logMessage( FrameworkLogEventType.DEBUG_LOG_EVENT_TYPE, "Edit${className}For${roleName}GridAction:remove() - successfully removed - " + parent.toString() );
+		}
+	}
+}
+#javaFooter()

@@ -1,0 +1,20 @@
+<tech-stack-package 
+	name="Spring MongoDB" 
+	shortName="SpringMongoDB"
+	description="MongoDB backend using Morphia with SpringBoot and Memcached." 
+	icon-url="./img/spring.circle.leaf.png" 	
+	info-page-url="http://www.realmethods.com/infopages/spring-mongo-info-page.html"
+    version="1.1"
+    release-status="production"
+    app-type="restfulapi">
+	<target-languages>
+		<target-language name="java"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="business"/>
+		<tech-stack-component name="mongodb" description="NoSQL data store" app-layer="data"/>
+		<tech-stack-component name="memcached" description="intermediate caching framework" app-layer="cache"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>			
+	</tech-stack>
+</tech-stack-package>

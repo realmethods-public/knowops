@@ -1,0 +1,52 @@
+#xmlHeader()
+#set( $appName = $aib.getApplicationNameFormatted() )
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>  
+	<groupId>${aib.getRootPackageName(true)}</groupId>  
+	<artifactId>${appName.replaceAll(" ",".")}</artifactId>  
+	<version>${aib.getVersion()}</version>  
+
+    <packaging>pom</packaging>
+
+#repositories()
+
+	<build>
+
+		<plugins>
+
+<!-- Apache maven ant plugin -->
+	  		<plugin>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <version>1.7</version>
+#antContribDecl()		        
+		  		<configuration>
+		  		</configuration>
+				<executions>
+		        	<execution>
+			            <id>nuget</id>
+			            <phase>install</phase>
+			            <inherited>false</inherited>
+			            <configuration>
+			            	<build_dir>${project.basedir}</build_dir>
+			              <target>
+			                <ant antfile="publish.xml">
+			                  <target name="nuget"/>
+			                </ant>
+						  </target>                
+			            </configuration>
+			            <goals>
+				        	<goal>run</goal>
+			            </goals>
+		          	</execution>
+#gitExecDecl()
+	    		</executions>    		
+			</plugin>    
+		
+		</plugins>
+
+	</build>
+	
+</project>

@@ -1,0 +1,55 @@
+#################################################
+## output associations
+#################################################
+#macro( associations $class )
+#set( $attributes = $class.getAttributesOrdered(false) )
+#set( $appName = $aib.getApplicationNameFormatted() )
+#foreach( $attribute in $attributes )
+  #if ( $attribute.isFromAssociation() && $aib.hasIdentity( $attribute.getSourceClassObject() ) )
+    #if ( $attribute.isComposite() == false || $attribute.isFromMultiValueAssociation() )
+      #set( $association = $attribute.getAssociation() )
+	  #set( $lowerCaseOwningClassName = $Utils.lowercaseFirstLetter( $classObject.getName() ) )            
+      #set( $cascade = "save-update" )
+      #if ( $association.isComposite() )
+        #set( $cascade = "all" )
+      #end ##if ( $association.isComposite() )
+### determine multiplicity value
+      #if( $association.isOneToOne() || $association.isZeroToOne() )
+        #set( $hibernateMultiplicity = "many-to-one" )	## use many-to-one since one-to-one doesn't support null non-constrainments
+      #elseif( $association.isOneToMany() )
+        #set( $hibernateMultiplicity = "one-to-many" )
+      #elseif( $association.isManyToMany() )
+        #set( $hibernateMultiplicity = "many-to-many" )
+      #else ##default to many-to-one
+        #set( $hibernateMultiplicity = "many-to-one" )
+      #end
+      #set( $fullClassName = "${path}.${attribute.getSourceClassObject().getName()}" )
+      #set( $fullClassName = "${fullClassName}" )
+      #if ( $association.isManyToMany() || $association.isOneToMany() )
+        #if ( $association.isManyToMany() )    
+          #set( $inverse = false ) 
+          #set( $manyTableName = ${association.getCombinedAssociationName()} )
+## need to figure out whether to apply it to this one or the other side
+          #if ( $association.hasNavigableSiblingAssociationEndObject() == true )
+            #if ( $association.getRoleName().compareTo( ${association.getSiblingAssociationEndObject().getRoleName()} ) > 0 )
+			<bag name="${association.getRoleName()}" table="${manyTableName.toLowerCase()}" inverse="true">
+            #else
+              <bag name="${association.getRoleName()}" table="${manyTableName.toLowerCase()}" cascade="persist">
+            #end ##if ( $association.getRoleName().compareTo( ${association.getSiblingAssociationEndObject().getRoleName()} ) > 0 )
+                <key column="${association.getSiblingAssociationEndObject().getRoleName().toLowerCase()}_id"/>              
+                <many-to-many class="${appName}.Models.${association.getType()}" column="${association.getRoleName().toLowerCase()}_id"/>
+              </bag>	        
+          #end ##if ( $association.hasSiblingAssociationEndObject() == true )    	
+        #else ##if ( $association.isManyToMany() )    
+          <bag name="${association.getRoleName()}" cascade="persist">
+            <key column="fk_${lowerCaseOwningClassName}_${association.getRoleName().toLowerCase()}_id"/>
+            <one-to-many class="${appName}.Models.${association.getType()}"/>
+          </bag>			
+        #end ##if ( $association.isManyToMany() )    
+      #else ##if ( $association.isManyToMany() || $association.isOneToMany() )
+        <${hibernateMultiplicity} name="${attribute.getName()}" cascade="${cascade}"/>
+      #end ##if ( $association.isManyToMany() || $association.isOneToMany() )
+    #end ##if ( $attribute.isComposite() == false || $attribute.isFromMultiValueAssociation() )
+  #end ##if ( $attribute.isFromAssociation() && $aib.hasIdentity( $attribute.getSourceClassObject() ) )
+#end ##foreach( $attribute in $attributes)
+#end

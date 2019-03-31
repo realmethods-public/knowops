@@ -1,0 +1,12 @@
+#macro ( getValueAsCollectionOutput )
+#foreach( $primaryKey in $classObject.getAllPrimaryKeysInHierarchy() )
+		collection.add( $primaryKey.getAsArgument() );
+#end## foreach $primaryKey in $classObject.getAllPrimaryKeysInHierarchy()
+#end
+
+#macro ( getValuesAsParameters )
+#foreach( $primaryKey in $classObject.getAllPrimaryKeysInHierarchy() )
+#set( $type = $primaryKey.getRootType() )
+        args.add( new ${type}Parameter( ${primaryKey.getAsArgument()}, asInput ) );
+#end
+#end

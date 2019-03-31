@@ -1,0 +1,22 @@
+<tech-stack-package 
+    name="Struts2 Couchbase"
+    shortName="Strut2NoSQL"
+    description="Couchbase and Memcached package, using CouchDB, Struts MVC, JQuery/Bootstrap frontend" 
+    platform="web"
+    icon-url="./img/couchbase.png"
+	info-page-url="http://www.realmethods.com/infopages/struts-couchbase-info-page.html"
+    version="1.1"
+    app-type="webapp"
+    release-status="production">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="javascript"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="jquery/bootstrap" description="front end frameworks" app-layer="presentation"/>
+		<tech-stack-component name="struts" description="Strut2 MVC web framework" app-layer="business"/>
+		<tech-stack-component name="couchbase nosql" description="no sql storage" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>			
+	</tech-stack>
+</tech-stack-package>

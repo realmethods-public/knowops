@@ -1,0 +1,31 @@
+#*
+ Outputs a formatted represented of the code that makes up
+ key field assignments for the PrimaryKey class
+*#
+#macro ( getKeyFieldAssignmentsFromCollection )
+#set( $attributes = $classObject.getAllPrimaryKeysInHierarchy() )
+## only provide accessors for primary-key fields    
+		if (args != null)
+		{
+			Object [] keys = args.toArray();
+			if ( keys[ 0 ] != null )	
+#foreach( $attribute in $attributes )	
+#set( $index = $velocityCount - 1 )	
+				this.${attribute.getAsArgument()} = new $attribute.getType()( keys[ $index ].toString() );
+		}				
+#end## foreach $attribute in $attributes
+#end
+
+#*
+ Outputs formatted represented of the code that makes up
+ key field assignments for the PrimaryKey class
+*#
+#macro ( getKeyFieldAssignments )
+#set( $keyFields = $classObject.getAllPrimaryKeysInHierarchy() )
+#foreach( $attribute in $keyFields )
+##only provide accessors for primary-key fields
+#if( $attribute.isPrimaryKey() == true )
+		this.${attribute.getAsArgument()} = ${attribute.getAsArgument()} != null ? new $attribute.getType()( ${attribute.getAsArgument()}.toString() ) : null;
+#end## $attribute.isPrimaryKey() == true
+#end## foreach $attribute in $keyFields
+#end

@@ -1,0 +1,255 @@
+#*
+ Struts Action Declaration Output
+*#
+#macro( strutsActionDeclarationsOutput )
+
+#foreach( $class in $aib.getClassesWithIdentity() )
+
+#set( $name = $class.getName() )
+#set( $upperName = $name.toUpperCase() )   
+##set( $actionPackageName = "${aib.getRootPackageName()}.${class.getFormattedPackageName()}#getActionPackageName()" )
+#set( $actionPackageName = "${aib.getRootPackageName()}.#getActionPackageName()" )             
+#set( $actionClass = "${actionPackageName}.${name}Action" )
+#set( $lowercaseName = $Utils.lowercaseFirstLetter( $name ) )
+#set( $pkName = ${class.getFirstPrimaryKey().getName()} )
+
+  <package name="${name}" extends="default" namespace="/${name}">
+
+    <action class="${actionClass}" method="execute" name="json">
+		<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">${className}</param>
+    	</result>    
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>    
+    	
+    </action>
+    
+<!-- load a ${name} -->
+    <action class="${actionClass}" method="load" name="load">
+		<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">${name}</param>
+    	    <param name="ignoreHierarchy">false</param>
+    	</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>    
+    	   
+    </action>
+
+<!-- displays the a grid of all ${name} using JSON -->
+    <action class="${actionClass}" name="viewAll" method="loadAll">
+		<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">paginatedList</param>
+    	</result>    
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>
+    </action> 
+
+<!-- loads all ${name} from the datastore -->        
+    <action class="${actionClass}" method="loadAll" name="loadAll">
+        <result name="success">/jsp/${name}ViewAllList.jsp</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>
+    </action>
+    
+<!-- display the main tab panel for a ${name} instance. 
+     includes the profile form, all single non-composite associations
+	 and all multiple associations 
+-->
+    <action class="${actionClass}" name="showTab" method="load">
+    	<result name="success">/jsp/${name}MainTab.jsp</result>    	   
+    	<param name="${pkName}">${#parameters['${pkName}'][0]}</param>   
+    	<param name="${selectedTab}">${#parameters['${selectedTab}'][0]}</param>
+    	            
+    </action> 
+            
+    <action class="${actionClass}" name="executeGridAction" method="executeGridAction">
+	    <result name="success">/jsp/${name}ViewAllList.jsp</result>
+	    <result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>	    
+    </action> 
+            
+            
+            
+<!-- load the ${name} and the supplied associated by the role name provided
+     by default, the associated load{roleName}() method loads all the contents of a ${name}
+-->	 
+##    <action class="${actionClass}" name="loadRoleForm*" method="load{1}">	
+##    	<interceptor-ref name="myParamsPrepareParamsStack"/>		
+##		<result name="success">/jsp/{1}ProfileForm.jsp</result>                     			
+##    </action>    
+
+<!-- save the supplied ${name} : does an update unless no primary key, then does a create -->
+    <action class="${actionClass}" method="save" name="save">
+    	<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">${lowercaseName}</param>
+    	    <param name="ignoreHierarchy">false</param>
+    	</result>        
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>
+
+<!-- create the supplied ${name} -->
+    <action class="${actionClass}" method="create" name="create">
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>
+
+<!-- update the supplied ${name} -->
+    <action class="${actionClass}" method="update" name="update">
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>
+
+<!-- delete a ${name} -->
+    <action class="${actionClass}" method="delete" name="delete">
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>
+	
+	
+##<!-- delete 1 or more ${name}-->
+##    <action class="${actionClass}" method="deleteSelections" name="deleteSelections">
+##        <result name="success"></result>
+##    </action>    
+	
+<!-- load and display a list based on the provided rolename of a multi association -->    
+    <action class="${actionClass}" name="list*" method="load">
+        <result name="success">/jsp/{1}List.jsp</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>    
+    
+#foreach( $multiAssociation in $class.getMultipleAssociations() )
+
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $class.getName() )
+
+	<action class="${actionClass}" name="save${roleName}" method="save${roleName}">
+    	<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+		    <param name="root">paginatedList</param>
+    	</result>
+	</action>
+
+	<action class="${actionClass}" name="delete${roleName}" method="delete${roleName}">
+    	<result name="success"></result>
+	</action>
+
+    <action class="${actionClass}" name="load${roleName}" method="load${roleName}">
+		<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">paginatedList</param>
+    	    <param name="ignoreHierarchy">false</param>
+    	</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>    
+    	   
+    </action>
+
+#end ##foreach( $multiAssociation in $class.getMultipleAssociations() )
+
+#set( $includeComposites = false )
+
+#foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $childName = $singleAssociation.getType() )
+#set( $parentName  = $class.getName() )
+
+	<action class="${actionClass}" name="save${roleName}" method="save${roleName}">
+    	<result name="success">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+		    <param name="root">${lowercaseName}.${Utils.lowercaseFirstLetter(${roleName})}</param>
+    	</result>
+	</action>
+
+	<action class="${actionClass}" name="delete${roleName}" method="delete${roleName}">
+    	<result name="success"></result>
+	</action>
+
+    <action class="${actionClass}" name="load${roleName}" method="load">
+		<result name="success" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">${lowercaseName}.${Utils.lowercaseFirstLetter(${roleName})}</param>
+    	    <param name="ignoreHierarchy">false</param>    	    
+    	</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>    
+    </action>
+
+#end ##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+
+#foreach( $method in $class.getFindAllByMethods() )
+
+#set( $methodName = $method.getName() )
+	<action class="${actionClass}" name="${methodName}List" method="noOp">
+    	<result name="success">/jsp/${methodName}List.jsp</result>
+    	<result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>    	        
+    </action>
+	<action class="${actionClass}" name="${methodName}" method="${methodName}">
+   		<result name="success">/jsp/findAllBy${methodName}List.jsp</result>
+   	    <result name="error" type="json">
+	        <param name="noCache">true</param>
+	        <param name="excludeNullProperties">true</param>
+    	    <param name="root">statusMessage</param>
+    	</result>        
+    </action>
+#end ##foreach( $method in $class.getFindAllByMethods() )
+
+  </package>
+
+#end ##foreach( $class in $aib.getClassesWithIdentity() )
+#end ##macro( strutsActionDeclarationsOutput )

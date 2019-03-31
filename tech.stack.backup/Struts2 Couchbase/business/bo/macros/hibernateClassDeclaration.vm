@@ -1,0 +1,11 @@
+#macro( getHibernateClassDecl )
+#if( $aib.usingHibernate() )
+#if ( $classObject.hasParent() )
+* @hibernate.class
+*     table="${classObject.getName().toLowerCase()}"
+#else
+* @hibernate.subclass
+*     discriminator-value="${classobject.getName()}"
+#end ##if( $aib.usingHibernate() )
+#end ##if ( $classObject.hasParent() )
+#end

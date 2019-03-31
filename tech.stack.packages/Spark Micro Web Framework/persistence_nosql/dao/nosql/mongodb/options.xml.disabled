@@ -1,0 +1,25 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<options name="mongodb">
+	<option name="server addresses" value="127.0.0.1:27017"></option>
+	<option name="database name" placeholder="leave blank for one per entity" value="appcreate"></option>
+	<!--  Note: An empty value denotes no security, use userid:pw format and separate multiples with a comma -->
+	<option name="credentials" value=""/> 
+	<option name="search size" value="10" min="10", max="500" step="5" type="spinner"></option>
+	
+<!--   required for MongoDB to handle unique Id to work with cloudMigrate primary key design -->
+    <option name="default collection name" value="default_collection"></option>
+	<option name="auto-increment id name" value="_id"></option>
+	<option name="auto-increment seq name" value="seq"></option>
+
+</options>

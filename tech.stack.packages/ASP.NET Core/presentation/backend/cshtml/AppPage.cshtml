@@ -1,0 +1,111 @@
+#xmlHeader()
+
+<html>
+
+<script type="text/javascript">
+
+	function doPrint()
+	{
+		window.print();
+	}
+
+	function localAction( action )
+	{
+		jQuery.ajax(
+		{
+	  		url: action,
+	  		dataType: 'text',
+		}
+		).always(function( data ) 
+		{
+			document.getElementById("mainSection").innerHTML = data;
+	    });
+	}
+
+	$( document ).ready(function()
+	{
+		//========================================================
+		// initialize the jstree
+		//========================================================
+		$('#modelTreeId').jstree(
+		{
+			"core" : {
+				"multiple" : false,
+				"animation" : 0,
+				"themes" : { "stripes" : true }
+				}
+		});
+		
+		populateTree();
+			
+		$('#modelTreeId').on('changed.jstree', function (e, data) 
+		{
+			var name = $('#modelTreeId').jstree('get_selected');
+			var url = "/" + name + "/List";
+//			console.log( 'tree on changed for url ' + url );
+			
+			$( "#treeSelectPanelDivId" ).load(url);        	 
+		});
+	});
+	
+	function populateTree()
+	{
+		var content = '<ul>';
+	
+	#foreach( $class in $aib.getClassesWithIdentity() )
+		content = content + '<li id="${class.getName()}"><font style="font-size:0.8em;">${class.getName()}</font></li>';
+	#end ##foreach( $class in $aib.getClassesWithIdentity() )
+			
+		content = content + '</ul>';
+	
+		//=====================================================				
+		// apply the content to the tree div then refresh
+		//=====================================================			
+		$('#modelTreeId').jstree(true).settings.core.data = content;
+		$('#modelTreeId').jstree(true).refresh();
+	
+	}
+	
+	function localAction( action )
+	{
+		jQuery.ajax(
+		{
+	  		url: action,
+	  		dataType: 'text',
+		}
+		).always(function( data ) 
+		{
+			document.getElementById("homePageDivId").innerHTML = data;
+	    });
+	}
+		
+</script>
+
+<div id="homePageDivId" style="width:100%;vertical-align:top">
+
+<!-- home page div -->
+
+  <table>
+    <tr>
+	  <td style="width:100px;vertical-align:top;background:white;padding:8px;text-align:left;vertical-align:top">
+	    <div id="modelTreeId" style="height:380px;overflow-y:auto">
+	    </div>	    
+	  </td>
+	  <td style="width:100%;height:380px;padding:8px;background:white;text-align:left;vertical-align:top">
+		<div id="treeSelectPanelDivId" style="height:100%;background:white">
+		<h6>Select a tree option to display relevant options and data</h6>
+		</div>
+	  </td>
+	</tr>
+  </table>
+</div> <!-- homepageId -->
+
+<p>
+
+<div id="loadingDivId" style = "display:none;">
+	<!-- this is the default loading gif -->
+	<img src="/img/loader.gif">
+</div>
+
+    
+       

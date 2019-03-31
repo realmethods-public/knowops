@@ -1,0 +1,25 @@
+<!--  
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+  <session-factory>
+    <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+    <property name="dialect">${aib.getParam("hibernate.dialect")}</property>
+    <property name="connection.driver_class">${aib.getParam("hibernate.connection.driver.class")}</property>
+    <property name="connection.connection_string">
+    	Database=${aib.getParam("hibernate.connection.database")};Data Source=;User Id=${aib.getParam("hibernate.connection.username")};Password=${aib.getParam("hibernate.connection.password")}
+    </property>
+    <property name="show_sql">true</property>
+  </session-factory>
+   
+</hibernate-configuration>

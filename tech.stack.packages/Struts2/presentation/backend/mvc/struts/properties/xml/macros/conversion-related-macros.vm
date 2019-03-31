@@ -1,0 +1,11 @@
+#macro( strutsDataTypeConversionOutput)
+## apply the enum related classes to the file
+#set( $enumClasses = ${aib.getEnumClassesToGenerate()} )
+#foreach( $enumClass in $enumClasses )
+#set( $enumClassName = ${enumClass.getName()} )
+${aib.getRootPackageName(true)}.#getBOPackageName().${enumClassName}=${aib.getRootPackageName(true)}.converter.FrameworkStrutsEnumConverter
+#end ##foreach( $enumClass in $enumClasses )
+java.util.Date=${aib.getRootPackageName(true)}.converter.FrameworkStrutsDateTimeConverter
+java.sql.Timestamp=${aib.getRootPackageName(true)}.converter.FrameworkStrutsDateTimeConverter
+#end
+

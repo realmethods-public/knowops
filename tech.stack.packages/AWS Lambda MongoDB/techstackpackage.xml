@@ -1,0 +1,20 @@
+<tech-stack-package 
+    name="AWS Lambda MongoDB"
+    shortName="LambdaNoSQL"
+    description="Tech stack using AWS Lambda as the service layer and MongoDB/Morpheus as the NoSQL persistence layer" 
+    icon-url="./img/lambda.circle.png"
+	info-page-url="http://www.realmethods.com/infopages/aws-lambda-nosql-info-page.html"
+    version="1.0"
+    app-type="serverless"
+    release-status="production">
+
+	<target-languages>
+		<target-language name="java"/>
+	</target-languages>
+	<tech-stack>
+		<tech-stack-component name="lambda" description="servless business delegate" app-layer="business"/>
+		<tech-stack-component name="mongodb" description="nosql persistence using mongodb" app-layer="data"/>
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+	</tech-stack>
+
+</tech-stack-package>

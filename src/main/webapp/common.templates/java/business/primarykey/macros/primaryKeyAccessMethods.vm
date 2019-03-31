@@ -1,0 +1,89 @@
+#*
+ Outputs the get/set methods for the primary key fields for this instance.
+*#
+#macro ( getKeyFieldAccessMethods )
+#set( $attributes = $classObject.getPrimaryKeyAttributes() )
+#foreach( $attribute in $attributes )
+   /**
+	* Returns the $attribute.getAsArgument().
+	* @return    $attribute.getType()
+    */    
+	public $attribute.getType() get${Utils.capitalizeFirstLetter( $attribute.getAsArgument() )}()
+	{
+		return( this.${attribute.getAsArgument()} );
+	}            
+	
+   /**
+	* Assigns the $attribute.getAsArgument().
+	* @return    $attribute.getType()
+    */    
+	public void set${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})}( $attribute.getType() id )
+	{
+		this.${attribute.getAsArgument()} = id;
+	}            
+	
+#end## $attribute in $attributes
+#end
+
+
+#*
+Outputs the primary key get/set access methods.
+*#
+#macro ( getPrimaryKeyAccessorMethods )
+#set( $name = $classObject.getName() )	
+## handle the getter aspect first	
+   /**
+	* Returns the associated FrameworkPrimaryKey
+	*
+	* @return FrameworkPrimaryKey
+	*/	 
+	public FrameworkPrimaryKey getFrameworkPrimaryKey()
+	{
+#set( $getBuffer = "${name}PrimaryKey pk = new ${name}PrimaryKey( " )      	
+#set( $primaryKeys = $classObject.getAllPrimaryKeysInHierarchy() )
+#set( $numPKs = $primaryKeys.size() )
+	#foreach( $attribute in $primaryKeys )
+		#set( $getBuffer = "${getBuffer}get${Utils.capitalizeFirstLetter( ${attribute.getAsArgument()})}()")
+		#if( $velocityCount < $numPKs )
+			#set( $getBuffer = "${getBuffer}, ")
+		#end## $velocityCount < $numPKs
+	#end## foreach $attribute in $primaryKeys
+#set($getBuffer = "${getBuffer} );" )
+## output the getter portion
+		$getBuffer
+		return( pk );
+    }
+	
+## end of getter method implemenation	
+## start to output the setter method implementation						  
+   /**
+    * Assigns the provided FrameworkPrimaryKey
+    *
+    * @param	key		FrameworkPrimaryKey
+    */	     
+    public void setFrameworkPrimaryKey( FrameworkPrimaryKey key )
+	{
+		if ( key != null )
+		{
+			Object [] values = key.values();
+			
+			// if the array of values is non-null and contains a non-null value
+			if ( values != null && values[0] != null )
+			{
+#set( $primaryKeys = $classObject.getAllPrimaryKeysInHierarchy() )		
+#foreach( $attribute in $primaryKeys )    		
+#set( $index = $velocityCount -  1 )
+		        set${Utils.capitalizeFirstLetter( $attribute.getName() )}(new $attribute.getType()( key.values()[ $index ].toString()));
+#end## $attribute in $primaryKeys
+			}
+		}
+		else
+		{		
+#set( $primaryKeys = $classObject.getAllPrimaryKeysInHierarchy() )		
+#foreach( $attribute in $primaryKeys )
+			set${Utils.capitalizeFirstLetter(${attribute.getName()})}(null);			
+#end## $attribute in $primaryKeys
+		}			
+	}		        
+#end
+

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping default-cascade="all" default-lazy="false"> 
+
+   	<class name="com.cloudmigrate.codetemplate.DBSchemaHelper" table="dbSchemaHelper" abstract="false">         
+
+		<id name="id" type="long" >
+      		<generator class="native"/>    
+    	</id>
+		
+		<property name="databaseName" column="databaseName" not-null="false"/>
+		<property name="schemaAsJson" column="schemaAsJson" length="65535" not-null="false"/>
+		
+	</class>
+
+</hibernate-mapping>

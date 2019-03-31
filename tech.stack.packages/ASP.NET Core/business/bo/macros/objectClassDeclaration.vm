@@ -1,0 +1,18 @@
+#macro ( getObjectClassDecl )
+#set( $parentName = "" )        
+#if( $classObject.hasParent() == true )    
+#set( $parentName = "${parentName}${classObject.getParentName()}" )        
+#if( $aib.hasIdentity( $classObject.getParentName() ) == true )
+#set( $parentName = "${parentName}" )
+#end
+#else ## no parent, so come directly off of the FrameworkBusinessObject
+#if( $aib.hasIdentity( $classObject ) == true )
+#set( $parentName = " : Base" )
+#else
+#set( $parentName = "" )
+#end
+#end
+## output the parent name
+public class ${classObject.getName()} $parentName
+{
+#end

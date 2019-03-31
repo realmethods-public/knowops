@@ -1,0 +1,27 @@
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<logHandlers>
+
+    <!--This is the default log handler used by the application.  
+        The framework internally uses a dedicated Log4J logger defined in lo4j.xml
+        <logHandler name="FrameworkDefaultLog"
+            synchronous="true"
+            debug="SYSTEM_OUT, eureka"
+            info="SYSTEM_OUT, eureka"
+	        warn="SYSTEM_OUT, eureka"
+	        error="SYSTEM_OUT, eureka"
+	        dateTimeStampFormat="yyyy.mm.dd-hh:mm:ss"
+        /> -->
+        <!-- add your own custom log handler(s) here -->
+
+</logHandlers>

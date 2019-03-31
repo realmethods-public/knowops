@@ -1,0 +1,33 @@
+<div class="app-header">${aib.getApplicationName()}</div>
+
+<mat-sidenav-container class="app-container">
+    
+	<mat-sidenav #sidenav mode="side" opened class="app-sidenav">
+	
+	#foreach( $class in $aib.getClassesToGenerate() )
+	#set( $className = $class.getName() )   
+	  <button mat-menu-item [matMenuTriggerFor]="${className}Menu">${className}</button>
+	#end
+	
+	#foreach( $class in $aib.getClassesToGenerate() )
+	#set( $className = $class.getName() )   
+	#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} ) 
+	<mat-menu ${esc.hash}${className}Menu="matMenu">
+	  	<a routerLink="create${className}">
+	  		<button mat-menu-item>Add</button>
+	  	</a>
+		<a routerLink="index${className}">
+	  		<button mat-menu-item>Show All</button>
+	  	</a>
+	</mat-menu>
+	#end##foreach( $class in $aib.getClassesToGenerate() )
+
+    </mat-sidenav>
+	
+	<mat-sidenav-content>
+		<div class="container" style="padding-top:10px">
+			<router-outlet></router-outlet>
+		</div>
+	</mat-sidenav-content>
+	
+</mat-sidenav-container>	

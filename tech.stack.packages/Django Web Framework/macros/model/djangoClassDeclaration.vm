@@ -1,0 +1,11 @@
+#macro ( getDjangoClassDecl $class $suffix )
+#set( $name = "${class.getName()}${suffix}" )
+#set( $parentName = "" )
+#if( $class.hasParent() == true )
+#set( $parentName = "${class.getParentName()}${suffix}" )
+#else## no parent, so come directly off of the Model package
+#set( $parentName = "models.Model" )
+#end##if( $class.hasParent() == true )
+## output the parent name
+class ${name} (${parentName}):
+#end ##macro ( getClassDecl )

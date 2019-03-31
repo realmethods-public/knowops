@@ -1,0 +1,29 @@
+version: v1.0
+name: Standard Java Build-Test Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+    
+blocks:
+  - name: Build-Test using Maven and JUnit5
+    task:
+      env_vars:
+        - name: DATABASE_USERNAME
+          value: "root"
+        - name: DATABASE_PASSWORD
+          value: ""
+        - name: DATABASE_DIALECT
+          value: "org.hibernate.dialect.MySQL8Dialect"
+        - name: DATABASE_DRIVER
+          value: "com.mysql.cj.jdbc.Driver"
+      jobs:
+        - name: Running test using Junit
+          commands:
+            - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)      
+            - sem-service start mysql 8
+            - sudo apt-get install -y -qq mysql-client
+            - sem-service status mysql          
+            - checkout
+            - mvn dependency:go-offline test
+            - cache store maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) ~/.m2

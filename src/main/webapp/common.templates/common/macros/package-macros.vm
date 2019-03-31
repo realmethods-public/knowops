@@ -1,0 +1,115 @@
+#*
+Package related output
+*#
+
+#macro( importAllTOStatements )
+#*#foreach( $pkg in $aib.getTOPackages() )
+#if ( $pkg.length() > 0 )
+import ${aib.getRootPackageName()}.${pkg}.#getTOPackageName().*;
+#else
+import ${aib.getRootPackageName()}.#getTOPackageName().*;
+#end
+#end
+*#
+#end
+
+#macro( importTOStatements )
+#*
+#foreach( $pkg in $classObject.getTOPackages() )
+#if ( $pkg.length() > 0 )
+import ${aib.getRootPackageName()}.${pkg}.#getTOPackageName().*;
+#else
+import ${aib.getRootPackageName()}.#getTOPackageName().*;
+#end
+#end
+*#
+#end
+
+#macro( importStatements $imports )
+    #foreach( $im in $imports )
+##    	#if ( $packages.size() > 0 )
+##    		#foreach( $pkg in $packages )
+##    			#if ( $pkg.length() > 0 )
+##xrimport ${aib.getRootPackageName()}.${pkg}.${im}.*;
+##import ${aib.getRootPackageName()}.${im}.*;
+##    			#else
+##import ${aib.getRootPackageName()}.${im}.*;
+##    			#end
+##    		#end
+##    	#else
+import ${aib.getRootPackageName()}.${im}.*;
+##    	#end
+    #end
+#end
+
+#macro( getServicePackageName )
+service#end
+
+#macro( getAxisPackageName )
+axis#end
+
+#macro ( getHibernatePackageName )
+hibernate#end
+
+#macro ( getPortletPackageName )
+portlet#end
+
+#macro ( getServletPackageName )
+servlet#end
+
+#macro ( getBOPackageName )
+bo#end
+
+#macro ( getDataPackageName )
+data#end
+
+#macro ( getCommonPackageName )
+common#end
+
+#macro ( getTranslatorPackageName )
+to#end
+
+#macro( getResourcePackageName )
+resource#end
+
+#macro( getEJBPackageName )
+ejb#end
+
+#macro( getDAOPackageName )
+dao#end
+
+#macro( getDelegatePackageName )
+delegate#end
+
+#macro( getLocatorPackageName )
+locator#end
+
+#macro( getPrimaryKeyPackageName )
+primarykey#end
+
+#macro( getTOPackageName )
+to#end
+
+#macro( getTestPackageName )
+test#end
+
+#macro( getTranslatorPackageName )
+translator#end
+
+#macro( getValidatorPackageName )
+validator#end
+
+#macro( getWorkerBeanPackageName )
+workerbean#end
+
+#macro( getFormPackageName )
+form#end
+
+#macro( getActionPackageName )
+action#end
+
+#macro( getBeanSerializerPackageName )
+axis#end
+
+#macro( getRestControllerPackageName )
+controller#end

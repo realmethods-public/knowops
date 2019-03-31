@@ -1,0 +1,50 @@
+#macro( generateFormFields $attributes $parentPrefix )
+<table class="formTableClass">
+#foreach( $attribute in $attributes )
+	<tr class="formTRClass">
+	  <td class="formTDClass">${attribute.getDisplayName()}</td>
+	  <td class="formTDClass">#outputFormField( $attribute $parentPrefix )</td>
+	</tr>
+#end 
+</table>
+#end
+
+#macro( outputFormField $attribute $parentPrefix )
+#set( $lowercaseClassName 		= ${Utils.lowercaseFirstLetter( ${classObject.getName()} )} )
+#set( $attributeName 	= ${Utils.lowercaseFirstLetter( ${attribute.getName()} )} )
+#set( $type 			= $attribute.getType() )
+#set( $displayName 		= $attribute.getDisplayName() )
+#set( $required			= "required" )
+#set( $toolTip			= "" )
+#if( $attribute.canBeNull() == true )
+#set( $required = "" )
+#end
+#if ( $parentPrefix.length() > 0 )
+##	#set( $attributeName = "${lowercaseClassName}.${parentPrefix}.${attributeName}" )
+	#set( $attributeName = "${parentPrefix}.${attributeName}" )
+#else
+##	#set( $attributeName = "${lowercaseClassName}.${attributeName}" )
+	#set( $attributeName = "${attributeName}" )
+#end
+#set( $name = ${attributeName} )
+#set( $id = ${attributeName} ) 
+	#if ( $attribute.isFromEnumerator() == true )	
+<select id='${id}' name='${name}' class="form-control">
+    #foreach( $enum in $aib.getEnumClassObject(${attribute.getType()}).getAttributes() )
+    	<option value='${enum.getName()}'>${enum.getName()}</option>
+    #end
+</select>	
+	#elseif ( $type.endsWith( "Boolean") == true )
+<input type='checkbox' id='${id}' name='${name}' placeHolder='${displayName}' class="form-control" />
+	#elseif ( $type.endsWith( "Date" ) )
+<input size="16" type="text" id="${id}" name="${name}" readonly class="form_datetime form-control">
+	#elseif ( $type.endsWith( "Time" ) )
+<input type='date' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}"/>
+	#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="maskedWholeNumberField form-control" />
+	#elseif ( $type.endsWith( "Double" ) )
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="maskedDecimalField form-control" />
+	#else
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="form-control" />	
+	#end
+#end

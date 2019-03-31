@@ -1,0 +1,1163 @@
+########################################################################
+## macro definitions for pom repository declarations
+########################################################################
+#macro( repositories )
+#if ( ${aib.getParam('jfrog.inUse')} == "true" )
+#set( $jfrogServerUrl = ${aib.getParam('jfrog.serverUrl')} )
+#set( $jfrogPluginRepoKey =  ${aib.getParam('jfrog.pluginRepoKey')} )
+#set( $jfrogSnapshotRepoKey =  ${aib.getParam('jfrog.snapshotRepoKey')} )
+#set( $jfrogPublishRepoKey =  ${aib.getParam('jfrog.publishRepoKey')} )
+	<repositories>
+        <repository>
+            <id>Maven central</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+	    <repository>
+			<id>spring-libs-snapshot</id>
+	      	<name>Spring Snapshot Repository</name>
+	      	<url>http://repo.spring.io/libs-snapshot</url>
+	    </repository>        
+	    <repository>
+	        <id>jFrog Central</id>
+	        <url>${jfrogServerUrl}/${jfrogPluginRepoKey}</url>
+	        <snapshots>
+	            <enabled>false</enabled>
+	        </snapshots>
+	    </repository>
+	    <repository>
+	        <id>Snapshots</id>
+	        <url>${jfrogServerUrl}/${jfrogSnapshotRepoKey}</url>
+	        <releases>
+	            <enabled>false</enabled>
+	        </releases>
+	    </repository>
+	</repositories>
+	<distributionManagement>
+    	<repository>
+        	<id>jfrog.repo</id>
+        	<name>realmethods-releases</name>
+        	<url>${jfrogServerUrl}/${jfrogPublishRepoKey}</url>
+    	</repository>
+    	<snapshotRepository>
+        	<id>jfrog.repo.snapshots</id>
+        	<name>realmethods-snapshots</name>
+        	<url>${jfrogServerUrl}/${jfrogPublishRepoKey}</url>
+    	</snapshotRepository>
+	</distributionManagement>	
+#else
+    <repositories>
+        <repository>
+            <id>maven central</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
+#end##if ( ${aib.getParam('jfrog.using()') == true }
+#end##macro( repositories )
+
+########################################################################
+## macro definitions for pom property declarations
+########################################################################
+#macro( standardProperties )
+#jettyProperties()
+#compilerProperties()
+#sparkWebProperties()
+#hibernateProperties()
+#end
+
+#macro( jettyProperties )
+    	<jettyVersion>9.4.0.v20161208</jettyVersion>
+#end
+
+#macro( compilerProperties )
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+#end##macro( compilerProperties )
+
+#macro( strutsProperties )
+		<struts2.version>2.5.20</struts2.version>
+##		<struts2.version>2.5.5</struts2.version>
+#end
+
+#macro( sparkWebProperties )
+		<maven.exec.skip>true</maven.exec.skip> <!-- default to skip, use maven.exec.skip=false from the cmd line to enable -->
+#end
+
+#macro( hibernateProperties )
+		<hibernate.version>5.4.1.Final</hibernate.version>
+#end
+
+########################################################################
+## macro definitions for pom execution declarations
+########################################################################
+#macro( prettyPrintExecDecl )
+<!-- pretty print execution -->
+		        	<execution>
+			            <id>pretty-print</id>
+			            <phase>compile</phase>
+			            <inherited>false</inherited>
+			            <configuration>
+			            	<build_dir>${project.basedir}</build_dir>
+			              <target>
+			                <property name="compile_classpath" refid="maven.compile.classpath"/>
+			                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+			                <property name="test_classpath" refid="maven.test.classpath"/>
+			                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+			
+			                <ant antfile="build.xml">
+			                  <target name="pretty-print"/>
+			                </ant>
+						  </target>                
+			            </configuration>
+			            <goals>
+				        	<goal>run</goal>
+			            </goals>
+		          	</execution> 
+#end
+
+#macro( gitExecDecl )
+<!-- git execution -->
+		     		<execution>
+			        	<id>git</id>
+			     		<phase>compile</phase>
+			            <inherited>false</inherited>
+			            <configuration>
+						  <target name = "git">
+                            <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+							<if>
+							  <equals arg1="${git}" arg2="true" />
+							  <then>
+							      <if>
+							        <os family="unix"/>
+									<then>
+								      <exec executable="dos2unix" logError="false" failonerror="false" failifexecutionfails="false">
+									    <arg value="${basedir}/gitpush.sh"/>
+									  </exec>
+									  <exec executable="chmod" logError="false" failonerror="false" failifexecutionfails="false">
+									    <arg value="+x"/>
+										<arg value="${basedir}/gitpush.sh"/>
+									  </exec>
+									</then>
+							      </if>
+   							      <exec executable="bash" logError="false" failonerror="false" failifexecutionfails="false">
+							        <arg value="--login"/>
+							        <arg value="${basedir}/gitpush.sh"/>
+							      </exec>	
+							  </then>
+							</if>
+						  </target>
+						</configuration>
+		                <goals>
+			            	<goal>run</goal>
+			            </goals>
+				  	</execution>          
+#end##macro( gitExecDecl )
+
+#macro( scpToRemoteExecDecl )
+#if (${aib.getParam('Spark Restful.buildAndCopyResultLayer')} == "true" )    
+<!-- 01/29/2019 - no longer inuse      
+					<execution>
+	          			<id>scp-to-remote</id>
+	          			<phase>package</phase>
+	          			<goals>
+	            			<goal>run</goal>
+	          			</goals>
+	          			<configuration>
+	            			<target>
+	              				<scp file="${project.basedir}/target/${appName}-${aib.getVersion()}-jar-with-dependencies.jar"
+	                				todir="${aib.getParam('Spark Restful.securityRemoteUrl')}:${aib.getParam('Spark Restful.fileLocation')}" 
+	                				verbose="true"
+	                				trust="true" 
+	                				passphrase=""
+	                				keyfile="${aib.getParam('Spark Restful.privateKeyFileLocation')}">
+	              				</scp>
+	            			</target>
+	          			</configuration>
+	          		</execution>
+-->	          		    
+#end##if (${aib.getParam('Spark Restful.buildAndCopyResultLayer')} == "true" )
+#end##macro( scpToRemoteExecDecl )
+
+########################################################################
+## macro definitions for pom plugin declarations
+########################################################################
+#macro( mavenCompilerPluginDecl $exclusion )
+<!-- Maven Compiler plugin -->
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>         
+#if ( $exclusion == $null || $exclusion == "" )    
+#else                   
+            	<configuration>
+		    		<excludes>
+						<exclude>${exclusion}</exclude>
+		    		</excludes>
+		    	</configuration>
+#end##if ( $exclusion != $null && $exclusion != '' )		  	
+		  	</plugin>
+#end##macro( mavenCompilerPluginDecl )
+
+#macro( jfrogPluginDecl )
+#set( $appName = ${aib.getApplicationNameFormatted()} )
+#if ( ${aib.getParam('jfrog.inUse')} == "true" )
+#set( $jfrogUsername =  ${aib.getParam('jfrog.userName')} )
+#set( $jfrogPassword =  ${aib.getParam('jfrog.password')} )
+#set( $jfrogIncludeEnvVars =  ${aib.getParam('jfrog.includeEnvVars')} )
+#set( $jfrogEnvVarsExcludePatterns =  ${aib.getParam('jfrog.envVarsExcludePatterns')} )
+#set( $jfrogExcludePatterns =  ${aib.getParam('jfrog.excludePatterns')} )
+#set( $jfrogContextUrl =  ${aib.getParam('jfrog.serverUrl')} ) 
+#set( $jfrogPublishRepoKey =  ${aib.getParam('jfrog.publishRepoKey')} )
+#set( $jfrogSnapshotRepoKey =  ${aib.getParam('jfrog.snapshotRepoKey')} )
+#set( $jfrogTimeoutInSeconds =  ${aib.getParam('jfrog.timeoutInSeconds')} )
+#set( $jfrogBuildName =  ${aib.getParam('jfrog.buildName')} )
+#set( $jfrogBuildnumber =  ${aib.getParam('jfrog.buildNumber')} )
+#set( $jfrogBuildUrl =  ${aib.getParam('jfrog.buildUrl')} )
+#set( $jfrogLicenseAutoDiscover =  ${aib.getParam('jfrog.licenseAutoDiscover')} )
+#set( $jfrogLicenseIncludePublishedArtifacts =  ${aib.getParam('jfrog.licenseIncludePublishedArtifacts')} )
+#set( $jfrogLicenseRunChecks =  ${aib.getParam('jfrog.licenseRunChecks')} )
+#set( $jfrogLicenseScopes =  ${aib.getParam('jfrog.licenseScopes')} )
+#set( $jfrogViolationRecipients =  ${aib.getParam('jfrog.violationRecipients')} )
+
+## if no build name, use the application name
+#if ( ! $jfrogBuildName  )
+#set( $jfrogBuildName = ${appName} )
+#end##if ( ! $jfrogBuildName )##default https://oss.jfrog.org
+## if no context url, use https://oss.jfrog.org
+#if ( ! $jfrogContextUrl  )##default https://oss.jfrog.org
+#set( $jfrogContextUrl = "https://oss.jfrog.org" )
+#end##if ( ! $jfrogContextUrl )##default https://oss.jfrog.org
+<!-- jFrog plugin -->
+	        <plugin>
+	            <groupId>org.jfrog.buildinfo</groupId>
+	            <artifactId>artifactory-maven-plugin</artifactId>
+	            <version>2.2.1</version>
+	            <inherited>false</inherited>
+	            <executions>
+	                <execution>
+	                    <id>build-info</id>
+	                    <goals>
+	                        <goal>publish</goal>
+	                    </goals>
+	                    <configuration>
+							<artifactory>
+                                <includeEnvVars>${jfrogIncludeEnvVars}</includeEnvVars>
+                                <envVarsExcludePatterns>${jfrogEnvVarsExcludePatterns}</envVarsExcludePatterns>
+                                <timeoutSec>${jfrogTimeoutInSeconds}</timeoutSec>
+                            </artifactory>
+                            <publisher>
+	                            <contextUrl>${jfrogContextUrl}</contextUrl>
+                                <username>${jfrogUsername}</username>
+                                <password>${jfrogPassword}</password>
+                                <excludePatterns>${jfrogExcludePatterns}</excludePatterns>
+                                <repoKey>${jfrogPublishRepoKey}</repoKey>
+                                <snapshotRepoKey>${jfrogSnapshotRepoKey}</snapshotRepoKey>
+                            </publisher>
+                            <buildInfo>
+                                <buildName>${jfrogBuildName}</buildName>
+                                <buildNumber>${jfrogBuildnumber}</buildNumber>
+                                <buildUrl>${jfrogBuildUrl}</buildUrl>
+                            </buildInfo>
+                            <licenses>
+                                <autoDiscover>${jfrogLicenseAutoDiscover}</autoDiscover>
+                                <includePublishedArtifacts>${jfrogLicenseIncludePublishedArtifacts}</includePublishedArtifacts>
+                                <runChecks>${jfrogLicenseRunChecks}</runChecks>
+                                <scopes>${jfrogLicenseScopes}</scopes>
+                                <violationRecipients>${jfrogViolationRecipients}</violationRecipients>
+                            </licenses>	                    
+<!-- for example			
+							<deployProperties>
+							    <groupId>...</groupId>
+							    <artifactId>...</artifactId>
+							    <version>...</version>
+							</deployProperties>	      
+-->							                  
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
+#end##if ( ${aib.getParam('jfrog.using()')} == "true" )
+#end##macro( jfrogPluginDecl )
+
+#macro( testPluginDecl )
+<!-- Maven Surefire Test plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <testSourceDirectory>${basedir}/src/main/java/</testSourceDirectory>
+                    <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                    <printSummary>false</printSummary>
+		           <systemProperties>
+		             <property> 
+		               <name>java.util.logging.config.file</name>
+		               <value>${basedir}/src/main/resources/log4j.properties</value>
+		             </property>
+					 <property> 
+		               <name>com.mchange.v2.log.Log4jMLog.DEFAULT_CUTOFF_LEVEL</name>
+		               <value>WARNING</value>
+		             </property>
+					 <property> 
+		               <name>com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL</name>
+		               <value>WARNING</value>
+		             </property>
+					 <property> 
+		               <name>com.mchange.v2.log.MLog</name>
+		               <value>com.mchange.v2.log.FallbackMLog</value>
+		             </property>		           </systemProperties>				
+                </configuration>          
+            </plugin>
+#end##macro( testPluginDecl )
+
+#macro( sparkWebMicroframeworkPluginDecl )
+<!-- Spark Web Microframework plugin -->
+            <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>exec-maven-plugin</artifactId>  
+                <version>1.6.0</version>  
+                <executions>  
+                    <execution>  
+                        <phase>install</phase>  
+                        <goals>  
+                            <goal>java</goal>  
+                        </goals>  
+                        <configuration>  
+                            <mainClass>${aib.getRootPackageName()}.Application</mainClass>
+                            <skip>${maven.exec.skip}</skip>
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin>
+#end##macro( sparkWebMicroframeworkPluginDecl )
+
+#macro( herokuPluginDecl )
+#if (${aib.getParam('Heroku.auto deploy')} == "true" )
+<!-- Heroku plugin -->
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>2.0.3</version>
+                <configuration>
+                    <appName>${aib.getParam('Heroku.app name')}</appName>
+                    <processTypes>
+                        <web>java -jar ${project.basedir}/target/${appName}-${aib.getVersion()}-jar-with-dependencies.jar</web>
+                    </processTypes>
+                </configuration>
+            </plugin>
+#end##if (${aib.getParam('Heroku.auto deploy')} == "true" )
+#end###macro( herokuPluginDecl )
+
+#macro( apacheMavenAssemblyPluginDecl )
+<!-- Apache maven assembly plugin -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${aib.getRootPackageName(true)}.Application</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+#end##macro( apacheMavenAssemblyPluginDecl )
+
+#macro( apacheMavenAntRunPluginGitOnlyDecl )
+<!-- Apache maven ant plugin -->
+	  		<plugin>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <version>1.7</version>
+#antContribDecl()		        
+		  		<configuration>
+		  		</configuration>
+				<executions>
+#gitExecDecl()
+	    		</executions>    		
+			</plugin>    
+#end##macro( apacheMavenAntRunPluginGitOnlyDecl )
+
+#macro( apacheMavenAntRunPluginDecl $exclusion )
+<!-- Apache maven ant plugin -->
+	  		<plugin>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <version>1.7</version>
+#antContribDecl()		  		
+		  		<configuration>
+		    	<excludes>
+					<exclude>${exclusion}</exclude>
+		    	</excludes>
+		  		</configuration>
+				<executions>
+#prettyPrintExecDecl()
+#gitExecDecl()
+#scpToRemoteExecDecl()
+	    		</executions>    		
+
+#if (${aib.getParam('Spark Restful.buildAndCopyResultLayer')} == "true" )
+<!--	    		<dependencies>
+	          		<dependency>
+	            		<groupId>com.jcraft</groupId>
+	            		<artifactId>jsch</artifactId>
+	            		<version>0.1.53</version>
+	          		</dependency>
+	          		<dependency>
+	            		<groupId>ant</groupId>
+	            		<artifactId>ant-jsch</artifactId>
+	            		<version>1.6.5</version>
+	          		</dependency>
+	        	</dependencies>
+-->
+#end
+
+			</plugin>    
+#end##macro( apacheMavenAntRunPluginDecl )
+
+#macro( eclipseJettyMavenPluginDecl )
+<!-- eclipse jetty maven plugin -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jettyVersion}</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+		         	<stopPort>9966</stopPort>
+		         	<stopKey>foo</stopKey>
+		         	<stopWait>10</stopWait>
+		         	<waitForChild>false</waitForChild>
+		       	</configuration>
+			</plugin>      
+#end##macro( eclipseJettyMavenPluginDecl )
+
+#macro( antContribDecl )
+				<dependencies>
+                        <dependency>
+                            <groupId>ant-contrib</groupId>
+                            <artifactId>ant-contrib</artifactId>
+                            <version>1.0b3</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.ant</groupId>
+                            <artifactId>ant-nodeps</artifactId>
+                            <version>1.8.1</version>
+                        </dependency>
+                    </dependencies>
+#end##macro( antContribDecl )
+
+#macro( swaggerPluginDecl )
+<!-- swagger plugin -->
+		<plugin>
+    		<groupId>com.github.kongchen</groupId>
+    		<artifactId>swagger-maven-plugin</artifactId>
+    		<version>${swagger.plugin.version}</version>
+    		<configuration>
+        		<apiSources>
+            		<apiSource>
+                		<locations>
+		                    <location>${aib.getRootPackageName(true)}.delegate</location>
+        		        </locations>
+                		<schemes>
+                    		<scheme>http</scheme>
+                    		<scheme>https</scheme>
+                		</schemes>
+                		<outputFormats>${swagger.outputformat}</outputFormats>
+                		<host>${swagger.host}</host>
+                		<basePath>${swagger.basepath}</basePath>
+                		<info>
+                    		<title>${swagger.title}</title>
+                    		<version>${swagger.version}</version>
+                    		<description>${swagger.description}</description>
+                    		<termsOfService>${swagger.termsofservice}</termsOfService>
+		                    <contact>
+        		                <email>${swagger.contact.email}</email>
+                        		<name>${swagger.contact.name}</name>
+                        		<url>${swagger.contact.url}</url>
+                    		</contact>
+                    		<license>
+                        		<url>${swagger.license.url}</url>
+                        		<name>${swagger.license.name}</name>
+                    		</license>
+                		</info>
+                		<securityDefinitions>
+                    		<securityDefinition>
+                        		<name>basicAuth</name>
+                        		<type>basic</type>
+                    		</securityDefinition>
+                		</securityDefinitions>
+                		<outputPath>${basedir}/generated/document.html</outputPath>
+                		<swaggerDirectory>${basedir}/generated/swagger-ui</swaggerDirectory>
+                		<modelConverters>io.swagger.validator.BeanValidator</modelConverters>
+            		</apiSource>
+        		</apiSources>
+    		</configuration>
+    		<executions>
+	        	<execution>
+    	        	<phase>compile</phase>
+        	    	<goals>
+                		<goal>generate</goal>
+            		</goals>
+        		</execution>
+    		</executions>
+    		<dependencies>
+	        	<!-- swagger-hibernate-validations BeanValidator as a custom model converter -->
+        		<dependency>
+            		<groupId>io.swagger</groupId>
+            		<artifactId>swagger-hibernate-validations</artifactId>
+            		<version>1.5.6</version>
+        		</dependency>
+    		</dependencies>
+		</plugin>
+#end##macro( swaggerPluginDecl )
+
+#macro( awsLambdaPluginDecl )
+<!-- aws lambda plugin -->
+ 	  <plugin>
+        <groupId>com.github.seanroy</groupId>
+        <artifactId>lambda-maven-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <region>${lambda.region}</region>
+          <accessKey>${lambda.accessKey}</accessKey>
+          <secretKey>${lambda.secretKey}</secretKey>        
+          <functionCode>${lambda.functionCode}</functionCode>
+          <version>${lambda.version}</version>
+          <environmentVpcSecurityGroupsIds>${lambda.vpcSecurityGroupIds}</environmentVpcSecurityGroupsIds>
+          <environmentVpcSubnetIds>${lambda.vpcSubnetIds}</environmentVpcSubnetIds>
+          <lambdaRoleArn>${lambda.lambdaRoleArn}</lambdaRoleArn>
+          <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+          <publish>${lambda.publish}</publish>
+          <runtime>${lambda.runtime}</runtime>
+          <forceUpdate>${lambda.forceUpdate}</forceUpdate>
+          <environmentVariables>
+            <delegateDAOHost>${lambda.delegateDAOHost}</delegateDAOHost>
+            <delegateDAOPort>${lambda.delegateDAOPort}</delegateDAOPort>
+            <kinesisStreamName>${lambda.kinesisStreamName}</kinesisStreamName>
+		  </environmentVariables>
+		  <lambdaFunctionsJSON>
+			[
+#set( $size = $aib.getClassesWithIdentity().size() )			
+#foreach( $class in $aib.getClassesWithIdentity() )
+#set( $loopCount = $velocityCount )		
+#set( $className = $class.getName() )
+#set( $includeComposites = false )
+## handle single associations
+#foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $parentName  = $class.getName() )
+#awsLambdaFuncDecl( ${class.getName()} "get${roleName}On${className}"  "get${roleName}On${className}" "get the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "save${roleName}On${className}"  "save${roleName}On${className}" "save the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}On${className}"  "delete${roleName}On${className}" "delete the ${roleName} for ${className}" ),
+#end ##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+## handle multiple associations
+#foreach( $multiAssociation in $class.getMultipleAssociations() )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $class.getName() )
+#awsLambdaFuncDecl( ${class.getName()} "get${roleName}On${className}"  "get${roleName}On${className}" "get the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "assign${roleName}On${className}"  "assign${roleName}On${className}" "assign one or more ${childName} to the ${roleName} for ${className}" ),
+#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}On${className}"  "delete${roleName}On${className}" "delete a ${childName} from the ${roleName} for ${className}" ),
+#end ##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+## common CRUD + getAll functions
+#awsLambdaFuncDecl( ${class.getName()} "create${className}" "create${className}" "creates a $className using supplied $className data" ),
+#awsLambdaFuncDecl( ${class.getName()} "get${className}" "get${className}" "find $className by its primary key" ),
+#awsLambdaFuncDecl( ${class.getName()} "getAll${className}" "getAll${className}" "find all $className entities" ),
+#awsLambdaFuncDecl( ${class.getName()} "save${className}" "save${className}" "saves a $className using supplied $className data" ),
+#if( $loopCount < $size )
+#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" ),
+#else
+#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" )
+#end ##if( $loopCount < $size )
+#end ##foreach( $class in $aib.getClassesWithIdentity() )
+            ]
+          </lambdaFunctionsJSON>
+        </configuration>
+      </plugin>
+
+#end
+
+#macro( springBootParentDecl )
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.1.3.RELEASE</version>
+    <relativePath/>
+  </parent>
+#end##macro( springBootParentDecl )
+
+#macro( springBootPluginDecl )
+<!-- spring boot plugin -->
+		<plugin>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-maven-plugin</artifactId>
+	      <version>2.1.3.RELEASE</version>
+	      <executions>
+	        <execution>
+	          <goals>
+	            <goal>repackage</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+#end##macro( springBootPluginDecl )
+
+#macro( standardMavenWarPlugin )      
+<!-- maven war plugin -->      
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-war-plugin</artifactId>
+	        <version>3.0.0</version>
+	        <configuration>
+	        	<archive>
+	            	<manifest>
+	              		<addClasspath>true</addClasspath>
+	            	</manifest>
+	          	</archive>
+	         	<webResources>
+	            	<resource>
+<!-- this is relative to the pom.xml directory -->
+						<directory>/src/main/webapp/</directory>
+	            	</resource>
+	          	</webResources>          
+	      	</configuration>
+		</plugin>
+#end##macro( standardMavenWarPlugin )
+
+########################################################################
+## macro definitions for pom dependencie
+########################################################################
+#macro( springBootDependencies )
+<!--  spring boot -->
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-web</artifactId>
+	    </dependency>	    
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-test</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+	    <dependency>
+	      <groupId>com.jayway.jsonpath</groupId>
+	      <artifactId>json-path</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+
+		<dependency>
+		    <groupId>org.apache.taglibs</groupId>
+		    <artifactId>taglibs-standard</artifactId>
+		    <version>1.2.3</version>
+		    <type>pom</type>
+		</dependency>
+
+<!--	    
+		<dependency>
+		  <groupId>javax.servlet</groupId>
+		  <artifactId>jstl</artifactId>
+		  <version>1.2</version>
+		</dependency>    
+-->
+#end##macro( springBootDependencies )
+
+#macro( couchbaseDependencies )
+<!-- couchbase nosql client -->
+		<dependency>
+	    	<groupId>com.couchbase.client</groupId>
+	    	<artifactId>java-client</artifactId>
+	    	<version>2.3.6</version>
+		</dependency>
+#end##macro( couchbaseDependencies )
+
+#macro( strutsDependencies )
+<!-- Apache Struts2 Dependencies -->
+		<dependency>
+	      <groupId>org.apache.struts</groupId>
+	      <artifactId>struts2-core</artifactId>
+	      <version>${struts2.version}</version>
+	   </dependency>
+	
+	   <dependency>
+	      <groupId>org.apache.struts</groupId>
+	      <artifactId>struts2-convention-plugin</artifactId>
+	      <version>${struts2.version}</version>
+	    </dependency>
+	
+	   <dependency>
+	      <groupId>org.apache.struts</groupId>
+	      <artifactId>struts2-json-plugin</artifactId>
+	      <version>${struts2.version}</version>
+	    </dependency>	
+	    
+		<dependency>
+	      <groupId>com.jgeppert.struts2.jquery</groupId>
+	      <artifactId>struts2-jquery-tree-plugin</artifactId>
+	      <version>3.5.1</version>
+		</dependency>
+	
+		<dependency>
+		    <groupId>com.jgeppert.struts2.jquery</groupId>
+		    <artifactId>struts2-jquery-grid-plugin</artifactId>
+		    <version>3.5.1</version>
+		</dependency>
+
+		<dependency>
+      		<groupId>javassist</groupId>
+      		<artifactId>javassist</artifactId>
+      		<version>3.8.1.GA</version>
+		</dependency>
+
+<!-- Struts dependency for json support -->
+		<dependency>
+      		<groupId>net.sf.json-lib</groupId>
+      		<artifactId>json-lib</artifactId>
+      		<version>2.4</version>
+      		<classifier>jdk15</classifier>
+		</dependency>
+#end##macro( strutsDependencies )
+
+#macro( jeeDependencies )
+<!-- JEE dependencies -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <version>2.5</version>
+		    <scope>provided</scope>
+		</dependency>
+#end##macro( jeeDependencies )
+
+#macro( jbossJavaxTransactionDependencies )
+		<dependency>
+      		<groupId>org.jboss.spec.javax.transaction</groupId>
+      		<artifactId>jboss-transaction-api_1.1_spec</artifactId>
+      		<version>1.0.1.Final</version>
+    	</dependency>
+#end##macro( jbossJavaxTransactionDependencies )
+
+#macro( awslambdaProperties )
+#if ( ${aib.getParam('aws-lambda.runtime')} == "java8" || ${aib.getParam('aws-lambda.runtime')} == "Java")   
+	<lambda.functionCode>${project.build.directory}/${project.build.finalName}.jar</lambda.functionCode>     
+#else
+	<lambda.functionCode>${project.build.directory}/${project.build.finalName}-bin.zip</lambda.functionCode>
+#end 	  
+      <lambda.version>${project.version}</lambda.version>
+<!-- user aws lambda options -->
+      <lambda.accessKey>${AWS_ACCESSKEY}</lambda.accessKey>
+      <lambda.secretKey>${AWS_SECRETKEY}</lambda.secretKey>
+      <lambda.s3Bucket>${aib.getParam('aws-lambda.s3Bucket')}</lambda.s3Bucket>
+      <lambda.region>${aib.getParam('aws-lambda.region')}</lambda.region>
+      <lambda.runtime>${aib.getParam('aws-lambda.runtime')}</lambda.runtime>
+      <lambda.timeout>${aib.getParam('aws-lambda.timeout')}</lambda.timeout>
+      <lambda.forceUpdate>${aib.getParam('aws-lambda.forceUpdate')}</lambda.forceUpdate>
+      <lambda.publish>${aib.getParam('aws-lambda.publish')}</lambda.publish>
+      <lambda.lambdaRoleArn>${aib.getParam('aws-lambda.lambdaRoleArn')}</lambda.lambdaRoleArn>
+      <lambda.vpcSubnetIds>${aib.getParam('aws-lambda.vpcSubnetIds')}</lambda.vpcSubnetIds>
+      <lambda.vpcSecurityGroupIds>${aib.getParam('aws-lambda.vpcSecurityGroupIds')}</lambda.vpcSecurityGroupIds>
+      <lambda.delegateDAOHost>${aib.getParam('aws-lambda.delegateDAOHost')}</lambda.delegateDAOHost>
+      <lambda.delegateDAOPort>${aib.getParam('aws-lambda.delegateDAOPort')}</lambda.delegateDAOPort>
+      <lambda.kinesisStreamName>${aib.getParam('aws-lambda.kinesis stream name')}</lambda.kinesisStreamName>
+
+#end##macro( awslambdaProperties )
+
+#macro( swaggerProperties )
+<!-- user swagger options -->      
+      <swagger.plugin.version>3.1.6</swagger.plugin.version>
+      <swagger.host>${aib.getParam('swagger.host')}</swagger.host>
+      <swagger.basepath>${aib.getParam('swagger.basepath')}</swagger.basepath>
+	  <swagger.contact.email>${aib.getParam('swagger.contact email')}</swagger.contact.email>
+      <swagger.contact.name>${aib.getParam('swagger.contact name')}</swagger.contact.name>
+      <swagger.contact.url>${aib.getParam('swagger.contact url')}</swagger.contact.url>
+	  <swagger.license.url>${aib.getParam('swagger.license url')}</swagger.license.url>
+      <swagger.license.name>${aib.getParam('swagger.license name')}</swagger.license.name>
+	  <swagger.title>${aib.getParam('swagger.title')}</swagger.title>
+      <swagger.version>${aib.getParam('swagger.version')}</swagger.version>
+      <swagger.description>${aib.getParam('swagger.description')}</swagger.description>
+      <swagger.termsofservice>${aib.getParam('swagger.terms of service')}</swagger.termsofservice>
+      <swagger.outputformat>${aib.getParam('swagger.output formats')}</swagger.outputformat>
+#end##macro( swaggerProperties )
+
+#macro( awsLamdaDependencies )
+<!-- AWS Lambda Java Core -->
+	    <dependency>
+	      <groupId>com.amazonaws</groupId>
+	      <artifactId>aws-lambda-java-core</artifactId>
+	      <version>1.1.0</version>
+	    </dependency>
+
+<!-- AWS Java SDK DynamoDB -->
+		<dependency>
+	      <groupId>com.amazonaws</groupId>
+	      <artifactId>aws-java-sdk-dynamodb</artifactId>
+	      <version>1.11.125</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.0</version>
+		</dependency>		
+#end##macro( awsLamdaDependencies )
+
+#macro( mySQLDependencies )
+<!-- MySQL -->
+		<dependency>
+		    <groupId>mysql</groupId>
+	    	<artifactId>mysql-connector-java</artifactId>
+	    	<version>8.0.13</version>
+		</dependency>
+#end##macro( mySQLDependencies )
+
+#macro( googleGsonDependencies )
+<!-- Google Gson -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.0</version>
+		</dependency>
+#end##macro( googleGsonDependencies )
+
+#macro( jacksonJsonDependencies )
+<!--  jackson/json -->
+   		<dependency>
+    		<groupId>com.fasterxml.jackson.core</groupId>
+    		<artifactId>jackson-databind</artifactId>
+    		<version>2.9.8</version>
+  		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>2.8.6</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.jayway.jsonpath</groupId>
+		    <artifactId>json-path</artifactId>
+		    <version>0.8.1</version>
+		</dependency>
+#end##macro( jacksonJsonDependencies )
+
+#macro( hibernateDependencies )
+<!--  Hibernate  ORM -->
+	    <dependency>  
+		  <groupId>org.hibernate</groupId>
+	      <artifactId>hibernate-core</artifactId>
+	      <version>${hibernate.version}</version>
+	    </dependency>  
+	
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-c3p0</artifactId>
+		    <version>${hibernate.version}</version>
+		    <exclusions>
+        		<exclusion>
+          			<groupId>com.mchange</groupId>
+          			<artifactId>c3p0</artifactId>
+        		</exclusion>
+        	</exclusions>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.mchange</groupId>
+		    <artifactId>c3p0</artifactId>
+		    <version>0.9.5.3</version>
+		</dependency>
+	
+	    <dependency>  
+		  <groupId>org.hibernate</groupId>
+	      <artifactId>hibernate-tools</artifactId>
+	      <version>3.2.3.GA</version>
+	    </dependency>  
+#end##macro( hibernateDependencies )
+
+#macro( jalopyDependencies )
+<!-- Jalopy pretty print  -->
+		<dependency>
+		    <groupId>jalopy</groupId>
+		    <artifactId>jalopy</artifactId>
+		    <version>1.5rc3</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>jalopy</groupId>
+		    <artifactId>jalopy-ant</artifactId>
+		    <version>0.6.2</version>
+		</dependency>
+#end##macro( jalopyDependencies() )
+
+#macro( log4jDependencies )
+<!-- Log4J  -->
+	    <dependency>  
+	      <groupId>log4j</groupId>  
+	      <artifactId>log4j</artifactId>  
+	      <version>1.2.14</version>  
+	      <scope>compile</scope>  
+	    </dependency>  
+
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>2.11.2</version>
+		</dependency>
+
+#end##macro( log4jDependencies )
+
+#macro( velocityDependencies )
+<!-- Apache Velocity -->
+		<dependency>
+	      <groupId>org.apache.velocity</groupId>
+	      <artifactId>velocity</artifactId>
+	      <version>1.5</version>
+		</dependency>
+
+		<dependency>
+	      <groupId>ognl</groupId>
+	      <artifactId>ognl</artifactId>
+	      <version>3.0.12</version>
+		</dependency>
+#end##macro( velocityDependencies )
+
+#macro( apacheCommonDependencies )
+<!-- Apache Common -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.0</version>
+		</dependency>
+		<dependency>
+	      <groupId>commons-beanutils</groupId>
+	      <artifactId>commons-beanutils</artifactId>
+	      <version>1.9.3</version>
+	    </dependency>
+
+		<dependency>
+	      <groupId>commons-codec</groupId>
+	      <artifactId>commons-codec</artifactId>
+	      <version>1.3</version>
+	    </dependency>
+
+		<dependency>
+	      <groupId>commons-collections</groupId>
+	      <artifactId>commons-collections</artifactId>
+	      <version>3.2.2</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-digester</groupId>
+	      <artifactId>commons-digester</artifactId>
+	      <version>1.6</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-discovery</groupId>
+	      <artifactId>commons-discovery</artifactId>
+	      <version>0.2</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-io</groupId>
+	      <artifactId>commons-io</artifactId>
+	      <version>1.2</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-lang</groupId>
+	      <artifactId>commons-lang</artifactId>
+	      <version>2.3</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-logging</groupId>
+	      <artifactId>commons-logging</artifactId>
+	      <version>1.0.4</version>
+		</dependency>  
+	
+		<dependency>
+	      <groupId>commons-net</groupId>
+	      <artifactId>commons-net</artifactId>
+	      <version>2.0</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-pool</groupId>
+	      <artifactId>commons-pool</artifactId>
+	      <version>1.5.1</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>commons-validator</groupId>
+	      <artifactId>commons-validator</artifactId>
+	      <version>1.3.1</version>
+		</dependency>
+	
+		<dependency>
+	      <groupId>oro</groupId>
+	      <artifactId>oro</artifactId>
+	      <version>2.0.7</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.2</version>
+		</dependency>
+	
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>4.4.5</version>
+		</dependency>		
+#end##macro( apacheCommonDependencies )
+
+#macro( sparkMicroframeworkDependencies )
+<!--  Spark Java Web Microframework-->
+		<dependency>
+	      <groupId>com.sparkjava</groupId>
+	      <artifactId>spark-core</artifactId>
+	      <version>2.7.2</version>
+	    </dependency>
+	
+		<dependency>
+	    	<groupId>com.sparkjava</groupId>
+	    	<artifactId>spark-template-velocity</artifactId>
+	    	<version>2.3</version>
+		</dependency>
+#end##macro( sparkMicroframeworkDependencies )
+
+#macro( junitDependencies )
+<!-- junit -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <version>5.3.1</version>
+		</dependency>
+
+		<dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>	
+	    </dependency>
+#end##macro( junitDependencies )
+
+#macro( w3cDOMDependencies )
+<!-- DOM Node -->
+		<dependency>
+	    	<groupId>org.w3c</groupId>
+	    	<artifactId>dom</artifactId>
+	    	<version>2.3.0-jaxb-1.0.6</version>
+		</dependency>
+#end##macro( w3cDOMDependencies )
+
+#macro( mavenInvokerDependencies )
+<!-- Maven Invoker -->
+	    <dependency>  	
+	    	<groupId>org.apache.maven.shared</groupId>
+			<artifactId>maven-invoker</artifactId>
+	   		<version>3.0.0</version>
+			<scope>compile</scope>  
+	    </dependency>
+#end##
+
+#macro ( awsDependencies )
+<!-- AWS Lambda Java Core -->
+	    <dependency>
+	      <groupId>com.amazonaws</groupId>
+	      <artifactId>aws-lambda-java-core</artifactId>
+	      <version>1.1.0</version>
+	    </dependency>
+#end
+
+#macro( swaggerDependencies )
+<!-- swagger-hibernate-validations BeanValidator as a custom model converter -->
+		<dependency>
+	    	<groupId>io.swagger</groupId>
+	    	<artifactId>swagger-jaxrs</artifactId>
+	    	<version>1.5.18</version>
+		</dependency>
+		<dependency>
+	    	<groupId>io.swagger</groupId>
+	    	<artifactId>swagger-core</artifactId>
+	    	<version>1.5.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.swagger</groupId>
+		    <artifactId>swagger-annotations</artifactId>
+		    <version>1.5.21</version>
+		</dependency>
+#end
+
+#macro( slf4jDependencies )
+<!-- slf4j Dependency -->
+		<dependency>
+	      <groupId>org.slf4j</groupId>
+	      <artifactId>slf4j-simple</artifactId>
+	      <version>1.7.21</version>
+		</dependency>
+	   <dependency>
+	       <groupId>org.slf4j</groupId>
+	       <artifactId>slf4j-api</artifactId>
+	       <version>1.7.5</version>
+	   </dependency>
+#end##macro( slf4jDependencies )
+
+#macro( easyMockTestDependencies )    
+<!--  Easy Mock Test System  -->    
+	    <dependency>
+	      <groupId>org.easymock</groupId>
+	      <artifactId>easymock</artifactId>
+	      <version>3.3.1</version>
+	      <scope>test</scope>
+	    </dependency>
+#end##macro( easyMockTestDependencies )
+
+#macro( googleGuavaDependencies )
+<!--  Google Core Libraries -->  	
+	    <dependency>
+	      <groupId>com.google.guava</groupId>
+	      <artifactId>guava</artifactId>
+	      <version>18.0</version>
+	    </dependency>
+#end##macro( googleGuavaDependencies )
+
+#macro( mongoDBMorpiaDependencies )
+<!-- mongodb / morphia -->
+		<dependency>
+		    <groupId>org.mongodb.morphia</groupId>
+		    <artifactId>morphia</artifactId>
+		    <version>1.3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.mongodb.morphia</groupId>
+		    <artifactId>morphia-logging-slf4j</artifactId>
+		    <version>1.3.1</version>
+		</dependency>
+#end##macro( mongoDBMorpiaDependencies )
+
+#macro( mongoDBDependencies )
+<!-- mongodb nosql client --> 
+		<dependency>
+			<groupId>org.mongodb</groupId>
+	      	<artifactId>mongo-java-driver</artifactId>
+	      	<version>3.4.1</version>
+		</dependency>
+#end##macro( mongoDBDependencies )
+
+#macro( memcachedDBDependencies )
+<!--  memcached client -->
+		<dependency>
+			<groupId>net.spy</groupId>
+	    	<artifactId>spymemcached</artifactId>
+	    	<version>2.12.0</version>
+		</dependency>
+#end##macro( memcachedDBDependencies )
+

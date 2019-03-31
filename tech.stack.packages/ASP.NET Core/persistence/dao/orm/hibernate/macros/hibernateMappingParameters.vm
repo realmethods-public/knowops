@@ -1,0 +1,6 @@
+#macro( hibernateMappingParameters )
+#set( $hbms = $aib.getParamsByPrefix( "hibernate.", true ).entrySet() )
+#foreach( $hbm in $hbms )
+        <property name="${hbm.getKey()}">${hbm.getValue()}</property>        
+#end 
+#end

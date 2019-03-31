@@ -1,0 +1,122 @@
+#*
+ For the purpose of code generation, generates the declaration of 
+ an attribute. 
+  
+ $attribute		the attribute in use
+ $forceToPublic	true/false - declare public
+ $autoGenPKs		true/false - auto assign a UID if the attribute is a PK
+*#    
+#macro ( getAttributeDeclaration $attribute $forceToPublic $autoGenPKs)
+#if ( $attribute.isFromAssociation() == true )
+  #if ( $attribute.isFromMultiValueAssociation() == true )
+@Embedded
+  #else
+    #if ( $attribute.isComposite() == true )
+@Embedded
+    #else
+@Reference
+    #end ##if ( $attribute.isComposite() == true )
+  #end ##if ( $attribute.isFromMultiValueAssociation() == true )  
+#elseif ( $attribute.isPrimaryKey() == true )
+@Id
+#end ##if ( $attribute.isFromAssociation() )
+#set( $static = "" )
+#set( $final = "" )
+#set( $transient = "" )
+#set( $volatile = "" )
+#set( $visibility = $attribute.getVisibility() )
+#if( $forceToPublic == true )
+	#set( $visibility = "public" )
+#end## $forceToPublic == true 
+#if( $attribute.isStatic() )
+	#set( $static = "static " )
+#end## $attribute.isStatic()
+#if( $attribute.isFinal() )
+	#set( $final = "final " )
+#end## $attribute.isFinal()	
+#if( $attribute.isTransient() )
+	#set( $transient = "transient " )
+#end## $attribute.isTransient()       
+#if( $attribute.isVolatile() )
+	#set( $volatile = "volatile " )
+#end## $attribute.isVolatile()           
+#set( $type = $attribute.getType() )
+#set( $asArg = $attribute.getAsArgument() )
+#set( $defaultPhrase = "null" )
+## need to determine the default value to output.  Treat different if it's a primarykey, attribute, or from an association 
+#if ( $attribute.isPrimaryKey() )
+	#if( $autoGenPKs == true || $attribute.isDateRelated() )
+		#set( $defaultPhrase = "new ${type}( com.cloudmigrate.framework.common.misc.Utility.generateUID() )" )
+	#else
+		#set( $defaultPhrase = "null" )
+	#end##if( $autoGenPKs == true || attribute.isDateRelated() )
+#elseif ( $attribute.isFromAssociation() == true )
+	##recursive so cannot be Hibernate instantiated, needs to be null
+	  #if ( $attribute.isComposite() == true )
+	    #set( $defaultPhrase = $attribute.getDefaultValue() )
+	  #else
+	  	##set( $defaultPhrase = $attribute.getDefaultValue() )
+    	#set( $defaultPhrase = "null" )
+      #end	
+##    #else
+##    	#set( $defaultPhrase = $attribute.getDefaultValue() )
+##    #endif
+#else ## must be an immediate non-primarkey attribute
+    #if ( $attribute.hasDefaultValue() )
+	    #set( $defaultPhrase = $attribute.getDefaultValue() )
+	#end
+#end
+${visibility} ${static}${final}${transient}${volatile}${type} ${asArg} = ${defaultPhrase};
+#end
+
+
+#*
+ For the purpose of code generation, returns a String representation of
+ get and set method declarations.  Unless the above method, this method
+ relies on the parent to determine whether or not to apply this call
+ to required fields.
+
+ $attribute						AttributeObject
+ $declareThrowsRemoteException 	boolean
+ $makeAbstract					boolean
+ $includeComments				boolean
+*#
+#macro( getAccessorMethodDeclarations $attribute $declareThrowsRemoteException $makeAbstract $includeComments )
+#set( $name = $attribute.getName() )
+#set( $arg = $attribute.getAsArgument() )
+#set( $argCapFirst = $Utils.capitalizeFirstLetter( $arg ) )
+#set( $abstract = "" )
+#set( $declException = "" )	
+#set( $type = $attribute.getType() )
+## first, create the get method        
+#if( $includeComments == true )	         
+    /**    
+     * Returns the $name
+     * @return $type
+     */         
+#end## $includeComments == true      	
+#if( $makeAbstract == true )	
+	#set( $abstract = "abstract" )
+#end## $makeAbstract == true
+#set( $getter = "$abstract public $type get${argCapFirst}()" )
+#if( $declareThrowsRemoteException == true  )
+	#set( $declException = "throws java.rmi.RemoteException" )
+	#set( $getter = "${getter} ${declException}" )
+#end## $declareThrowsRemoteException == true				                	
+	${getter};
+## last, create the set method for a non-final attribute
+#if( $attribute.isFinal() == false )    
+	#if( $includeComments == true )		                    	
+   /**    
+    * Assigns the $name
+    * @param    $arg	$type
+    */			    
+	#end##if( $includeComments == true )
+	#set( $setter = "$abstract public void set${argCapFirst}( $type $arg )" )
+	#if( $declareThrowsRemoteException == true  )
+		#set( $setter = "${setter} ${declException}" )
+	#end ##if( $declareThrowsRemoteException == true  )
+## output the set method
+	$setter;
+#end## $attribute.isFinal() == false      
+#end

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--
+  realMethods Confidential
+  
+  2018 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+  	>
+
+<xsd:element name="tech-stack-package">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="target-languages" minOccurs="1" maxOccurs="1">
+		<xsd:complexType>
+		  <xsd:sequence>
+		    <xsd:element name="target-language" type="nameType" minOccurs="1" maxOccurs="unbounded">
+            </xsd:element> <!-- target-language -->
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element> <!-- target-languages -->
+      <xsd:element name="tech-stack" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="tech-stack-component" minOccurs="1" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="name" type="xsd:string" use="required" />
+				<xsd:attribute name="description" type="xsd:string" use="required"/>
+			    <xsd:attribute name="app-layer" type="appLayer" use="required"/>     
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>            
+        </xsd:complexType>
+      </xsd:element> <!-- tech-stack -->
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="shortName" type="xsd:string" use="required"/>		
+    <xsd:attribute name="description" type="xsd:string" use="required"/>
+    <xsd:attribute name="version" type="xsd:string" use="required"/>
+    <xsd:attribute name="info-page-url" type="xsd:string" use="required"/>
+    <xsd:attribute name="icon-url" type="xsd:string" use="required"/>
+    <xsd:attribute name="app-type" type="appType" use="required"/>     
+	<xsd:attribute name="release-status" type="releaseStatus" use="required"/>     
+  </xsd:complexType>
+</xsd:element> <!-- tech-stack-package -->
+
+  	
+<xsd:complexType name="nameType">
+	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+    	</xsd:extension>
+  	</xsd:simpleContent>
+</xsd:complexType> <!-- nameType -->
+
+<xsd:complexType name="descriptionType">
+ 	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="description" type="xsd:string" use="required"/>
+    	</xsd:extension>
+  	</xsd:simpleContent>
+</xsd:complexType> <!-- descriptionType -->
+
+<xsd:complexType name="nameDescriptionType">
+	<xsd:simpleContent>
+  		<xsd:extension base="xsd:string">
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+			<xsd:attribute name="description" type="xsd:string" use="required"/>
+    	</xsd:extension>
+  	</xsd:simpleContent> <!-- nameDescriptionType -->
+</xsd:complexType>
+
+<xsd:simpleType name="appType">
+  <xsd:restriction base="xsd:string">
+    <xsd:enumeration value="serverless" />
+    <xsd:enumeration value="webapp" />
+    <xsd:enumeration value="restfulapi" />
+    <xsd:enumeration value="mobile" />
+    <xsd:enumeration value="other" />
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="appLayer">
+  <xsd:restriction base="xsd:string">
+    <xsd:enumeration value="presentation" />
+    <xsd:enumeration value="business" />
+    <xsd:enumeration value="integration" />
+    <xsd:enumeration value="data" />
+    <xsd:enumeration value="build" />
+    <xsd:enumeration value="cache" />
+    <xsd:enumeration value="test" />
+    <xsd:enumeration value="other" />
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="releaseStatus">
+  <xsd:restriction base="xsd:string">
+    <xsd:enumeration value="alpha" />
+    <xsd:enumeration value="beta" />
+    <xsd:enumeration value="production" />
+  </xsd:restriction>
+</xsd:simpleType>
+
+</xsd:schema>

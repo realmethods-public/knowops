@@ -1,0 +1,43 @@
+#*
+ Generates code to apply value object attributes to a Struts form
+*#
+#macro ( getAllInputStrutsFormFields )
+#set( $includesPKs = false )
+#set( $attributes = $classObject.getUserModifiableAttributes() )
+            BaseActionForm form = getTheForm( performParameters );
+            Object object		= null;
+#getAllInputStrutsFormFieldsHelper( $attributes "businessObject" )
+#set( $stackempty = $aib.getUtilityStack().empty() )
+#end
+
+#macro( getAllInputStrutsFormFieldsHelper $attributes $prefix )
+//at top, prefix is $prefix
+#set( $varPortion = "" )
+#foreach( $attribute in $attributes )
+#* don't need to deal with AIB generated attributes nor PKs 
+   discovered and assigned during XML parsing nor final attributes *#
+#set( $type = $attribute.getRootType() )
+#set( $asArgument = $Utils.capitalizeFirstLetter( $attribute.getAsArgument() ) )
+#set( $attribName = $attribute.getUniqueName() )
+#set( $attribName = $Utils.lowercaseFirstLetter( $attribName ) )
+## Type Checking
+#if( $attribute.isSingleComposite() == true )
+// from ${attribute.getClassObject().getName()}:${attribute.getName()}
+            if ( ${prefix}.get${asArgument}() == null )
+            	${prefix}.set${asArgument}( new ${attribute.getType()}() );            	
+#set( $foo = $aib.getUtilityStack().push( $prefix ) )
+//After push, prefix is $prefix for $asArgument : "${prefix}.get${asArgument}()"
+#set( $newprefix = "${prefix}.get${asArgument}()" )
+#getAllInputStrutsFormFieldsHelper( $attribute.getAttributes() $newprefix )
+#set( $prefix = $aib.getUtilityStack().pop() )
+//After pop, prefix is $prefix            	
+#elseif( $attribute.isDateTimeRelated() )            
+            form.setValue( "${attribName}", ${prefix}.get${asArgument}() != null ? Utility.format${type}ToString( ${prefix}.get${asArgument}() ) : new String() );
+#else## treat as normal
+            object = ${prefix}.get${asArgument}();
+            if ( object != null )
+                form.setValue( "${attribName}",  object );
+            else
+                form.setValue( "${attribName}",  "" );                
+#end#end## $attribute in $attributes
+#end
