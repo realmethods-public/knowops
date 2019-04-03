@@ -18,6 +18,7 @@
 		<plugins>
 
 #apacheMavenAntRunPluginGitOnlyDecl()
+#xebiaLabsPlugin()
 		
 		</plugins>
 

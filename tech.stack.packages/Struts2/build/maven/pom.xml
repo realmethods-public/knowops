@@ -35,6 +35,7 @@
 #set( $exclusion = "" )
 #mavenCompilerPluginDecl( $exclusion )
 #apacheMavenAntRunPluginDecl( $exclusion )
+#xebiaLabsPlugin()
 
     </plugins>
     

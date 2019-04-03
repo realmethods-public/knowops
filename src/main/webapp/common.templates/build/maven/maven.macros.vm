@@ -31,6 +31,16 @@
 	            <enabled>false</enabled>
 	        </releases>
 	    </repository>
+#if ( ${aib.getParam("xebiaLabs.inUse")} == "true" )	    
+	    <repository>
+	        <id>xebialabs-maven2</id>
+	        <url>https://dist.xebialabs.com/public/maven2/</url>
+	    </repository>
+	    <repository>
+	        <id>knopflerfish</id>
+	        <url>http://www.knopflerfish.org/maven2</url>
+	    </repository>	    
+#end##if ( ${aib.getParam("xebiaLabs.inUse")} == "true" )
 	</repositories>
 	<distributionManagement>
     	<repository>
@@ -62,6 +72,7 @@
 #compilerProperties()
 #sparkWebProperties()
 #hibernateProperties()
+#xebiaLabsProperties()
 #end
 
 #macro( jettyProperties )
@@ -85,6 +96,15 @@
 #macro( hibernateProperties )
 		<hibernate.version>5.4.1.Final</hibernate.version>
 #end
+
+#macro( xebiaLabProperties )
+        <xldeploy.username>${aib.getParam("xebiaLabs.userName")}</xldeploy.username>
+        <xldeploy.password>${aib.getParam("xebiaLabs.password")}</xldeploy.password>
+        <xldeploy.server>${aib.getParam("xebiaLabs.server")}</xldeploy.server>
+        <xldeploy.port>${aib.getParam("xebiaLabs.port")}</xldeploy.port>
+        <xldeploy.container>${aib.getParam("xebiaLabs.container")}</xldeploy.container>
+#end
+
 
 ########################################################################
 ## macro definitions for pom execution declarations
@@ -636,6 +656,44 @@
 	      	</configuration>
 		</plugin>
 #end##macro( standardMavenWarPlugin )
+
+#macro( xebiaLabsPlugin )
+<!-- XebiaLabs Plugin -->
+        <plugin>
+            <groupId>com.xebialabs.xldeploy</groupId>
+            <artifactId>xldeploy-maven-plugin</artifactId>
+            <version>6.0.0</version>
+            <executions>
+                <execution>
+                    <id>deploy-id</id>
+                    <phase>pre-integration-test</phase>
+                    <goals>
+                        <goal>deploy</goal>
+                    </goals>
+                    <configuration>
+                        <environmentId>${xldeploy.container}</environmentId>
+                    </configuration>                    
+                </execution>
+                <execution>
+                    <id>clean-id</id>
+                    <phase>post-integration-test</phase>
+                    <goals>
+                        <goal>clean</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <username>${xldeploy.username}</username>
+                <password>${xldeploy.password}</password>
+                <serverAddress>${xldeploy.server}</serverAddress>
+                <port>${xldeploy.port}</port>
+                <deletePreviouslyDeployedDar>true</deletePreviouslyDeployedDar>
+                <timestampedVersion>false</timestampedVersion>
+                <cancelTaskOnError>false</cancelTaskOnError>
+                <environmentId>${xldeploy.container}</environmentId>
+            </configuration>            
+        </plugin>
+#end##macro( xebiaLabsPlugin )
 
 ########################################################################
 ## macro definitions for pom dependencie

@@ -36,7 +36,8 @@
 
 #standardMavenWarPlugin()
 #jfrogPluginDecl()		  	
-#testPluginDecl()		  
+#testPluginDecl()
+#xebiaLabsPlugin()	  
 #herokuPluginDecl()	
 #set( $exclusion = "" )
 #apacheMavenAntRunPluginDecl( $exclusion )

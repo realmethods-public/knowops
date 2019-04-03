@@ -33,6 +33,7 @@
 #eclipseJettyMavenPluginDecl()
 #testPluginDecl()
 #jfrogPluginDecl()
+#xebiaLabsPlugin()
 #herokuPluginDecl()	
 #set( $exclusion = "" )
 #mavenCompilerPluginDecl( $exclusion )
