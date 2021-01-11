@@ -22,7 +22,7 @@ apt-get install -y nano
 ######################################################
 ##  final session prep
 ######################################################
-ARG tomcatRoot = /usr/local/tomcat
+ARG tomcatRoot=/usr/local/tomcat
 ARG appName=realmethods
 ## ARG version=1.2
 

@@ -4,7 +4,7 @@ RUN apt-get update --fix-missing && \
 apt-get install -y dos2unix && \
 apt-get install -y nano
 
-ARG tomcatRoot = /usr/local/tomcat
+ARG tomcatRoot=/usr/local/tomcat
 
 COPY catalina.properties ${tomcatRoot}/conf
 COPY server.xml ${tomcatRoot}/conf
