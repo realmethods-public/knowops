@@ -11,7 +11,7 @@
 ##  Contributors :
 ##        realMethods Inc - General Release
 ##--------------------------------------------------------------
-FROM tomcat:9.0
+FROM tomcat:9.0-jdk8
 
 RUN apt-get update --fix-missing && \
 apt-get install -y maven=3.3.9 && \
