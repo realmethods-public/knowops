@@ -60,7 +60,7 @@ jobs:
 
       - run: 
           name: checking java version
-          command: java --version
+          command: java -version
       
       - run: 
           name: compiling, running test using Junit, the create a deployable war file
@@ -77,10 +77,12 @@ jobs:
 
       # cache the entire project 
       - *save_repo
+      
       # Upload test results for display in Test Summary:
       # https://circleci.com/docs/2.0/collect-test-data/
       - store_test_results:
           path: ~/test-results
+      
       # Upload test summary for display in Artifacts:
       # https://circleci.com/docs/2.0/artifacts/
       - store_artifacts:
