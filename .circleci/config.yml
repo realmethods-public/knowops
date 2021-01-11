@@ -105,3 +105,6 @@ workflows:
   build_contain_workflow:
     jobs:
       - build_contain_project
+      - docker_build:
+          requires:
+            - build_contain_project
