@@ -7,7 +7,7 @@ apt-get install -y nano
 ARG tomcatRoot=/usr/local/tomcat
 
 COPY catalina.properties ${tomcatRoot}/conf
-COPY server.xml ${tomcatRoot}/conf
+# COPY server.xml ${tomcatRoot}/conf
 COPY /target/*.war ${tomcatRoot}/webapps
 
 # make the app war the root war so all default requests are directed to it
