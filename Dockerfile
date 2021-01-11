@@ -22,15 +22,17 @@ apt-get install -y nano
 ######################################################
 ##  final session prep
 ######################################################
-COPY /target/*.war /usr/local/tomcat/webapps
-COPY C:\Users\srand\realmethods\tools\apache\apache-tomcat-9.0.14\conf\catalina.properties /usr/local/tomcat/conf
-COPY C:\Users\srand\realmethods\tools\apache\apache-tomcat-9.0.14\conf\server.xml /usr/local/tomcat/conf
-
+ARG tomcatRoot = /usr/local/tomcat
 ARG appName=realmethods
 ## ARG version=1.2
+
+COPY ${tomcatRoot}/webapps/${appName}.war ${tomcatRoot}/webapps
+COPY ${tomcatRoot}/conf/catalina.properties ${tomcatRoot}/conf
+COPY ${tomcatRoot}/conf/server.xml ${tomcatRoot}/conf
+
 # make the app war the root war so all default requests are directed to it
-RUN mv /usr/local/tomcat/webapps/${appName}.war /usr/local/tomcat/webapps/ROOT.war
-RUN mv /usr/local/tomcat/webapps/ROOT /usr/local/tomcat/webapps/ROOT_OLD
+RUN mv ${tomcatRoot}/webapps/${appName}.war ${tomcatRoot}/webapps/ROOT.war
+RUN mv ${tomcatRoot}/webapps/ROOT ${tomcatRoot}/webapps/ROOT_OLD
 
 # run tomcat
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD ["${tomcatRoot}/bin/catalina.sh", "run"]

@@ -62,8 +62,8 @@
 		required="true"
 		description="CI/CD Platform" 
 		type="select"/>	
-	<option name="userName"  value="" required="true" description="nexus user name" type="input"/>
-	<option name="password"  value="" required="true" description="nexus password" type="input"/>
+	<option name="userName"  value="" required="true" description="repo user name" type="input"/>
+	<option name="password"  value="" required="true" description="repo password" type="input"/>
 	<option name="email"  value="" required="true" description="email address assigned with nexus"
 		placeHolder="email address asigned to nexus account" type="input"/>
 	<option name="publishRepoKey"  value="" required="true" description="key in repository to reference"

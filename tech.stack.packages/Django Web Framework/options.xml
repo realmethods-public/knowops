@@ -10,6 +10,8 @@
   Contributors :
         realMethods Inc - General Release
 -->
+
+<!-- Application  -->
 <options name="application">
 	<option name="name" value="demo" required="true" 
 		description="app display name" type="input"/>
@@ -37,16 +39,129 @@
 		description="license type" type="input"/>		
 
 </options>
-<options name="Heroku">
-	<option name="auto deploy"  value="true" required="true" description="auto deploy to heroku" type="boolean"/>	
-	<option name="app name" value="demo" required="true" description="heroku app name" type="input"/>
+
+<!-- Docker -->
+<options name="docker" maxPerRow="1">
+	<option name="inUse"  value="true" required="true" description="using Docker" type="boolean"/>
+	<option name="userName"  value="" required="true" description="Docker repo ]user name" type="input"/>
+	<option name="password"  value="" required="true" description="Docker repo password" type="input"/>
+	<option name="orgName"  value="" required="true" description="organization name" type="input"/>
+	<option name="repo" value="" required="true" description="Docker repository name" type="input"/>
+	<option name="tag"  value="latest" required="true" description="tag" type="input"/>
 </options>
-<options name="nexus">
+
+<!-- CI/CD Platform -->
+<options name="cicd" maxPerRow="1">
+	<option name="platform" value="codeship" 
+		selections="jenkins,codeship,circleci,travis,aws,azure,bitbucket,gitlab,semaphore,shippable,buddy"
+		required="true"
+		description="CI/CD Platform" 
+		type="select"/>	
+	<option name="AES key" value="" required="true"
+		description="CodeShip AES key value" type="input"/>
+	<option name="ssh-fingerprint" value="" required="true"
+		description="SSH Fingerprint for CircleCI" type="input"/>
+</options>
+
+<!-- Artifact repository -->
+<options name="artifact-repo" maxPerRow="1">
 	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
-	<option name="userName"  value="" required="true" description="nexus user name" type="input"/>
-	<option name="password"  value="" required="true" description="nexus password" type="input"/>
+	<option name="type" value="jfrog" 
+		selections="jfrog,nexus"
+		required="true"
+		description="CI/CD Platform" 
+		type="select"/>	
+	<option name="userName"  value="" required="true" description="repo user name" type="input"/>
+	<option name="password"  value="" required="true" description="repo password" type="input"/>
 	<option name="email"  value="" required="true" description="email address assigned with nexus"
 		placeHolder="email address asigned to nexus account" type="input"/>
-	<option name="repoUrl" value="http://127.0.0.1/repository/npm-repo" 
+	<option name="publishRepoKey"  value="" required="true" description="key in repository to reference"
+		placeHolder="key in repository to reference" type="input"/>
+	<option name="serverUrl" value="http://127.0.0.1/repository/npm-repo" 
 		required="true" description="nexus server url" type="input"/>
 </options>
+
+<!-- AWS -->
+<options name="aws" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>
+	<option name="vpc"  value="vpc-c422e2a0" required="true" description="VPC" type="input"/>
+	<option name="ec2-instance-type"  value="t2.medium" required="true" description="EC2 instance type" type="input"/>
+	<option name="access-key"  value="ASSIGN_AS_ENV_VAR_WITH_CI_PROVIDER" required="true" description="aws access key" type="input"/>
+	<option name="secret-key"  value="ASSIGN_AS_ENV_VAR_WITH_CI_PROVIDER" required="true" description="aws secret key" type="input"/>
+	<option name="region"  value="" required="true" description="service region" type="input"/>
+    <option name="region" value="us-east-1" 
+		selections="us-west-1, us-west-2, ap-east-1, ap-south-1, ap-northeast-3, ap-northeast-2, ap-southeast-1, ap-southeast-2, ap-northeast-1,ca-central-1,cn-north-1,cn-northwest-1,eu-central-1,eu-west-1,eu-west-2,eu-west-3,eu-north-1,me-south-1,sa-east-1,us-gov-east-1,us-gov-west-1"
+		required="true"
+		description="Available AWS Regions" 
+		type="select"/>	
+</options>
+
+<!-- Google -->
+<options name="google" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>
+	<option name="userName"  value="admin" required="true" description="user name" type="input"/>
+	<option name="password"  value="5UhfcIPAPsiPXklT" required="true" description="random user password" type="input"/>
+	<option name="project"  value="" required="true" description="Google project name" type="input"/>
+    <option name="region" value="us-central1" 
+		selections="asia-east1,asia-east2,asia-northeast1,asia-northeast2,asia-south1,asia-southeast1,australia-southeast1,europe-north1,europe-west1,europe-west2,europe-west3,europe-west4,europe-west6,northamerica-northeast1,southamerica-east1,us-central1,us-east1,us-east4,us-west1,us-west2"
+		required="true"
+		description="Available Google Regions" 
+		type="select"/>	
+    <option name="zone" value="a" 
+		selections="a,b,c,d,f"
+		required="true"
+		description="Available Google Zones" 
+		type="select"/>	
+</options>
+
+<!-- Terraform -->
+<options name="terraform" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using hashicorp terraform" type="boolean"/>
+	<option name="provider" value="google" 
+	selections="aws,azure,google,nutanix,local"
+	required="true"
+	description="Available Terraform providers" 
+	type="select"/>	
+</options>
+
+<!-- Kubernetes -->
+<options name="kubernetes" maxPerRow="1">
+    <option name="inUse"  value="false" required="true" description="using Kubernetes" type="boolean"/>
+	<option name="host"  value="" required="true" description="kubernetes host IP" type="input"/>
+	<option name="hostTarget" value="google" 
+		selections="google,aws,azure,openstack,local"
+		required="true"
+		description="host location of the k8 cluster" 
+		type="select"/>	
+	<option name="exposeAsService"  value="true" required="true" description="expose as service" type="boolean"/>
+	<option name="serviceType"  value="LoadBalancer" required="true" description="type of service" type="input"/>
+	<option name="useSessionAffinity"  value="true" required="true" description="using session affinity" type="boolean"/>
+</options>
+
+<!-- Nutanix -->
+<options name="nutanix" maxPerRow="1">
+    <option name="inUse"  value="false" required="true" description="using Nutanix as a provider" type="boolean"/>
+	<option name="userName"  value="" required="true" description="user name" type="input"/>
+	<option name="password"  value="" required="true" description="password" type="input"/>
+	<option name="endpoint"  value="" required="true" description="ip address of AHV instance or cluster" type="input"/>
+    <option name="insecure"  value="true" required="true" description="" type="boolean"/>
+	<option name="port"  value="9440" required="true" description="port number" type="input"/>
+	<option name="clusterId"  value="" required="true" description="Id of AHV cluster" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+    <option name="vmUserName"  value="" required="true" description="userName of virtual machine" type="input"/>
+    <option name="vmPassword"  value="" required="true" description="password of virtual machine" type="input"/>
+    <option name="vmHost"  value="" required="true" description="host IP of virtual machine" type="input"/>
+	<option name="vmOS" value="linux" 
+		selections="linux,windows(not-yet-supported)"
+		required="true"
+		description="os type of VM" 
+		type="select"/>	
+</options>
+
+<!-- resources -->
+<options name="resources" maxPerRow="1">
+	<option name="available" value=""></option>
+</options>
+
+

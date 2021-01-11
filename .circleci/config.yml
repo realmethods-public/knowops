@@ -1,0 +1,120 @@
+version: 2.1
+
+references:
+
+working_directory: &working_directory
+  /home/circleci/gitRoot/
+
+repo_cache_key: &repo_cache_key
+  v1-repo-{{ .Branch }}-{{ .Revision }}
+
+# Step to restore repository from cache
+restore_repo: &restore_repo
+  restore_cache:
+    key: *repo_cache_key
+
+save_repo: &save_repo
+  save_cache:
+    key: *repo_cache_key
+    paths:
+        - *working_directory
+
+jobs: 
+
+  # core job
+  build_test_project:
+
+    # assign the working directory
+    working_directory: *working_directory
+        
+    # run the steps with Docker as the primary container
+    # job commands run in this container
+    # CircleCI Java8 image, installs Apache Maven
+    # MySQL 8 image
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+      - image: mysql:8.0
+        # required env vars
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+            MYSQL_ROOT_PASSWORD: ''
+            MYSQL_DATABASE: circleci
+
+    # env var assignments
+    environment:
+        DATABASE_USERNAME: root
+        DATABASE_PASSWORD:
+        DATABASE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+        DATABASE_DRIVER: com.mysql.jdbc.Driver
+        DATABASE_URL: jdbc:mysql://localhost:3306/circleci?createDatabaseIfNotExist=true
+        
+
+    # steps the core build test job
+    steps:
+
+      # check out source code to working directory
+      - checkout
+      # restore the saved cache after the first run or if `pom.xml` has changed
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - *restore_repo
+      - run: 
+          name: compiling, running test using Junit, the create a deployable war file
+          command: mvn package
+
+      # save the results from the testing that occurred during
+      # the maven packaging in the prior step
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+
+      # cache the entire project 
+      - *save_repo
+      # Upload test results for display in Test Summary:
+      # https://circleci.com/docs/2.0/collect-test-data/
+      - store_test_results:
+          path: ~/test-results
+      # Upload test summary for display in Artifacts:
+      # https://circleci.com/docs/2.0/artifacts/
+      - store_artifacts:
+          path: ~/test-results/junit
+
+  docker_build:
+    # assign the working directory
+    working_directory: *working_directory
+
+    docker: # run the steps with Docker, this image is not used and therefore ignored
+      - image: circleci/python:3.7  
+      
+    steps:
+      - *restore_repo
+      - setup_remote_docker
+      - run:
+          name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
+          command: |
+            docker login --username tylertravismya --password 69cutlass
+            docker build -t /knowops:latest .
+            docker push /knowops:latest
+
+  terraform:
+    <<: *terraform_config
+    steps:
+      - *restore_repo
+      - *terraform_init
+      - add_ssh_keys: # fingerprint is returned when the private SSH key is applied to this CircleCI project
+          fingerprints:
+            - ""
+      - run:
+          name: terraform plan
+          command: |
+            cd /home/circleci/gitRoot/terraform
+            terraform plan -out=terraform.plan -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
+            terraform apply -auto-approve "terraform.plan"
+# simple workflow to build out the environment
+workflows:
+  version: 2
+  build_test_deploy_workflow:
+    jobs:
+      - build_test_project
