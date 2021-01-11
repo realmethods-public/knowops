@@ -32,7 +32,7 @@ jobs:
     # CircleCI Java8 image, installs Apache Maven
     # MySQL 8 image
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:8
       - image: mysql:8.0
         # required env vars
         environment:
@@ -57,6 +57,10 @@ jobs:
       # restore the saved cache after the first run or if `pom.xml` has changed
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
       - *restore_repo
+
+      - run: 
+          name: checking java version
+          command: java --version
       
       - run: 
           name: compiling, running test using Junit, the create a deployable war file
