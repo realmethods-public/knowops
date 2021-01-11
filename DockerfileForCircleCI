@@ -15,4 +15,4 @@ RUN mv ${tomcatRoot}/webapps/realmethods-1.2.war ${tomcatRoot}/webapps/ROOT.war
 # RUN mv ${tomcatRoot}/webapps/ROOT ${tomcatRoot}/webapps/ROOT_OLD
 
 # run tomcat
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+# CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
