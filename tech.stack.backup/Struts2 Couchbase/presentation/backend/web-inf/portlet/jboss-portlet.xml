@@ -1,8 +1,0 @@
-#xmlHeader()
-<portlet-app>
-   <portlet>
-      <portlet-name>${aib.getApplicationName()}Portlet</portlet-name>
-      <config-name>StrutsPortlet</config-name>         
-      <security></security>
-   </portlet>
-</portlet-app>
