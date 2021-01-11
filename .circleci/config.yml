@@ -32,7 +32,7 @@ jobs:
     # CircleCI Java8 image, installs Apache Maven
     # MySQL 8 image
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk
       - image: mysql:8.0
         # required env vars
         environment:
