@@ -48,15 +48,16 @@ jobs:
         DATABASE_DRIVER: com.mysql.jdbc.Driver
         DATABASE_URL: jdbc:mysql://localhost:3306/circleci?createDatabaseIfNotExist=true
         
-
     # steps the core build test job
     steps:
 
       # check out source code to working directory
       - checkout
+      
       # restore the saved cache after the first run or if `pom.xml` has changed
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
       - *restore_repo
+      
       - run: 
           name: compiling, running test using Junit, the create a deployable war file
           command: mvn package
@@ -95,7 +96,7 @@ jobs:
           name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
           command: |
             docker login --username tylertravismya --password 69cutlass
-            docker build -t realmethods/knowops:latest .
+            docker build -t realmethods/knowops:latest . -f ./DockerfileForCircleCi
             docker push realmethods/knowops:latest
 
             
