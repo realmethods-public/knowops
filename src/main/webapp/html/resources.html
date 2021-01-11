@@ -1,0 +1,68 @@
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
+ * This software is the proprietary information of realMethods, Inc.
+ * Use is subject to license terms formally and mutually agreed to 
+ * by realMethods, Inc. and you.
+ * 
+ * Contributor
+ *     realMethods, Inc - initial API and implementation
+-->
+
+<!-- 
+ Page content for the  display of the published resources
+-->
+
+<div id="resourcesDivId">
+
+	<a href="#" id="resourcesTriggerId">
+  		<img class="navImageClass theToolTip" src="./img/library-2.png" 
+			title="Display published resources"/>
+	</a>
+	<div id="resourcesSlideId" class="slideClass">
+  	
+      	<h3 class="sectionHeaderClass">Resources</h3>
+		<div class="container col-lg-12">
+	  		<div class="row">
+	    		<div class="col-lg-4 text-right">
+		  			<form class="pure-form">
+						<select class="form-control" id="resourceSelectId">
+							<option value="ALL" selected="selected">
+							  All Available To Me
+						    </option>
+							<option value="PUBLIC">
+							  My Public Resources
+						    </option>
+							<option value="PRIVATE">
+							  My Private App Resources
+						    </option>
+							<option value="COMMUNITY">
+							  Available Community Resources
+						    </option>						
+						<select>
+					  </form>
+				</div> <!-- col -->
+				<div class="col-lg-2 text-left">    
+		   			<a href="#" class="theToolTip" title="Refesh list of packages" onclick="loadResources()" >
+	    				<button type="button" class="btn btn-lg" >
+	        				<span class="glyphicon glyphicon-refresh">
+	          				</span>
+	        			</button>
+	  				</a>
+	  			</div> <!-- col -->
+				<div class="col-lg-4 text-left">
+		      	  <div id="resourcesLoadingDivId" style="display:none;color:black">
+		        	loading published resources...
+		        	<image src="./img/load_new.gif" width=48 height=48"/>
+		          </div>
+				</div> <!-- col -->
+	  			
+	  		</div><!-- row -->
+	  	</div><!-- container -->
+    		<div id="resourcesListDivId">
+	    		<div id="resourcesListLoadingDivId" style="display:none;color:black;overflow-y : auto;">
+		  			please wait while the library is loaded...<image src="./img/load_new.gif" width=48 height=48/>
+    			</div> <!--resourcesListLoadingDivId" --> 
+  		</div> <!-- resourceListDivId -->
+	</div> <!-- resourcesSlideId -->
+    	
+</div> <!-- resourcesDivId -->
+	    			  

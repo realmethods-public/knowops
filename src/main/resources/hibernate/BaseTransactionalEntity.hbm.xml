@@ -2,7 +2,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -17,7 +17,7 @@
 	
 <hibernate-mapping default-cascade="all" default-lazy="false"> 
 
-   	<class name="com.cloudmigrate.entity.BaseTransactionalEntity" table="baseTransactional" abstract="false">         
+   	<class name="com.realmethods.entity.BaseTransactionalEntity" table="baseTransactional" abstract="false">         
 
 		<id name="id" type="long" column="id">
       		<generator class="native"/>    
@@ -29,34 +29,92 @@
 		<property name="deleted" column="deleted" not-null="false"/>
 		<property name="cost" column="cost" not-null="false"/>
 		<property name="checkSum" column="checkSum" not-null="false"/>
-		<property name="scopeType" column="scopeType" type="com.cloudmigrate.entity.ScopeTypeEnumType" not-null="false"/>
 		<property name="name" column="name" not-null="false"/>	
 		<property name="description" column="description" not-null="false"/>
 
-		<joined-subclass name="com.cloudmigrate.entity.FrameworkPackage" table="techstack">
+		<!--  <property name="scopeType" column="scopeType" type="com.realmethods.entity.ScopeTypeEnumType" not-null="false"/> -->
+
+        <property name="scopeType" column="scopeType">
+    		<type name="org.hibernate.type.EnumType">
+        		<param name="enumClass">com.realmethods.entity.ScopeType</param>
+            	<param name="useNamed">true</param>
+			</type>
+		</property>
+		
+		<joined-subclass name="com.realmethods.entity.FrameworkPackage" table="techstack">
 			<key column="id"/>
 			<property name="shortName" column="shortName" not-null="false"/>
 			<property name="version" column="version" not-null="false"/>	
-			<property name="packageXML" column="packageXML" length="65535" not-null="false"/>		
+			<property name="packageXML" column="packageXML" length="8500" not-null="false"/>		
 			<property name="iconUrl" column="iconUrl" not-null="false"/>	
 			<property name="appType" column="appType" not-null="false"/>	
 			<property name="infoPageUrl" column="infoPageUrl" not-null="false"/>	
 			<property name="releaseStatus" column="releaseStatus" not-null="false"/>	
+			<property name="localZipFilePath" column="localZipFilePath" not-null="false"/>				
+			<property name="derivedFrom" column="derivedFrom" not-null="false"/>				
 		</joined-subclass>
 		
-		<joined-subclass name="com.cloudmigrate.entity.GeneratedAppDetails" table="archiveApp">
+		<joined-subclass name="com.realmethods.entity.GeneratedAppDetails" table="archiveApp">
 			<key column="id"/>
 			<property name="modelId" column="modelId" not-null="false"/>
 			<property name="packageId" column="packageId" not-null="false"/>		
 		</joined-subclass>
 			
-		<joined-subclass name="com.cloudmigrate.entity.LocalModel" table="model">
+		<joined-subclass name="com.realmethods.entity.LocalModel" table="model">
 			<key column="id"/>
 			<property name="originalFileName" column="originalFileName" not-null="false"/>
-		   	<property name="modelType" column="modelType" type="com.cloudmigrate.entity.ModelType"/> 		
+
+	        <property name="modelType" column="modelType">
+	    		<type name="org.hibernate.type.EnumType">
+	        		<param name="enumClass">com.realmethods.entity.ModelType</param>
+	            	<param name="useNamed">true</param>
+				</type>
+			</property>
+
+			<component name="pojoParams" class="com.realmethods.api.PojoParams">
+				<property name="javaRootPackageNames" column="javaRootPackageNames" not-null="false"/>
+				<property name="primaryKeyPattern" column="primaryKeyPattern" not-null="false"/>	
+            </component>
+
 		</joined-subclass>
 	
+		<joined-subclass name="com.realmethods.entity.Resource" table="resource">
+			<key column="id"/>
+	        <property name="resourceType" column="resourceType">
+	    		<type name="org.hibernate.type.EnumType">
+	        		<param name="enumClass">com.realmethods.entity.ResourceType</param>
+	            	<param name="useNamed">true</param>
+				</type>
+			</property>
+		</joined-subclass>		
 		
+		<joined-subclass name="com.realmethods.entity.Project" table="project">
+			<key column="id"/>
+			<property name="techStackPackageName" column="techStackPackageName" not-null="false"/>
+			<property name="modelId" column="modelId" not-null="false"/>
+			
+			<map name="options" table="project_options" cascade="all">
+            	<key column="option_id"/>
+            	<index column="option_key" length="64" type="string"/>
+            	<element column="option_value" type="string"/>
+    	    </map>
+    	    
+	       	<list name = "builds" cascade="all">
+         		<key column = "project_id"/>
+         		<list-index column = "idx"/>
+         		<one-to-many class="com.realmethods.entity.Build"/>
+    	    </list>
+
+			<component name="gitParams" class="com.realmethods.api.GitParams">
+				<property name="username" column="username" not-null="false"/>
+				<property name="password" column="password" not-null="false"/>	
+				<property name="repository" column="repository" not-null="false"/>
+				<property name="tag" column="tag" not-null="false"/>	
+				<property name="host" column="host" not-null="false"/>	
+            </component>
+        
+		</joined-subclass>
+				
 	</class>
 			
 </hibernate-mapping>

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * realMethods Confidential
  * 
- * 2018 realMethods, Inc.
+ * 2021 realMethods, Inc.
  * All Rights Reserved.
  * 
  * This file is subject to the terms and conditions defined in
@@ -17,35 +17,14 @@ import java.sql.Types;
 /**
  * An SQL dialect for HXTT Text (CSV).
  */
-public class HxttTextDialect extends HxttDialect {
+public class HxttTextDialect extends HxttXMLDialect {
 
     public HxttTextDialect() {
         super();
         //complete map
-        registerColumnType( Types.BIT, "boolean" );
-        registerColumnType( Types.CHAR, "varchar($l)" );
-        registerColumnType( Types.VARCHAR, "varchar($l)" );
-        registerColumnType( Types.LONGVARCHAR,  "longvarchar");
-        registerColumnType( Types.NUMERIC, "numeric($p,$s)" );
         registerColumnType( Types.DECIMAL, "decimal($p,$s)" );
-        registerColumnType( Types.BIGINT, "bigint" );
-        registerColumnType( Types.SMALLINT, "numeric(5,0)" ); // HXTT Text (CSV) DON'T SUPPORT SMALLINT
-        registerColumnType( Types.TINYINT, "numeric(3,0)" );   // HXTT Text (CSV) DON'T SUPPORT TINYINT
-        registerColumnType( Types.BOOLEAN, "boolean" );
-        registerColumnType( Types.INTEGER, "integer" );
-
-        registerColumnType( Types.FLOAT, "float" );
-        registerColumnType( Types.DOUBLE, "double" );
-        registerColumnType( Types.BINARY,  "binary" );
-        registerColumnType( Types.VARBINARY,  "varbinary" );
-        registerColumnType( Types.LONGVARBINARY, "longvarbinary");
-
-        registerColumnType( Types.DATE, "date" );
-        registerColumnType( Types.TIME, "time" );
-        registerColumnType( Types.TIMESTAMP, "timestamp" );
-        registerColumnType( Types.BLOB, "blob" );
-        registerColumnType( Types.CLOB, "clob" );
         registerColumnType( Types.JAVA_OBJECT, "java_object" );
+
     }
 
     @Override
@@ -56,27 +35,6 @@ public class HxttTextDialect extends HxttDialect {
      */
     public boolean hasAlterTable() {
             return false;
-    }
-    
+    }    
 
-    @Override
-    /**
-     * Does this dialect support identity column key generation?
-     *
-     * @return True if IDENTITY columns are supported; false otherwise.
-     */
-    public boolean supportsIdentityColumns() {
-            return false;
-    }
-
-//    @Override
-    /**
-     * Whether this dialect have an Identity clause added to the data type or a
-     * completely seperate identity data type
-     *
-     * @return boolean
-     */
-    public boolean hasDataTypeInIdentityColumn() {
-            return false;
-    }
 }

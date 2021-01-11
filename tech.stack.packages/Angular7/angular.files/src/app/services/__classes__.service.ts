@@ -1,6 +1,5 @@
 #set( $className = $classObject.getName() )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} )
-#set( $hostUrl = ${aib.getParam("application.hostUrl")} )
 import { Injectable } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -12,10 +11,13 @@ import {${classObject.getName()}} from '../models/${classObject.getName()}';
 #foreach( $type in $classObject.getAssociationTypes( $className ) )
 import {${type}Service} from '../services/${type}.service';
 #end
+import { HelperBaseService } from './helperbase.service';
 
-
-@Injectable()
-export class ${className}Service {
+@Injectable({
+	providedIn: 'root'
+  })
+    
+export class ${className}Service extends HelperBaseService {
 
 	//********************************************************************
 	// general holder 
@@ -30,7 +32,9 @@ export class ${className}Service {
 	//********************************************************************
 	// sole constructor, injected with the HttpClient
 	//********************************************************************
- 	constructor(private http: HttpClient) {}
+ 	constructor(private http: HttpClient) {
+ 	    super();
+    }
  	
 #set( $includePrimaryKeys = false )
 #set( $includeType = false )
@@ -44,7 +48,7 @@ export class ${className}Service {
 	// delegates via URI to an ORM handler
 	//********************************************************************
   	add${className}(${argsAsString}) : Promise<any> {
-    	const uri = '${hostUrl}/${className}/add';
+    	const uri = this.ormUrl + '/${className}/add';
     	const obj = {
 #attributeStructDecl(${classObject})
     	};
@@ -59,7 +63,7 @@ export class ${className}Service {
 	// delegates via URI to an ORM handler
 	//********************************************************************
 	get${className}s() {
-    	const uri = '${hostUrl}/${className}';
+    	const uri = this.ormUrl + '/${className}';
     	
     	return this
             	.http.get(uri).map(res => {
@@ -74,7 +78,7 @@ export class ${className}Service {
 	// delegates via URI to an ORM handler
 	//********************************************************************
   	edit${className}(id) {
-    	const uri = '${hostUrl}/${className}/edit/' + id;
+    	const uri = this.ormUrl + '/${className}/edit/' + id;
     	
     	return this.http.get(uri).map(res => {
               							return res;
@@ -86,8 +90,12 @@ export class ${className}Service {
 	// returns a Promise
 	// delegates via URI to an ORM handler
 	//********************************************************************
+#if ( $argsAsString == $null || $argsAsString == "" )
+    update${className}(id)  : Promise<any>  {
+#else
 	update${className}(${argsAsString}, id)  : Promise<any>  {
-    	const uri = '${hostUrl}/${className}/update/' + id;
+#end##if ( ${argAsString}.length() > 0 )
+    	const uri = this.ormUrl + '/${className}/update/' + id;
     	const obj = {
 #attributeStructDecl(${classObject})
     	};
@@ -101,7 +109,7 @@ export class ${className}Service {
 	// delegates via URI to an ORM handler
 	//********************************************************************
 	delete${className}(id)  : Promise<any> {
-    	const uri = 'http://localhost:4000/${className}/delete/' + id;
+    	const uri = this.ormUrl + '/${className}/delete/' + id;
 
         return this.http.get(uri).toPromise();
   }
@@ -118,16 +126,16 @@ export class ${className}Service {
 	// returns a Promise
 	// delegates via URI to an ORM handler
 	//********************************************************************
-	assign${roleName}( ${lowercaseClassName}Id, ${lowercaseRoleName}Id ): Promise<any> {
+	assign${roleName}( ${lowercaseClassName}Id, _${lowercaseRoleName}Id ): Promise<any> {
 
 		// get the ${className} from storage
 		this.loadHelper( ${lowercaseClassName}Id );
 		
 		// get the ${childName} from storage
-		var $lowercaseChildName 	= new ${childName}Service(this.http).edit${childName}(${lowercaseRoleName}Id);
+		var tmp 	= new ${childName}Service(this.http).edit${childName}(_${lowercaseRoleName}Id);
 		
 		// assign the $roleName		
-		this.${lowercaseClassName}.$lowercaseRoleName = $lowercaseChildName;
+		this.${lowercaseClassName}.$lowercaseRoleName = tmp;
       		
 		// save the ${className}
 		return this.saveHelper();		
@@ -223,7 +231,7 @@ export class ${className}Service {
 	//********************************************************************
 	saveHelper() : Promise<any> {
 		
-		const uri = '${hostUrl}/${className}/update/' + this.${lowercaseClassName}._id;		
+		const uri = this.ormUrl + '/${className}/update/' + this.${lowercaseClassName}._id;		
 		
     	return this
       			.http

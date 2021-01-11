@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2019 realMethods, Inc.
   
   All Rights Reserved.
   
@@ -18,11 +18,11 @@
   
   <groupId>com.realmethods</groupId>  
   <artifactId>realmethods</artifactId>  
-  <version>1.1</version>  
+  <version>1.2</version>  
   <packaging>war</packaging>  
     
   <name>realmethods</name>
-  <description>core capabilities code generation for Serverless, RESTful, and WebApp scenarios</description>
+  <description>Core capabilities DevOps project generation for Serverless, RESTful, and WebApp scenarios</description>
   <repositories>
   	<repository>
       <id>repomaven</id>
@@ -33,14 +33,16 @@
  <properties>      
       <jettyVersion>9.4.0.v20161208</jettyVersion>
       <sonar.scm.provider>git</sonar.scm.provider>
-      <sonar.exclusions>**/Httx*.class,**/js/**,**/css/**,**/*.php,**/common.templates/**</sonar.exclusions>
+      <sonar.exclusions>**/hxtt/**,**/js/**,**/css/**,**/*.php,**/common.templates/**</sonar.exclusions>
       <maven.compiler.target>1.8</maven.compiler.target>
       <maven.compiler.source>1.8</maven.compiler.source>
       <struts2.version>2.5.5</struts2.version>
-      <hibernate.version>4.3.11.Final</hibernate.version>
+      <!--<hibernate.version>4.3.11.Final</hibernate.version>-->
+      <hibernate.version>5.4.1.Final</hibernate.version>
   </properties>
   
   <build>
+    <!--<finalName>realmethods</finalName>-->
     <plugins>
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
@@ -53,6 +55,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
+          <warName>realmethods.war</warName>
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
@@ -133,7 +136,7 @@
         </configuration>
       </plugin>
                -->
-<!-- ant plugin to run github --> 
+<!-- ant plugin to run github  
 	  <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.7</version>
@@ -156,13 +159,20 @@
           </execution>  
     	</executions>
       </plugin>    
-
+-->
       
     </plugins>
   </build>
    
   <dependencies>  
 
+<!-- Snake YAML parser -->
+    <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>1.21</version>            
+    </dependency>
+    
 <!-- Jackson JSON parser -->
   
   <dependency>
@@ -172,11 +182,18 @@
   </dependency>
   
 <!-- AWS SDK -->
-  	<dependency>
+  	<!--<dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
       <version>1.11.283</version>
-	</dependency>
+	</dependency>-->
+	
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-s3</artifactId>
+        <version>1.11.529</version>
+    </dependency>
+	
 
 <!-- Eclipse Jetty -->
    
@@ -192,7 +209,7 @@
 	<dependency>
 	  <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.47</version>
+      <version>8.0.17</version>
 	</dependency>
 
 	<dependency>
@@ -405,11 +422,11 @@
     	<version>3.1.0.v201006071150</version>
 	</dependency>
 
-<dependency>
-    <groupId>org.eclipse.uml2.codegen</groupId>
-    <artifactId>ecore</artifactId>
-    <version>1.3.0-v200706251652</version>
-</dependency>
+	<dependency>
+    	<groupId>org.eclipse.uml2.codegen</groupId>
+    	<artifactId>ecore</artifactId>
+    	<version>1.3.0-v200706251652</version>
+	</dependency>
 -->
 
     <dependency>  	
@@ -452,7 +469,7 @@
     <dependency>  
 		<groupId>org.hibernate</groupId>
       	<artifactId>hibernate-tools</artifactId>
-      	<version>4.3.5.Final</version>
+      	<version>${hibernate.version}</version>
 	  	<exclusions>
         	<exclusion>
           		<artifactId>freemarker</artifactId>
@@ -526,7 +543,12 @@
     	<version>1.5.6</version>
 	</dependency>
 
+	<dependency>
+		<groupId>org.eclipse.jgit</groupId>
+		<artifactId>org.eclipse.jgit</artifactId>
+  		<version>5.4.2.201908231537-r</version>
+	</dependency>
+
   </dependencies>  
- 
   
 </project>  

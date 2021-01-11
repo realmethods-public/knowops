@@ -46,41 +46,43 @@ public class ${className}Action extends $parentAction
    		
    	    return( $lowercaseClassName );
    	}
-   	
-   	public List getGridModel()
-    {
+
+// delegate access methods to underlying model, including primary keys
+#foreach( $attribute in ${classObject.getAttributesOnly(true,true)} )
+#set( $type = $attribute.getType() )
+#set( $name = ${Utils.capitalizeFirstLetter( ${attribute.getName()} )} )
+    public $type get${name}() { return get${className}().get${name}(); }
+    public void set${name}( $type arg ) { get${className}().set${name}( arg ); }
+
+#end
+
+    public List getGridModel() {
     	return( ${lowercaseClassName}List );
     }
    	
-   	public List getList()
-   	{
+   	public List getList() {
    		return( ${lowercaseClassName}List );
    	}
 
 #foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $type = $multiAssociation.getType() )
-    public Set<${type}> get${roleName}()
-    {
+    public Set<${type}> get${roleName}() {
         return( ${lowercaseClassName}.get${roleName}() );
     }
 #end
 
 	
 	public String executeGridAction()
-	throws Exception
-	{
+	throws Exception {
 		String result = "error";
 		String operator = getOper();
 		
-		if ( operator != null )
-		{
-			if ( operator.equalsIgnoreCase( "add" ) ||  operator.equalsIgnoreCase( "edit" ) )
-			{
+		if ( operator != null ) {
+			if ( operator.equalsIgnoreCase( "add" ) ||  operator.equalsIgnoreCase( "edit" ) ) {
 				result = save();
 			}
-			else if ( operator.equalsIgnoreCase( "del" ) )
-			{
+			else if ( operator.equalsIgnoreCase( "del" ) ) {
 				result = delete();
 			}				
 		}
@@ -97,14 +99,11 @@ public class ${className}Action extends $parentAction
      * @exception     Exception
      */
     public String save()
-    throws Exception
-    {
-        if ( hasPrimaryKey() )
-        {
+    throws Exception {
+        if ( hasPrimaryKey() ) {
             return (update());
         }
-        else
-        {
+        else {
             return (create());
         }
     }
@@ -115,23 +114,19 @@ public class ${className}Action extends $parentAction
      * @exception     Exception
      */
     public String create()
-    throws Exception
-    {
-        try
-        {       
+    throws Exception {
+        try {       
 	        $className $lowercaseClassName = get${className}();                 
 	        
 			// Create the ${className} by calling the 
 			// create ${className} method on ${className}BusinessDelegate
 			this.${lowercaseClassName} = ${className}BusinessDelegate.get${className}Instance().create${className}( ${lowercaseClassName} );
 	
-            if ( ${lowercaseClassName} != null )
-            {
+            if ( ${lowercaseClassName} != null ) {
             	LOGGER.info( "${className}Action:create() - successfully created ${className} - " + ${lowercaseClassName}.toString() );
             }
         }
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
         	LOGGER.severe( "${className}Action:create() - failed on ${className} - " + exc.getMessage());        	
         	addMessage( "failed to create ${className}" );
         	return ERROR;
@@ -141,8 +136,7 @@ public class ${className}Action extends $parentAction
     }
 
     public String update()
-    throws Exception
-    {
+    throws Exception {
     	// store provided data
         $className tmp = get${className}();
 
@@ -152,9 +146,7 @@ public class ${className}Action extends $parentAction
     	// copy provided data into actual data
     	${lowercaseClassName}.copyShallow( tmp );
     	
-        try
-        {                        
-	        
+        try {                        
 			// create the ${className}Business Delegate            
 			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
             this.${lowercaseClassName} = delegate.save${className}( ${lowercaseClassName} );
@@ -162,8 +154,7 @@ public class ${className}Action extends $parentAction
             if ( this.${lowercaseClassName} != null )
                 LOGGER.info( "${className}Action:update() - successfully updated ${className} - " + ${lowercaseClassName}.toString() );
         }
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
         	LOGGER.severe( "${className}Action:update() - failed to update ${className} - " + exc.getMessage());        	
         	addMessage( "failed to update ${className} with key " + ${lowercaseClassName}.get${className}PrimaryKey().valuesAsCollection() );
         	return ERROR;
@@ -179,27 +170,21 @@ public class ${className}Action extends $parentAction
      * @exception       Exception
      */                
     public String delete()
-    throws Exception
-    {                
-        try
-        {
+    throws Exception {                
+        try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
         	
-        	if ( childIds == null )
-        	{
+        	if ( getChildIds() == null ) {
         		delegate.delete( ${lowercaseClassName}.get${className}PrimaryKey() );
         		LOGGER.info( "${className}Action:delete() - successfully deleted ${className} with key " + ${lowercaseClassName}.get${className}PrimaryKey().valuesAsCollection() );
         	}
-        	else
-        	{
-        		for ( Long id : childIds )
-        		{
+        	else {
+        		for ( Long id : getChildIds() ) {
         			delegate.delete( new ${className}PrimaryKey( id ) );
         		}
         	}
  		}                
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
         	LOGGER.info( "${className}Action:delete() - " + exc.getMessage() );
         	addMessage( "failed to delete ${className} with key " + ${lowercaseClassName}.get${className}PrimaryKey().valuesAsCollection() );
         	return ERROR;
@@ -218,29 +203,25 @@ public class ${className}Action extends $parentAction
     {    	
         ${className}PrimaryKey pk = null;
 
-    	try
-        {  
+    	try {  
 	        $className $lowercaseClassName = get${className}();
 	        
         	if ( hasPrimaryKey() )
 	        	pk = ${lowercaseClassName}.get${className}PrimaryKey();
         	
-        	if ( pk != null )
-        	{
+        	if ( pk != null ) {
 	            // load the ${className}
 	            this.${lowercaseClassName} = ${className}BusinessDelegate.get${className}Instance().get${className}( pk );
 	            
 	            LOGGER.info( "${className}Action:load() - successfully loaded - " + this.${lowercaseClassName}.toString() );             
 			}
-			else
-			{
+			else {
 	            LOGGER.warning( "${className}Action:load() - unable to locate the primary key as an attribute or a selection for - " + ${lowercaseClassName}.toString() );
 	            addMessage( "failed to load ${className} with key " + pk.valuesAsCollection() );
 	            return ERROR;
 			}	            
         }
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
             LOGGER.severe( "${className}Action:load() - failed to load - " + this.${lowercaseClassName}.toString() + ", " + exc.getMessage() );
             addMessage( "failed to load ${className} with key " + pk.valuesAsCollection() );            
             return ERROR;
@@ -256,10 +237,8 @@ public class ${className}Action extends $parentAction
      * @exception       ProcessingException
      */
     public String loadAll()
-    throws Exception
-    {                
-        try
-        {                        
+    throws Exception {                
+        try {                        
             // load the ${className}
             ${lowercaseClassName}List = ${className}BusinessDelegate.get${className}Instance().getAll${className}();
             
@@ -268,8 +247,7 @@ public class ${className}Action extends $parentAction
             
             paginate( ${lowercaseClassName}List ); 
         }
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
             LOGGER.warning( "${className}Action:loadAll() - failed to load all ${className}s - " + exc.getMessage() );
             addMessage( "failed to loadAll ${className}" );
         	return ERROR;
@@ -290,10 +268,8 @@ public class ${className}Action extends $parentAction
      * @return			result		String
      */     
 	public String ${method.getName()}()
-	throws Exception
-	{
-        try
-        {  
+	throws Exception {
+        try {  
     #set( $arg = "" )	## default to empty        
     
     #if ( ${method.hasArguments()} )	## should only be one argument
@@ -313,8 +289,7 @@ public class ${className}Action extends $parentAction
 			
 			if ( keysIter.hasNext() )
 				pk = new ${argType}PrimaryKey(keysIter.next());
-			else
-			{
+			else {
                 LOGGER.info( "${className}Action:${method.getName()}() - cannot locate the primary key for $argType in the HttpServletRequest." );
 				return SUCCESS;
 			}
@@ -332,8 +307,7 @@ public class ${className}Action extends $parentAction
             
             paginate( ${lowercaseClassName}List );
         }
-        catch( Throwable exc )
-        {
+        catch( Throwable exc ) {
         	LOGGER.warning( "${className}Action:loadAll() - failed to load all ${className}s - " + exc.getMessage())
             throw new Exception( "${className}Action:loadAll() - failed to load all ${className}s - " + exc, exc );
         }
@@ -345,8 +319,7 @@ public class ${className}Action extends $parentAction
     /**
      * Returns true if the $lowercaseClassName is non-null and has it's primary key field(s) set
      */
-    protected boolean hasPrimaryKey()
-    {
+    protected boolean hasPrimaryKey() {
 	    $className $lowercaseClassName = get${className}();
     	boolean hasPK = false;
 
@@ -364,13 +337,11 @@ public class ${className}Action extends $parentAction
 #set( $parentName  = $classObject.getName() )
 
 	public String save${roleName}()
-	throws Exception
-	{
+	throws Exception {
 		if ( load() == ERROR )
 			return( ERROR );
 		
-		if ( childId != null )
-		{
+		if ( childId != null ) {
 			${childName}BusinessDelegate childDelegate 	= ${childName}BusinessDelegate.get${childName}Instance();
 			${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();			
 			${childName} child 							= null;
@@ -387,13 +358,11 @@ public class ${className}Action extends $parentAction
 	}
 
 	public String delete${roleName}()
-	throws Exception
-	{
+	throws Exception {
 		if ( load() == ERROR )
 			return( ERROR );
 
-		if ( ${lowercaseClassName}.get${roleName}() != null )
-		{
+		if ( ${lowercaseClassName}.get${roleName}() != null ) {
 			${childName}PrimaryKey pk = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey();
 			
 			// null out the parent first so there's no constraint during deletion
@@ -418,12 +387,10 @@ public class ${className}Action extends $parentAction
 #set( $childName = $multiAssociation.getType() )
 #set( $parentName  = $classObject.getName() )
 
-    public String load${roleName}() throws Exception
-    {
+    public String load${roleName}() throws Exception {
         String result = load();
 
-        if (result == SUCCESS)
-        {
+        if (result == SUCCESS) {
             paginate(${lowercaseClassName}.get${roleName}());
         }
 
@@ -431,8 +398,7 @@ public class ${className}Action extends $parentAction
     }
 
 	public String save${roleName}()
-	throws Exception
-	{
+	throws Exception {
 		if ( load() == ERROR )
 			return( ERROR );
 		
@@ -441,8 +407,8 @@ public class ${className}Action extends $parentAction
 		${childName}BusinessDelegate childDelegate 	= ${childName}BusinessDelegate.get${childName}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();		
 		
-		if ( childId != null )// creating or saving one
-		{
+		// creating or saving one 
+		if ( childId != null ) {
 			pk = new ${childName}PrimaryKey( childId );
 			
 			// find the ${childName}
@@ -450,16 +416,13 @@ public class ${className}Action extends $parentAction
 			// add it to the ${roleName} 
 			${lowercaseClassName}.get${roleName}().add( child );				
 		}
-		else
-		{
+		else {
 			// clear out the ${roleName} but 
 			${lowercaseClassName}.get${roleName}().clear();
 			
 			// finally, find each child and add it
-			if ( childIds != null )
-			{
-				for( Long id : childIds )
-				{
+			if ( getChildIds() != null ) {
+				for( Long id : getChildIds() ) {
 					pk = new ${childName}PrimaryKey( id );
 					child = childDelegate.get${childName}( pk );
 	
@@ -478,23 +441,19 @@ public class ${className}Action extends $parentAction
 	}
 
 	public String delete${roleName}()
-	throws Exception
-	{		
+	throws Exception {		
 		if ( load() == ERROR )
 			return( ERROR );
 
-		if ( childIds != null )
-		{
+		if ( getChildIds() != null ) {
 			${childName}PrimaryKey pk 					= null;
 			${childName}BusinessDelegate childDelegate 	= ${childName}BusinessDelegate.get${childName}Instance();
 			${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
 			Set<${childName}> children					= ${lowercaseClassName}.get${roleName}();
 			${childName} child 							= null;
 			
-			for( Long id : childIds )
-			{
-				try
-				{
+			for( Long id : getChildIds() ) {
+				try {
 					pk = new ${childName}PrimaryKey( id );
 					
 					// first remove the relevant child from the list
@@ -504,8 +463,7 @@ public class ${className}Action extends $parentAction
 					// then safe to delete the child				
 					childDelegate.delete( pk );
 				}
-				catch( Exception exc )
-				{
+				catch( Exception exc ) {
 					LOGGER.severe( "${className}Action:delete${roleName}() failed - " + exc.getMessage() );
 				}
 			}
@@ -521,15 +479,6 @@ public class ${className}Action extends $parentAction
 
 	#end
 	
-	public void setChildIds( Long[] ids )
-	{
-		childIds = ids;
-	}
-
-	public void setChildId( Long id )
-	{
-		childId = id;
-	}
 
 //************************************************************************    
 // Attributes
@@ -537,8 +486,6 @@ public class ${className}Action extends $parentAction
     
 	protected List<$className> ${lowercaseClassName}List 	= null;
 	protected $className $lowercaseClassName 				= null;
-	protected Long[] childIds 								= null;
-	protected Long childId 									= null;
 	
     private static final Logger LOGGER = Logger.getLogger(${classObject.getName()}.class.getName());
 }

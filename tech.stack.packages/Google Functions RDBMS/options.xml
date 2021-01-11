@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2019 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -48,4 +48,13 @@
 	<option name="description" value="" required="false" description="description" type="input"/>
 	<option name="terms of service" value="" required="false" description="terms of service" type="input"/>
 	<option name="output formats"  value="json" selections="json,yaml" type="select"/> 	
+</options>
+<options name="nexus">
+	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
+	<option name="userName"  value="" required="true" description="nexus user name" type="input"/>
+	<option name="password"  value="" required="true" description="nexus password" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+	<option name="repoUrl" value="http://127.0.0.1/repository/npm-repo" 
+		required="true" description="nexus server url" type="input"/>
 </options>

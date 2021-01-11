@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -19,10 +19,10 @@ a deployed war file.  The subsequent referrenced files will be loaded relative t
  
     <app-config-files>
 <!--    
-		<app-config-file name="framework" file="framework.xml" handler="com.cloudmigrate.framework.common.properties.FrameworkXMLPropertiesHandler"/>
-        <app-config-file name="esb" file="esb.xml" handler="com.cloudmigrate.framework.common.properties.ESBPropertiesHandler"/>
-        <app-config-file name="security" file="security.xml" handler="com.cloudmigrate.framework.common.properties.SecurityXMLPropertiesHandler"/>
-        <app-config-file name="task" file="task.xml" handler="com.cloudmigrate.framework.common.properties.TaskXMLPropertiesHandler"/>
+		<app-config-file name="framework" file="framework.xml" handler="com.realmethods.framework.common.properties.FrameworkXMLPropertiesHandler"/>
+        <app-config-file name="esb" file="esb.xml" handler="com.realmethods.framework.common.properties.ESBPropertiesHandler"/>
+        <app-config-file name="security" file="security.xml" handler="com.realmethods.framework.common.properties.SecurityXMLPropertiesHandler"/>
+        <app-config-file name="task" file="task.xml" handler="com.realmethods.framework.common.properties.TaskXMLPropertiesHandler"/>
 -->
     </app-config-files>
 

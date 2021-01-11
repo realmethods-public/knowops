@@ -238,47 +238,14 @@
           <publish>${lambda.publish}</publish>
           <forceUpdate>${lambda.forceUpdate}</forceUpdate>
           <environmentVariables>
-            <mongoDbServerAddresses>${aib.getParam('mongodb.server addresses')}</mongoDbServerAddresses>
+            <mongoDbServerAddresses>${aib.getParam('mongodb.serverAddresses')}</mongoDbServerAddresses>
 #if ( $aib.getParam('mongodb.credentials').length() > 0 )
             <mongoDbCredentials>${aib.getParam('mongodb.credentials')}</mongoDbCredentials>     
 #end      
 		  </environmentVariables>
 		  <lambdaFunctionsJSON>
 			[
-#set( $size = $aib.getClassesWithIdentity().size() )			
-#foreach( $class in $aib.getClassesWithIdentity() )
-#set( $loopCount = $velocityCount )		
-#set( $className = $class.getName() )
-#set( $includeComposites = false )
-## handle single associations
-#foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
-#set( $roleName = $singleAssociation.getRoleName() )
-#set( $parentName  = $class.getName() )
-#awsLambdaFuncDecl( ${class.getName()} "get${roleName}"  "get${className}${roleName}" "get the ${roleName} for ${className}" ),
-#awsLambdaFuncDecl( ${class.getName()} "save${roleName}"  "save${className}${roleName}" "save the ${roleName} for ${className}" ),
-#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}"  "delete${className}${roleName}" "delete the ${roleName} for ${className}" ),
-#end ##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
-## handle multiple associations
-#foreach( $multiAssociation in $class.getMultipleAssociations() )
-#set( $roleName = $multiAssociation.getRoleName() )
-#set( $childName = $multiAssociation.getType() )
-#set( $parentName  = $class.getName() )
-#awsLambdaFuncDecl( ${class.getName()} "get${roleName}"  "get${className}${roleName}" "get the ${roleName} for ${className}" ),
-#awsLambdaFuncDecl( ${class.getName()} "add${roleName}"  "add${className}${roleName}" "add a ${childName} to the ${roleName} for ${className}" ),
-#awsLambdaFuncDecl( ${class.getName()} "assign${roleName}"  "assign${className}${roleName}" "assign one or more ${childName} to the ${roleName} for ${className}" ),
-#awsLambdaFuncDecl( ${class.getName()} "delete${roleName}"  "delete${className}${roleName}" "delete a ${childName} from the ${roleName} for ${className}" ),
-#end ##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
-## common CRUD + getAll functions
-#awsLambdaFuncDecl( ${class.getName()} "create${className}" "create${className}" "creates a $className using supplied $className data" ),
-#awsLambdaFuncDecl( ${class.getName()} "get${className}" "get${className}" "find $className by its primary key" ),
-#awsLambdaFuncDecl( ${class.getName()} "getAll${className}" "getAll${className}" "find all $className entities" ),
-#awsLambdaFuncDecl( ${class.getName()} "save${className}" "save${className}" "saves a $className using supplied $className data" ),
-#if( $loopCount < $size )
-#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" ),
-#else
-#awsLambdaFuncDecl( ${class.getName()} "delete${className}" "delete${className}"  "delete a $className by its primary key" )
-#end ##if( $loopCount < $size )
-#end ##foreach( $class in $aib.getClassesWithIdentity() )
+#awsLambdaFunctionDecls()            
             ]
           </lambdaFunctionsJSON>
         </configuration>
@@ -291,14 +258,11 @@
   </build>
    
   <dependencies>  
-#awsDependencies()
+#awsLambdaDependencies()
 #googleGsonDependencies()
-#jacksonJsonDependencies()
 #jalopyDependencies()
 #log4jDependencies()
-#apacheCommonDependencies()
 #w3cDOMDependencies()
-#mavenInvokerDependencies()
 #junitDependencies()
 #swaggerDependencies()
 #mongoDBMorpiaDependencies()

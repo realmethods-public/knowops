@@ -1,9 +1,0 @@
-#macro( getEnumLabels)
-#set( $attributes = $classObject.getAttributesOrdered(false) )
-        List labels = new ArrayList();
-#foreach( $attribute in $attributes )
-#set( $arg = ${Utils.capitalizeFirstLetter(${attribute.getAsArgument()})} )
-        labels.add( "${attribute.getAsArgument()}" );	
-#end    
-        return( labels);
-#end

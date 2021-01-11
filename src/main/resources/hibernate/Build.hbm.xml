@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+  realMethods Confidential
+  
+  2021 realMethods, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        realMethods Inc - General Release
+-->
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping default-cascade="all" default-lazy="false"> 
+
+   	<class name="com.realmethods.entity.Build" table="build" abstract="false">         
+
+		<id name="id" type="long" >
+      		<generator class="native"/>    
+    	</id>
+		
+		<property name="buildNumber" column="buildNumber" not-null="false"/>
+		<property name="modelId" column="modelId" not-null="false"/>
+		<property name="techStackPackageName" column="techStackPackageName" not-null="false"/>
+		<property name="startDateTime" column="startDateTime" not-null="false"/>
+		<property name="endDateTime" column="endDateTime" not-null="false"/>
+		<property name="logFileURL" column="logFileURL" not-null="false"/>
+
+        <property name="status" column="status">
+    		<type name="org.hibernate.type.EnumType">
+        		<param name="enumClass">com.realmethods.entity.BuildStatus</param>
+            	<param name="useNamed">true</param>
+			</type>
+		</property>
+		
+        <component name="buildOptions" class="com.realmethods.entity.BuildOptions">
+			<property name="usingKubernetes"/>
+			<property name="usingTerraform"/>
+			<property name="usingArtifactRepo"/>
+			<property name="dockerHost"/>
+			<property name="dockerRepo"/>
+			<property name="gitHost"/>
+			<property name="gitRepo"/>
+			<property name="k8Host"/>
+			<property name="k8HostTarget"/>
+			<property name="terraformProvider"/>	
+			<property name="artifactType"/>			
+			<property name="appName"/>
+			<property name="appAuthor"/>
+			<property name="appVersion"/>
+			<property name="cicdPlatform"/>
+        </component>
+        
+	</class>
+
+</hibernate-mapping>

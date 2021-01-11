@@ -77,12 +77,12 @@ import java.util.*;
 #end
 #*
 	/**
-	 * Retrieves the values as a Collection of com.cloudmigrate.foundational.common.parameters.Parameter parameters, 
+	 * Retrieves the values as a Collection of com.realmethods.foundational.common.parameters.Parameter parameters, 
 	 * either as input or output parameters
 	 * 
 	 * @param  	asInput	indicates if the Parameters are input or output
 	 * @return 	Collection of Parameters 
-	 * @see		com.cloudmigrate.foundational.common.parameter.Parameter
+	 * @see		com.realmethods.foundational.common.parameter.Parameter
 	 */
 	public List getValuesAsParameters( boolean asInput )
 	{

@@ -9,66 +9,20 @@
     "test": "ng test",
     "lint": "ng lint",
     "setup": "npm install --save @ng-bootstrap/ng-bootstrap rxjs-compat express body-parser cors mongoose buffer @types/node @angular/material @angular/cdk @angular/animations  @angular/material-moment-adapter angular-bootstrap-md moment",
-#if ( ${aib.getParam('jfrog.inUse')} == "true" )
-#set( $jfrogServerUrl = ${aib.getParam('jfrog.serverUrl')} )
-#set( $jfrogNPMRepository = ${aib.getParam('jfrog.publishRepoKey')} )
-#set( $jfrogUserName = ${aib.getParam('jfrog.userName')} )
-#set( $jfrogPassword = ${aib.getParam('jfrog.password')} )
-#set( $jfrogEmail = ${aib.getParam('jfrog.email')} )
-#set( $jfrogRepoUrl = "${jfrogServerUrl}/api/npm/${jfrogNPMRepository}/" )
-   	"prejfrogpublish": "ng build",
-    "jfrogpublish": "npm-cli-login -u ${jfrogUserName} -p ${jfrogPassword} -e ${jfrogEmail} -r ${jfrogRepoUrl}",
-    "postjfrogpublish" : "npm publish --registry ${jfrogRepoUrl}",
-#end##if ( ${aib.getParam('jfrog.inUse')} == "true" )    
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoServerUrl = ${aib.getParam('artifact-repo.serverUrl')} )
+#set( $repoNPMRepository = ${aib.getParam('artifact-repo.publishRepoKey')} )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoEmail = ${aib.getParam('artifact-repo.email')} )
+#set( $repoRepoUrl = "${repoServerUrl}/api/npm/${repoNPMRepository}" )
+   	"predeploy": "ng build",
+    "deploy": "npm-cli-login -u ${repoUserName} -p ${repoPassword} -e ${repoEmail} -r ${repoRepoUrl}",
+    "postdeploy" : "npm publish --registry ${repoRepoUrl}",
+#end##if ( ${aib.getParam('repo.inUse')} == "true" )    
+
     "e2e": "ng e2e"
   },
   "private": false,
-  "dependencies": {
-    "@angular/animations": "^7.2.2",
-    "@angular/cdk": "^7.2.2",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/material": "^7.2.2",
-    "@angular/material-moment-adapter": "^7.2.2",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/router": "~7.2.0",
-    "@ng-bootstrap/ng-bootstrap": "^4.0.1",
-    "angular-bootstrap-md": "^7.3.0",
-    "body-parser": "^1.18.3",
-    "buffer": "^5.2.1",
-    "chart.js": "^2.7.3",
-    "core-js": "^2.5.4",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "moment": "^2.24.0",
-    "mongoose": "^5.4.6",
-    "rxjs": "~6.3.3",
-    "rxjs-compat": "^6.3.3",
-    "tslib": "^1.9.0",
-    "zone.js": "~0.8.26"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "~0.12.0",
-    "@angular/cli": "~7.2.1",
-    "@angular/compiler-cli": "~7.2.0",
-    "@angular/language-service": "~7.2.0",
-    "@types/jasmine": "~2.8.8",
-    "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^8.9.5",
-    "codelyzer": "~4.5.0",
-    "jasmine-core": "~2.99.1",
-    "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~3.1.1",
-    "karma-chrome-launcher": "~2.2.0",
-    "karma-coverage-istanbul-reporter": "~2.0.1",
-    "karma-jasmine": "~1.1.2",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "~5.4.0",
-    "ts-node": "~7.0.0",
-    "tslint": "~5.11.0",
-    "typescript": "~3.2.2"
-  }
+#angularDependencies()
 }

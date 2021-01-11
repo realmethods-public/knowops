@@ -1,9 +1,38 @@
-#macro( awsLambdaFuncDecl $className $funcNameToCall $funcNameToExpose $desc )
+#macro( awsLambdaFuncDecl $className $funcNameToCall $funcNameToExpose $desc $separatorChar )
+#if( ${aib.getParam("terraform.inUse")} == "true" )
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = "$aib.getApplicationNameFormatted()" )
+#end##if( ${containerObject} )
+resource "aws_lambda_function" "${funcNameToExpose}" {
+  filename         = "/home/circleci/gitRoot/target/${appName}-${aib.getVersion()}.jar"
+  function_name    = "${aib.getParam('aws-lambda.funcNamePrefix')}${funcNameToExpose}"
+  role             = "${aib.getParam('aws-lambda.lambdaRoleArn')}"
+  handler          = "${aib.getRootPackageName(true)}.#getDelegatePackageName().${className}AWSLambdaDelegate::${funcNameToCall}"
+  source_code_hash = "${esc.dollar}{filebase64sha256("/home/circleci/gitRoot/target/${appName}-${aib.getVersion()}.jar")}"
+  runtime          = "${aib.getParam('aws-lambda.runtime')}"
+  memory_size      = "${aib.getParam('aws-lambda.memorySize')}"
+  timeout          = "${aib.getParam('aws-lambda.timeout')}"
+  publish          = "${aib.getParam('aws-lambda.publish')}"
+  environment {
+    variables = {
+      mongoDbServerAddresses = "${esc.dollar}{aws_instance.mongodb.public_ip}:27017"
+    }
+  }
+  vpc_config {
+     subnet_ids = ["${aib.getParam('aws-lambda.vpcSubnetIds')}"]
+     security_group_ids = ["${aib.getParam('aws-lambda.vpcSecurityGroupIds')}"]
+  }  
+}
+
+#else
               {
                 "functionName": "${funcNameToExpose}",
                 "description": "${desc}",
                 "handler": "${aib.getRootPackageName(true)}.#getDelegatePackageName().${className}AWSLambdaDelegate::${funcNameToCall}",
                 "timeout": ${aib.getParam('aws-lambda.timeout')},
                 "memorySize": ${aib.getParam('aws-lambda.memorySize')}
-              }
+              }${separatorChar}
+#end##if( ${aib.getParam("terraform.inUse")} == "true" )
 #end

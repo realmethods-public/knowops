@@ -2,8 +2,8 @@
 #set( $name = $classObject.getName() )package ${aib.getRootPackageName(true)}.#getBOPackageName();
 import java.util.*;
 
-import com.cloudmigrate.common.bo.*;
-import com.cloudmigrate.foundational.common.*;
+import com.realmethods.common.bo.*;
+import com.realmethods.foundational.common.*;
 
 #set( $imports = [ "#getPrimaryKeyPackageName()", "#getBOPackageName()" ] )
 #importStatements( $imports )

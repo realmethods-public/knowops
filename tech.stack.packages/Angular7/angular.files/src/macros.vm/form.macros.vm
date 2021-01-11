@@ -8,27 +8,22 @@
 	</div>
 	
 	<div class="panel-body">
-		<form [formGroup]="${formName}" novalidate>
 ###################################################
 ## loop thru all attributes, excluding pks
 ###################################################
 #set( $includePrimaryKeys = false )
-#set( $ngModel = "" )##default to empty, apply when action is update
 ###################################################
 ## loop thru all attributes, excluding pks
 ###################################################
-#foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )      
+#foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )  
 #set( $name = $attribute.getName() )
+#if ( $action == "update" ) ## append the class name for edits to access the contained domain model
+#set( $name = "${lowercaseClassName}.${name}" )
+#end
 #set( $displayName = $attribute.getDisplayName() )
 #set( $type = $attribute.getType() )
 #set( $isRequired = false )
-###################################################
-## only apply the ngModel if in update mode
-###################################################
-#if ( $action == "update" )
-#set( $ngModel = "[(ngModel)] = ${esc.q}${lowercaseClassName}.${name}${esc.q}" )
-#end##if ( $action == "update" )
-			<div class="form-group">
+#set( $ngModel = "[(ngModel)]=${esc.q}${name}${esc.q}" )
 ###################################################
 ## if not from an association
 ###################################################				
@@ -37,13 +32,14 @@
 ## handle enumerated types as select with options
 ###################################################				
 #if ( $attribute.isFromEnumerator() == true )
-				<mat-form-field>
-					<mat-select placeholder="${displayName}" formControlName="${name}" ${ngModel}>
-				    	<mat-option *ngFor="let ${type} of ${type}s" [value]="${type}">
-				      		{{${type}}}
-				    	</mat-option>
-				  	</mat-select>
-				</mat-form-field>
+		<mat-form-field appearance="legacy">
+		    <mat-label>${displayName}</mat-label>
+			<mat-select placeholder="${displayName}" name="${name}" ${ngModel}>
+		    	<mat-option ngDefaultControl *ngFor="let ${type} of ${type}s" [value]="${type}">
+		      		{{${type}}}
+		    	</mat-option>
+		  	</mat-select>
+		</mat-form-field>
 #else##if ( $attribute.isFromEnumerator() == true )
 ###################################################
 ## handle primitive types...not associations yet
@@ -52,7 +48,7 @@
 ## handle booleans as a checkbox
 ###################################################
 #if ( $type.endsWith( "oolean") == true )
-				<mat-checkbox formControlName="${name}" ${ngModel}>${name}</mat-checkbox>
+		<mat-checkbox name="${name}" ngDefaultControl ${ngModel}>${displayName}</mat-checkbox>
 ###################################################
 ## handle date using the ngbDatePicker
 ###################################################				
@@ -60,26 +56,32 @@
 #set( $isRequired = $attribute.isRequired() )
 #set( $controlsRequired = false )
 #if ( $type.endsWith( "Date" ) )
-				<mat-form-field>
-				  	<input matInput [matDatepicker]="picker" placeholder="${displayName}" formControlName="${name}" ${ngModel}>
-	  				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-	  				<mat-datepicker #picker></mat-datepicker>
-				</mat-form-field>
+		<mat-form-field appearance="legacy">
+		    <mat-label>${displayName}</mat-label>
+		  	<input matInput ngDefaultControl [matDatepicker]="picker" placeholder="${displayName}" name="${name}" ${ngModel}>
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+			<mat-hint></mat-hint>
+		</mat-form-field>
 ###################################################
 ## handle time using the nbg-timepicker
 ###################################################
 #elseif ( $type.endsWith( "Time" ) )
-				<ngb-timepicker ${ngModel} class="form-control" formControlName="${name}" #${name} ${ngModel}></ngb-timepicker>
+		<ngb-timepicker ${ngModel} class="form-control" name="${name}" #${name} ${ngModel}></ngb-timepicker>
 ###################################################
 ## handle numerics as an input text
 ###################################################
 #elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
-				<input type="text" mat-input placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+		<input matInput placeholder="${displayName}" name="${name} "${ngModel}>
 ###################################################
 ## handle all by default as input text
 ###################################################
 #else
-				<input type="text" mat-input placeholder="${displayName}" formControlName="${name}" ${ngModel}>
+		<mat-form-field appearance="legacy">
+    		<mat-label>${displayName}</mat-label>
+		    <input matInput ngDefaultControl placeholder="${displayName}" name="${name}" ${ngModel}>
+    		<mat-hint></mat-hint>
+  		</mat-form-field>
 #end## of all none-boolean values
 #end##if ( $type.endsWith( "Date" )
 #end##if ( $attribute.isFromEnumerator() == false )
@@ -103,30 +105,35 @@
 #set( $multiple = "multiple")
 #end##if ( $attribute.isFromSingleValueAssociation() == true )
 #if ( $action == "update" ) ## only apply comparison when in update mode
-#set( $multiple = "${multiple}  [compareWith]=${esc.q}compareFn${esc.q} [(ngModel)]=${esc.q}${lowercaseClassName}.${roleName}${esc.q}" )
+#set( $multiple = "${multiple}  [compareWith]=${esc.q}compareFn${esc.q} " )
 #end
-				<mat-form-field>
-					<mat-select placeholder="${roleName}" formControlName="${roleName}" ${multiple}>
-				    	<mat-option *ngFor="let ${lowercaseAssocClassName} of ${lowercaseAssocClassName}s" [value]="${lowercaseAssocClassName}._id">
-				      		{{${lowercaseAssocClassName}.${bestFitForName}}}
-				    	</mat-option>
-				  	</mat-select>
-				</mat-form-field>
+#if ( $action == "update" ) ## append the class name for edits to access the contained domain model
+#set( $roleName = "${lowercaseClassName}.${roleName}" )
+#end
+		<mat-form-field appearance="legacy">
+    		<mat-label>${attribute.getAssociation().getRoleName()}</mat-label>
+			<mat-select placeholder="${attribute.getAssociation().getRoleName()}" ${multiple} [(ngModel)]=${esc.q}${roleName}${esc.q}>
+		    	<mat-option name="${roleName}" ngDefaultControl  
+		    		*ngFor="let ${lowercaseAssocClassName} of ${lowercaseAssocClassName}s"		    		 
+		    		[value]="${lowercaseAssocClassName}._id">
+		      		{{${lowercaseAssocClassName}.${bestFitForName}}}
+		    	</mat-option>
+		  	</mat-select>
+		</mat-form-field>
 #end##if ( $attribute.isFromAssociation() == false )			
-			</div><!--form-group --> 
 ###################################################
 ## handler at least one attribute is required
 ###################################################
 #if( $isRequired == true )
 #set( $controlsRequired = true ) ## got one...used later on in declaring the button
-			<div *ngIf="${formName}.controls['${name}'].invalid && (${formName}.controls['${name}'].dirty || ${formName}.controls['${name}'].touched)" class="alert alert-danger">
-				<div *ngIf="${formName}.controls['${name}'].errors.required">
-        			${name} is required.
-				</div>
+		<div *ngIf="${formName}.controls['${name}'].invalid && (${formName}.controls['${name}'].dirty || ${formName}.controls['${name}'].touched)" class="alert alert-danger">
+			<div *ngIf="${formName}.controls['${name}'].errors.required">
+    			${name} is required.
 			</div>
+		</div>
 #end##if( $attribute.isRequired() == true )
+<p>
 #end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
-        	<div class="form-group">
 #set( $includePrimaryKeys = false )
 #set( $includeType = false )
 #set( $delim = ", " )
@@ -140,27 +147,29 @@
 #set( $size = $attributes.size() )
 #set( $args = "" )
 #foreach ( $attribute in $attributes )
-#set( $name = $attribute.getName() )
+#set( $name = "${attribute.getName()}" )
 #if ( $attribute.isFromAssociation() )
 #set( $name = $attribute.getAssociation().getRoleName() )
 #end
+#if ( $action == "update" ) ## append the class name for edits to access the contained domain model
+#set( $name = "${lowercaseClassName}.${name}" )
+#end
 #if( $attribute.getType().endsWith("oolean") == false ) ## checkbox handled differently
-#set( $args = "${args}${formName}.controls[${esc.singleQuote}${name}${esc.singleQuote}].value" )
+#set( $args = "${args}${name}" )
 #else
-#set( $args = "${args}${formName}.controls[${esc.singleQuote}${name}${esc.singleQuote}].value == true ? true : false" )
+#set( $args = "${args}${name} == true ? true : false" )
 #end##if( $attribute.getType().endsWith("oolean") == true )
 #if ( $velocityCount < $size )
 #set( $args = "${args}, " )
 #end##if ( $velocityCount < size )      
 #end##foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )      
-				<button (click)="${action}${className}(${args})" 
+        <button 
+		    (click)="${action}${className}(${args})" 
 #if( $controlsRequired == true )
-					[disabled]="${formName}.pristine || ${formName}.invalid"
+		    [disabled]="${formName}.pristine || ${formName}.invalid"
 #end##if( $controlsRequired == true )
-					class="btn btn-primary">${action}</button>
-        	</div>
-		</form> <!--${lowercaseClassName}Form -->
-	</div> <!-- panel body -->
-		
+		    class="btn btn-primary">${action}
+		</button>
+	</div> <!-- panel body -->	
 </div> <!-- panel panel-primary -->
 #end##macro( formFields $action )

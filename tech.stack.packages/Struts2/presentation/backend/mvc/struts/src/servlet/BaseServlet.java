@@ -15,8 +15,9 @@ public class BaseServlet extends HttpServlet
 {
 	public void init(ServletConfig config) throws javax.servlet.ServletException
 	{
+		super.init(config);
 		// give a Hibernate a kick-start during servlet initialization instead of
-		// hitting it cold,casn
+		// hitting it cold
 		FrameworkPersistenceHelper.self();
 	}
 }

@@ -1,8 +1,7 @@
 // server.js
-
 const express = require('express'),
 	path = require('path'),
-	bodyParser = require('body-parser'),
+	bodyParser = require('body-parser'), 
 	cors = require('cors'),
 	mongoose = require('mongoose'),
 #foreach( $class in $aib.getClassesToGenerate() )  
@@ -13,7 +12,7 @@ const express = require('express'),
 	config = require('./config/mongoDb.js');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, {
+mongoose.connect(process.env.MONGO_HOST_ADDRESS || config.DB, {
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 1000
   }).then(
@@ -24,7 +23,7 @@ mongoose.connect(config.DB, {
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-const port = process.env.PORT || 4000;
+const port = ${aib.getParam("mongodb.mongoosePort")};
 
 #foreach( $class in $aib.getClassesToGenerate() )  
 #set( $className = $class.getName() )

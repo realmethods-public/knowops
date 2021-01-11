@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -24,12 +24,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
-         <dependency>
-            <groupId>${dbGroupId}</groupId>
-            <artifactId>${dbArtifactId}</artifactId>
-            <version>${dbVersion}</version>
-        </dependency>
-    
+	    <dependency>
+	      <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.47</version>
+	    </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -151,11 +150,11 @@
                                         <path location="${project.basedir}/target/classes"/>
                                     </classpath>
                         			<jdbcconfiguration
-                        				packagename="com.cloudmigrate.reveng"
+                        				packagename="${packageName}"
                         				revengfile="${revEngXmlFile}"                        	
                             			detectmanytomany="true"
                    						configurationfile="${cfgXmlFile}"
-                   						reversestrategy="com.cloudmigrate.codetemplate.RealMethodsReverseEngineeringStrategy"
+                   						reversestrategy="com.realmethods.codetemplate.RealMethodsReverseEngineeringStrategy"
                    						/>
 				                	<hbm2java 
 				                		destdir="${destDirForPojos}/src/main/java" 

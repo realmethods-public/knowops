@@ -1,15 +1,33 @@
-# realMethods
+# realMethods Tech Stack Package Descriptor
 
-This ASP.NET web application project was generated with realMethods version ${aib.getPlatformVersion()}.
+## Name
+Microsoft ASP.NET
+
+## Summary Image
+![alt text](http://www.realmethods.com/infopages/img/aspdotnet.png)
+
+## Intent
+To create an application that uses:
+- ASP.NET Core 2.0 and .NET Framework v4x for full MVC support
+- Fully functional front-end using .cshtml with embedded JQuery and Bootstrap
+- nHibernate for model to table db mapping
+- A Git repository to commit application files
+
+## Contents
+[https://github.com/realmethods-public/tech.stack.packages/tree/master/ASP.NET%20Core](https://github.com/realmethods-public/tech.stack.packages/tree/master/ASP.NET%20Core)
+
+
+## Usage
 
 The ASP.NET technology stack package it was generated from has been tested with Visual Studio 2017.
 
-## Create a New Project
+**Create a New Project**
 
-In Visual Studio, create an ASP.NET Core 2.0 project by the name of ${aib.getApplicationName()} that uses the .NET Framework. (not the .NET Core).  
+In Visual Studio, create an ASP.NET Core 2.0 project that the .NET Framework. (not the .NET Core).  Be sure to name the project the same 
+name as the application being generated  
 
 
-## Option 1 - Using NuGet
+**Option 1 - Using NuGet**
 
 The following steps require the use of NuGet to package and publish the generated application files.
 
@@ -20,7 +38,7 @@ Assuming nuget is installed, issue the following command within the root directo
 
 `nuget sources Add -Name __<name_of_repository>__ -Source __<url_to_the_NuGet_repository>__`
 
-For example, if using the jFrog Artifactory, the command looks like:
+For example, if using the JFrog Artifactory, the command looks like:
 
 `nuget sources Add -Name Artifactory -Source http://<jfrog_artifactory_url>/artifactory/api/nuget/<repository key>`
 
@@ -80,3 +98,8 @@ __Copy to Output__ to __Copy Always__.
 
 Build then run the project.  Visual Studio will launch the app in the browser.
 
+## External Doc Link
+[http://www.realmethods.com/infopages/asp.net-info-page.html](http://www.realmethods.com/infopages/asp.net-info-page.html)
+
+## Package Derived From
+None

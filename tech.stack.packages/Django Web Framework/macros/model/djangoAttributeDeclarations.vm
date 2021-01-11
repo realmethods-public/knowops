@@ -15,6 +15,7 @@
 #if ( $attribute.getCanBeNull() == false )
 ##set( $canBeNull = "null=True" ) ## set Null to true
 #end##if ( $attribute.getCanBeNull() == true )
+#if ( $attribute.isFromEnumerator() == false )
 ##need to coerce a model type into a Django type
 #if ( $attribute.isFromAssociation() == true )
 #if ( $type == $parentClass.getName() )## use self as the type
@@ -57,5 +58,8 @@
 #set( $type = "models.CharField(max_length=64, $canBeNull)" )
 #end##if( $type.equalsIgnoreCase("string") )
 #end##if ( $attribute.isFromAssociation() == true )
+#else##if ( $attribute.isFromEnumerator() == false )
+#set( $type = "models.CharField(max_length=64, ${canBeNull}, choices=[(tag.name, tag.value) for tag in ${attribute.getType()}])" )
+#end###if ( $attribute.isFromEnumerator() == false )
 	${varName} = ${type}
 #end##macro ( getAttributeDeclaration $attribute)

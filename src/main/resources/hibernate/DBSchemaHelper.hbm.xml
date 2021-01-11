@@ -2,7 +2,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -17,7 +17,7 @@
 	
 <hibernate-mapping default-cascade="all" default-lazy="false"> 
 
-   	<class name="com.cloudmigrate.codetemplate.DBSchemaHelper" table="dbSchemaHelper" abstract="false">         
+   	<class name="com.realmethods.codetemplate.DBSchemaHelper" table="dbSchemaHelper" abstract="false">         
 
 		<id name="id" type="long" >
       		<generator class="native"/>    

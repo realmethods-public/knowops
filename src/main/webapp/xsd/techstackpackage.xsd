@@ -48,7 +48,8 @@
     <xsd:attribute name="info-page-url" type="xsd:string" use="required"/>
     <xsd:attribute name="icon-url" type="xsd:string" use="required"/>
     <xsd:attribute name="app-type" type="appType" use="required"/>     
-	<xsd:attribute name="release-status" type="releaseStatus" use="required"/>     
+    <xsd:attribute name="derivedFrom" type="xsd:string" use="optional"/>     
+	  <xsd:attribute name="release-status" type="releaseStatus" use="required"/>     
   </xsd:complexType>
 </xsd:element> <!-- tech-stack-package -->
 

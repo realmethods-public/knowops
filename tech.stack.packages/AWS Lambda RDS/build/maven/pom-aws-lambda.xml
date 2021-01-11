@@ -16,7 +16,7 @@
     <version>${aib.getVersion()}</version>
   </parent>
 #end  
-  <artifactId>${appName.replaceAll(" ",".")}-lambda-serverless</artifactId>  
+  <artifactId>${appName.replaceAll(" ",".")}</artifactId>  
   <version>${aib.getVersion()}</version>  
 
 #if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )  
@@ -25,7 +25,7 @@
   <packaging>pom</packaging>
 #end ##if ( ${aib.getParam('aws-lambda.runtime')} == "java8" )
     
-  <name>${appName}-aws-lambda-jar</name>    
+  <name>${appName.replaceAll(" ",".")}</name>    
   
 #repositories()
   
@@ -182,15 +182,11 @@
 	</build>
    
 	<dependencies>  
-
-#awsDependencies()
+#awsLambdaDependencies()
 #googleGsonDependencies()
-#jacksonJsonDependencies()
 #jalopyDependencies()
 #log4jDependencies()
-#apacheCommonDependencies()
 #w3cDOMDependencies()
-#mavenInvokerDependencies()
 #swaggerDependencies()
 
 	</dependencies>  

@@ -6,3 +6,10 @@ gitpush*
 *.bat
 *.svn/
 *tech.stack.backup/
+*common.templates.backup/
+*tech.stack.packages/
+*bin/
+*.sh
+.pydevproject
+catalina.properties
+.settings/

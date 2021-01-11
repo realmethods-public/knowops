@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2019 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -27,4 +27,17 @@
 		description="app version" type="input"/>		
 	<option name="package name" value="com.occulue" modifiable="false" required="true"
 		description="package prefix to apply(com.xyz format)" type="input"/>
+</options>
+<options name="nexus">
+	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
+	<option name="userName"  value="" required="true" description="nexus user name" type="input"/>
+	<option name="password"  value="" required="true" description="nexus password" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+	<option name="releaseUrl" value="http://127.0.0.1/repository/maven-releases" 
+		required="true" description="nexus server url" type="input"/>
+	<option name="snapshotUrl" value="http://127.0.0.1/repository/maven-snapshots" 
+		required="true" description="nexus server url" type="input"/>
+	<option name="mavenRepoUrl" value="http://127.0.0.1/repository/maven-public" 
+		required="true" description="nexus server url" type="input"/>
 </options>

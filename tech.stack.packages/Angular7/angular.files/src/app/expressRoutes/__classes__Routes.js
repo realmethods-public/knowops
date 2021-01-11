@@ -49,7 +49,7 @@ ${lowercaseClassName}Routes.route('/update/:id').post(function (req, res) {
 		else {
 #set( $includePrimaryKeys = false )
 #set( $includePrimaryKeys = false )
-#set( $attributes = ${classObject.getAttributesOrdered( $includePrimaryKeys )} )
+#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys )} )
 #foreach( $attribute in $attributes )      
             ${lowercaseClassName}.${attribute.getName()} = req.body.${attribute.getName()};
 #end##foreach ( $attribute in $classObject.getAttributesOrdered( $includePrimaryKeys ) )

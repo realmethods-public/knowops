@@ -45,17 +45,17 @@ Change to the **${aib.getApplicationName()}** directory and install the remainin
 
 `npm run setup`
 
-#if ( ${aib.getParam('jfrog.inUse')} == "true" )
-## Publish to jFrog Artifactory
-This command will do a build on the project and publish the build to an assigned NPM repository managed within the Artifactory.
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+## Publish to Repository
+This command will do a build on the project and publish the build to an assigned NPM repository managed within the either JFrog Artifactory or Nexus Sonatype.
 
-`npm run jfrogpublish`
+`npm run deploy`
 
-During this phase, a login to the Artifactory is attempted requiring your attention.  Make sure to enter your Artifactory credentials correctly, as well as the public email assigned
-to the user within the Artifactory.
+During this phase, a login to the repository is attempted requiring your attention.  Make sure to enter your credentials correctly, as well as the public email assigned
+to the user within.
 
 Once complete, the build will be available within the named NPM Artifactory repository.
-#end##if ( ${aib.getParam('jfrog.inUse')} == "true" )
+#end##if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
 
 ## MongoDB setup
 

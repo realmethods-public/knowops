@@ -4,12 +4,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 	
-	<display-name>goFramework</display-name>
+	<display-name>realmethods</display-name>
   
 	<filter>
 		<filter-name>struts2</filter-name>
 	<!--  <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class> -->
-		<filter-class>com.cloudmigrate.server.servlet.BaseStrutsFilterDispatcher</filter-class> 
+		<filter-class>com.realmethods.server.servlet.BaseStrutsFilterDispatcher</filter-class> 
 	</filter>
 
 	<filter-mapping>
@@ -24,17 +24,17 @@
 
 	<servlet>   
         <servlet-name>
-        	realMethods
+        	realmethods
         </servlet-name>        
         <servlet-class>
-	    	com.cloudmigrate.server.servlet.GoFrameworkServlet
+	    	com.realmethods.server.servlet.RealMethodsFrameworkServlet
         </servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
 	<servlet-mapping>    
 		<servlet-name>
-			realMethods
+			realmethods
 		</servlet-name>
 		
         <url-pattern>
@@ -48,7 +48,7 @@
     </welcome-file-list>
 	
 	<session-config>
-        <session-timeout>1440</session-timeout>
+        <session-timeout>120</session-timeout>
     </session-config>
 
 </web-app>

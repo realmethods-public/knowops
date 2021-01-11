@@ -37,20 +37,24 @@
 	</build>
    
   	<dependencies>  
-
-#awsLamdaDependencies()
-#mySQLDependencies()
-#googleGsonDependencies()
-#jacksonJsonDependencies()
+#sparkMicroframeworkDependencies()
+#slf4jDependencies()
 #hibernateDependencies()
-#jalopyDependencies()
-#log4jDependencies()
-#velocityDependencies()
+#mySQLDependencies()
+#jacksonJsonDependencies()
 #apacheCommonDependencies()
 #junitDependencies()
+#easyMockTestDependencies()
+#googleGsonDependencies()
+#googleGuavaDependencies()
+##mongoDBMorpiaDependencies()
+##mongoDBDependencies()
+##memcachedDBDependencies()
+#jalopyDependencies()
+#velocityDependencies()
 #w3cDOMDependencies()
-#mavenInvokerDependencies()
-#sparkMicroframeworkDependencies()
+#jbossJavaxTransactionDependencies()
+#log4jDependencies()
 
 	</dependencies>
     

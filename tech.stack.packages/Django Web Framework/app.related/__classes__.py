@@ -10,6 +10,11 @@ from .$classObject.getParentName() import $classObject.getParentName()
 #else
 #set( $doc = $class.getDocumentation() )
 #end##if( $class.hasDocumentation() == false )
+#foreach( $enum in $class.getEnumerators() )
+#set( $enumType = $enum.getType() )
+from ${lowercaseAppName}.models.${enumType} import ${enumType}
+#end
+
 #======================================================================
 # 
 # $doc

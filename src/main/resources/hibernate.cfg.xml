@@ -2,7 +2,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -36,12 +36,12 @@
         <property name="hibernate.max_fetch_depth">1</property>        
 		<property name="hibernate.current_session_context_class">thread</property> 
         <property name="hibernate.connection.username">root</property>        
-        <property name="hibernate.connection.password">6969Cutlass!!</property>        
+        <property name="hibernate.connection.password">6969Cutlass!!00Corvette!!</property>        
         
         <!-- use for mysql -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>  
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>                
-        <property name="hibernate.connection.url">jdbc:mysql://35.238.135.228:3306/realmethods?createDatabaseIfNotExist=true&amp;autoReconnect=true&amp;useSSL=false</property>        
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>  
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>  
+        <property name="hibernate.connection.url">jdbc:mysql://realmethods-production-mysql.cssxewoc41nq.us-east-1.rds.amazonaws.com:3306/realmethods02012001?createDatabaseIfNotExist=true&amp;autoReconnect=true&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</property>        
 
 <!-- ~AIB -->          
    
@@ -49,8 +49,7 @@
 
       <mapping resource="/hibernate/BaseTransactionalEntity.hbm.xml"/>
 	  <mapping resource="/hibernate/User.hbm.xml"/>
-	  <mapping resource="/hibernate/DBSchemaHelper.hbm.xml"/>
-
+	  <mapping resource="/hibernate/Build.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

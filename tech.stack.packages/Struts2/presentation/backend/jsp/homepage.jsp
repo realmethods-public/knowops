@@ -1,6 +1,29 @@
 <html>
 
-#jsHeadDeclaration()
+<head>
+
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+		<!-- 3rd party style sheets -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet" />	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Libre Franklin" rel="stylesheet" type="text/css"/>
+	<!-- app specific style sheets -->
+	<link href="${pageContext.request.contextPath}/css/common.css" rel="stylesheet" type="text/css"/>
+	
+		<!-- 3rd part javascript functions, etc -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/js/bootstrap-dialog.min.js"></script>
+ 	
+ 	<!-- app specific javascript functions -->
+ 	<script src="${pageContext.request.contextPath}/js/common.js"></script>
+ 	 
+</head>
 
 <script type="text/javascript">
 
@@ -9,18 +32,6 @@
 		window.print();
 	}
 
-	function localAction( action )
-	{
-		jQuery.ajax(
-		{
-	  		url: action,
-	  		dataType: 'text',
-		}
-		).always(function( data ) 
-		{
-			document.getElementById("mainSection").innerHTML = data;
-	    });
-	}
 
 	$( document ).ready(function()
 	{
@@ -80,8 +91,6 @@
 
 <body>
 
-##jsHeader()
-
 <div id="homePageDivId" style="width:100%;height:520px;vertical-align:top">
 
 <!-  simple div providing the toolbar section -->
@@ -92,7 +101,7 @@
 				border="0" alt="print" onclick="print()" style="width:32px;height:32px"/>
         
 	<img align="center" src="${pageContext.request.contextPath}/img/logout.png" 
-			border="0" alt="logoff" onclick="localAction('logoff.action')" style="width:32px;height:32px"/>
+			border="0" alt="logoff" onclick="localAction('${pageContext.request.contextPath}/logoff.action')" style="width:32px;height:32px"/>
 	
 </div>
 

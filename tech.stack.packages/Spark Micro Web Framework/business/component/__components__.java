@@ -3,7 +3,7 @@ package ${aib.getRootPackageName(true)}.#getServicePackageName();
 
 import java.util.*;
 
-import com.cloudmigrate.common.bo.*;
+import com.realmethods.common.bo.*;
 
 #set( $imports = [ "#getBOPackageName()" ] )
 #importStatements( $imports )

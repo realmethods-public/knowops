@@ -6,13 +6,13 @@ var Schema = mongoose.Schema;
 // Define collection and schema for ${className}
 var $className = new Schema({
 #set( $includePrimaryKeys = false )
-#set( $attributes = ${classObject.getAttributesOrdered( $includePrimaryKeys )} )
+#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys )} )
 #foreach( $attribute in $attributes )  
   ${attribute.getName()}: {
 #set( $outputTheAttributeType = true )
 #attributeTypeDeclaration(${attribute}, ${classObject}, ${outputTheAttributeType})
   },
-#end##foreach ( $attribute in $classObject.getAttributesOrdered( $includePrimaryKeys ) )  
+#end##foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )  
 },{
     collection: '${lowercaseClassName}s'
 });

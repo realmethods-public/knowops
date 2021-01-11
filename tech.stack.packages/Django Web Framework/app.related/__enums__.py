@@ -18,7 +18,8 @@ from django.db import models
 #======================================================================
 # Class $className Declaration (enumerated type)
 #======================================================================
-#getClassDecl( $class "")
+from enum import Enum 
+class $className(Enum):   # A subclass of Enum
 #set( $attributes = $class.getAttributes() )
 #foreach ( $attribute in $attributes )
 	${attribute.getName()} = '${attribute.getName()}'

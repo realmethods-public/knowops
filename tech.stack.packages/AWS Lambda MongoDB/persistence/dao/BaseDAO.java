@@ -41,8 +41,7 @@ public abstract class BaseDAO
 	 */
 	protected Datastore getDatastore()
 	{
-		if ( dataStore == null )
-		{
+		if ( dataStore == null ) {
 			final Morphia morphia;
 			final List<com.mongodb.ServerAddress> servers	= new ArrayList();
 			final List<MongoCredential> credentials 		= new ArrayList<MongoCredential>();			
@@ -55,20 +54,16 @@ public abstract class BaseDAO
 				port = new Integer( DEFAULT_HOST_PORT).intValue();
 				servers.add( new ServerAddress( DEFAULT_HOST_ADDRESS, port ) );
 			}
-			else if ( !serverAddress.isEmpty() )
-			{
+			else if ( !serverAddress.isEmpty() ) {
 				StringTokenizer tokenizer 	= new StringTokenizer( serverAddress, "," );
 				String hostName 			= null;
 				
-				while( tokenizer.hasMoreTokens() )
-				{
+				while( tokenizer.hasMoreTokens() ) {
 					itemTokenizer = new StringTokenizer( tokenizer.nextToken(), ":" );
 					
-					if ( itemTokenizer.hasMoreTokens() )
-					{
+					if ( itemTokenizer.hasMoreTokens() ) {
 						hostName = itemTokenizer.nextToken();
-						if ( itemTokenizer.hasMoreTokens() )
-						{ 
+						if ( itemTokenizer.hasMoreTokens() ) { 
 							port = new Integer( itemTokenizer.nextToken() ).intValue();
 							servers.add( new ServerAddress( hostName, port ) );
 						}
@@ -76,8 +71,7 @@ public abstract class BaseDAO
 				}
 			}
 			
-			if ( credentialInputs != null && credentialInputs.length() > 0 )
-			{
+			if ( credentialInputs != null && credentialInputs.length() > 0 ) {
 				StringTokenizer credentialTokenizer = new StringTokenizer( credentialInputs, "," );
 				String userId						= null;
 				String password						= null;
@@ -88,15 +82,12 @@ public abstract class BaseDAO
 				String dbName						= getCollectionName(); // each child entity gets its own db
 #end ##if ( $dbName.length() > 0)
 	
-				while( credentialTokenizer.hasMoreTokens() )
-				{
+				while( credentialTokenizer.hasMoreTokens() ) {
 					itemTokenizer = new StringTokenizer( credentialTokenizer.nextToken(), ":" );
 					
-					if ( itemTokenizer.hasMoreTokens() )
-					{
+					if ( itemTokenizer.hasMoreTokens() ) {
 						userId = itemTokenizer.nextToken();
-						if ( itemTokenizer.hasMoreTokens() )
-						{ 
+						if ( itemTokenizer.hasMoreTokens() ) { 
 							password = itemTokenizer.nextToken();
 							credentials.add( MongoCredential
 												.createPlainCredential(userId, dbName, password.toCharArray()));
@@ -167,8 +158,8 @@ public abstract class BaseDAO
 	}
 	
 	protected String getCollectionName()
-    { 
-		String name = "${aib.getParam( "mongodb.default collection name" )}";
+    {                                   
+		String name = "${aib.getParam( "mongodb.defaultCollectionName" )}";
 		return ( name ); 
 	}
 
@@ -182,8 +173,8 @@ public abstract class BaseDAO
     private static final String DEFAULT_HOST_ADDRESS	= System.getenv("DEFAULT_HOST_ADDRESS");
 	private static final String DEFAULT_HOST_PORT		= System.getenv("DEFAULT_HOST_PORT");
 	private static final Logger LOGGER 	= Logger.getLogger(BaseDAO.class.getName());
-	protected static final String MONGO_ID_FIELD_NAME	= "${aib.getParam( "mongodb.auto-increment id name" )}"; 
-	protected static final String MONGO_SEQ_FIELD_NAME	= "${aib.getParam( "mongodb.auto-increment seq name" )}";
+	protected static final String MONGO_ID_FIELD_NAME	= "${aib.getParam( "mongodb.autoIncrementIdName" )}"; 
+	protected static final String MONGO_SEQ_FIELD_NAME	= "${aib.getParam( "mongodb.autoIncrementSeqName" )}";
 	protected final static String MONGO_SERVER_ADDRESSES = java.lang.System.getenv("mongoDbServerAddresses");
 	protected final static String MONGO_CREDENTIALS 	= java.lang.System.getenv("mongoDbCredentials");
 }

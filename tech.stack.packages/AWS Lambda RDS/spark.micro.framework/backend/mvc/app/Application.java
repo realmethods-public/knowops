@@ -41,6 +41,8 @@ public class Application //implements SparkApplication
 		Spark.staticFileLocation("/public");
 #if( ${containerObject} )		
 		Spark.port( ${containerObject.getPort()} );
+#else
+        Spark.port( 8000 );
 #end		
 		get("/", (request, response) -> 
     	{

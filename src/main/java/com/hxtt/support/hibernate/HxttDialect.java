@@ -1,7 +1,7 @@
 /*******************************************************************************
  * realMethods Confidential
  * 
- * 2018 realMethods, Inc.
+ * 2021 realMethods, Inc.
  * All Rights Reserved.
  * 
  * This file is subject to the terms and conditions defined in
@@ -30,7 +30,8 @@ public abstract class HxttDialect extends Dialect {
     
     static final String DEFAULT_BATCH_SIZE = "15";
     static final String NO_BATCH = "0";
-    
+    static final String NOT_NULL_AUTO_INCREMENT = "not null auto_increment";
+    static final String NULL_DECL = "null";
     
     public HxttDialect() {
         super();
@@ -118,7 +119,7 @@ public abstract class HxttDialect extends Dialect {
         registerFunction("strconv", new StandardSQLFunction("strconv", StandardBasicTypes.STRING) );
         registerFunction("strtran", new StandardSQLFunction("strtran", StandardBasicTypes.STRING) );
         registerFunction("stuff", new StandardSQLFunction("stuff", StandardBasicTypes.STRING) );
-        registerFunction("substr", new StandardSQLFunction("stuff", StandardBasicTypes.STRING) );
+        registerFunction("substr", new StandardSQLFunction("substr", StandardBasicTypes.STRING) );
         registerFunction("substring", new StandardSQLFunction("substring", StandardBasicTypes.STRING) );
         registerFunction("translate", new StandardSQLFunction("translate", StandardBasicTypes.STRING) );
         registerFunction("trim", new StandardSQLFunction("trim") );
@@ -322,44 +323,6 @@ public abstract class HxttDialect extends Dialect {
     }
         
   
-    // limit/offset support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    @Override
-    /**
-     * Does this dialect support some form of limiting query results
-     * via a SQL clause?
-     *
-     * @return True if this dialect supports some form of LIMIT.
-     */
-    public final boolean supportsLimit() {
-        return true;
-    }
-
-    @Override
-    /**
-     * Apply s limit clause to the query.
-     * <p/>
-     * Typically dialects utilize {@link #supportsVariableLimit() variable}
-     * limit caluses when they support limits.  Thus, when building the
-     * select command we do not actually need to know the limit or the offest
-     * since we will just be using placeholders.
-     * <p/>
-     * Here we do still pass along whether or not an offset was specified
-     * so that dialects not supporting offsets can generate proper exceptions.
-     * In general, dialects will override one or the other of this method and
-     * {@link #getLimitString(String, int, int)}.
-     *
-     * @param query The query to which to apply the limit.
-     * @param hasOffset Is the query requesting an offset?
-     * @return the modified SQL
-     */
-    public String getLimitString(String sql, boolean hasOffset) {
-        return new StringBuilder(sql.length() + 20)
-            .append(sql)
-            .append(hasOffset ? " limit ?, ?" : " limit ?")
-            .toString();
-    }
-
     // IDENTITY support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     /**
@@ -374,7 +337,7 @@ public abstract class HxttDialect extends Dialect {
 //    @Override
     /**
      * Get the select command to use to retrieve the last generated IDENTITY
-     * value for a particuar table
+     * value for a particular table
      *
      * @param table The table into which the insert was done
      * @param column The PK column.
@@ -398,7 +361,7 @@ public abstract class HxttDialect extends Dialect {
      * @throws MappingException If IDENTITY generation is not supported.
      */
     public final String getIdentityColumnString() {
-         return "not null auto_increment"; 
+         return NOT_NULL_AUTO_INCREMENT; 
     }
 
     /**
@@ -408,7 +371,7 @@ public abstract class HxttDialect extends Dialect {
      * @return The appropriate keyword.
      */
     public final String getIdentityInsertString() {
-        return "null";
+        return NULL_DECL;
     }
     
     // lock acquisition support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -533,6 +496,7 @@ public abstract class HxttDialect extends Dialect {
             return false;
     }
 
+    @Override
     /**
      * The syntax used to add a column to a table (optional).
      *

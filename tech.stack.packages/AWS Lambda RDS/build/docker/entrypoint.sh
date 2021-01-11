@@ -1,5 +1,4 @@
+#set( $appName = "${aib.getApplicationNameFormatted()}-restful-dao-layer" )
 #!/bin/bash
 
-service mysql start
-mysql -e "SET PASSWORD FOR '${aib.getParam("hibernate.hibernate.connection.username")}'@'localhost'=PASSWORD('${aib.getParam("hibernate.hibernate.connection.password")}')"
-mvn package
+java -jar -Dserver.port=8000 ${appName}-${aib.getVersion()}.jar

@@ -377,7 +377,26 @@ public abstract class BaseStrutsAction
         return (map);
     }
 
+    public Long[] getChildIds() {
+    	return childIds;
+    }
+    
+	public void setChildIds( Long[] ids ) {
+		childIds = ids;
+	}
+
+	public Long getChildId() {
+		return childId;
+	}
+
+	public void setChildId( Long id ) {
+		childId = id;
+	}
+
 // attributes
+	protected Long[] childIds 				= null;
+	protected Long childId 					= null;
+
     private List paginatedList = null;
     private String [] selections = null;
     private String selection = null;

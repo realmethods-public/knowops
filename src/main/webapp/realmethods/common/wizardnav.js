@@ -5,6 +5,7 @@ var usingCache 		= false;
 var mvcType 		= "";
 var delegateType 	= "";
 var appCreationType = "";
+var persistenceType = "";
 
 function wizard() {
     $('#Wizard_Modal').modal('show');
@@ -13,6 +14,10 @@ function wizard() {
 function wizardMigrateorInnovate()
 {
  	$('#Wizard_Modal').modal('hide');
+    $('#Migrate_Or_Innovate_Modal').modal('show');
+}
+
+function showMigrateInnovate() {
     $('#Migrate_Or_Innovate_Modal').modal('show');
 }
 
@@ -37,6 +42,18 @@ function renovate()
     $('#Renovate_Modal').modal('show');
 }
 
+function migrateGitWizard()
+{
+	$('#Migrate_Modal').modal('hide');
+	showLocalModelModal('git');
+}
+
+function migrateEJBWizard()
+{
+	$('#Migrate_Modal').modal('hide');
+	showLocalModelModal('jar');
+}
+
 function migratePojoWizard()
 {
 	$('#Migrate_Modal').modal('hide');
@@ -55,12 +72,17 @@ function migrateSQLScriptWizard()
 	showLocalModelModal('sql')
 }
 
-function innovateJSONWizard()
+function innovateYAMLWizard()
 {
 	$('#Innovate_Modal').modal('hide');
 	showLocalModelModal('json');
 }
 
+function innovateJSONWizard()
+{
+	$('#Innovate_Modal').modal('hide');
+	showLocalModelModal('json');
+}
 function innovateUMLWizard()
 {
 	$('#Innovate_Modal').modal('hide');
@@ -81,15 +103,16 @@ function innovateExistingModelWizard()
 }
 
 function showTSPWizard()
-{
+{	
+	$('#Wizard_Modal').modal('hide');
 	$('#TSP_Wizard_Modal').modal('show');
 }
 
 function chooseTSPWizard()
 {
-	$('#TSP_Wizard_Modal').modal('hide');
+	//$('#TSP_Wizard_Modal').modal('hide');
+	$('#Wizard_Modal').modal('hide');
 	factoryTSPSelect();
-//	$('#UI_Wizard_Modal').modal('show');
 }
 
 function UIWizard( yesNo )

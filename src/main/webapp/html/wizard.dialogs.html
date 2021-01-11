@@ -1,10 +1,10 @@
-<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
- * This software is the proprietary information of cloudMigrate, Inc.
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
+ * This software is the proprietary information of realMethods, Inc.
  * Use is subject to license terms formally and mutually agreed to 
- * by cloudMigrate, Inc. and you.
+ * by realMethods, Inc. and you.
  * 
  * Contributor
- *     cloudMigrate, Inc - initial API and implementation
+ *     realMethods, Inc - initial API and implementation
 -->
 
 <!----------------------------------------------------
@@ -15,7 +15,7 @@
 Start Wizard Dialog
 ------------------------------------------------------>
 
-<div id="Wizard_Modal" class="modal fade hide" 
+<div id="Wizard_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
 
 <div class="modal-dialog">
@@ -41,7 +41,7 @@ Start Wizard Dialog
 	      		The wizard will guide you through a series of questions and options to best 
 	      		determine which Technology Stack Package will
 	      		suit your requirements, along with the different ways to load and apply a model.
-	      		<p><a href="#" onclick="wizardMigrateorInnovate()">Let's Get Started!!</a>
+	      		<p><a href="#" onclick="chooseTSPWizard()">Let's Get Started!!</a>
 	    	</span>
 	  	</div> <!-- modal-body -->
 
@@ -59,7 +59,7 @@ Start Wizard Dialog
  Choose Migrate or innovate Dialog
 ------------------------------------------------------>
 
-<div id="Migrate_Or_Innovate_Modal" class="modal fade hide" 
+<div id="Migrate_Or_Innovate_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="Migrate_Or_Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
 
 	<div class="modal-dialog">
@@ -111,7 +111,7 @@ Start Wizard Dialog
 <!----------------------------------------------------
  Migrate dialog
 ------------------------------------------------------>
-<div id="Migrate_Modal" class="modal fade hide" 
+<div id="Migrate_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="Migrate_Label_Id" aria-hidden="true" style="background:white;color:black">
 
 <div class="modal-dialog">
@@ -133,31 +133,39 @@ Start Wizard Dialog
 
 		<div class="modal-body" style="background-color:white" id="wizard_body_id">
     		<span style="font-size:1.4em">
-    			Are you migrating from an existing J2EE App, a Java code base, a database directly, or SQL Script file?
+    			Are you migrating from an existing J2EE/Java code base or a SQL Script file?
     		</span>
     		<table  style="width:100%">
 	  	  		<tr>
 	        		<td>
-	    	  			<a href="#" onclick="migratePojoWizard()">
-	   						<img align="center" src="./img/ejb-mini-logo.png" width="128" height="128"/>
+	    	  			<a href="#" onclick="migrateGitWizard()">
+	   						<img align="center" src="./img/git-circle.png" width="128" height="128"/>
 	    	  			</a>
 	    			</td>	
 	        		<td>
+	    	  			<a href="#" onclick="migrateEJBWizard()">
+	   						<img align="center" src="./img/ejb-circle.png" width="128" height="128"/>
+	    	  			</a>
+	    			</td>
+	        		<td>
 	    	  			<a href="#" onclick="migratePojoWizard()">
-	   						<img align="center" src="./img/java.png" width="128" height="128"/>
+	   						<img align="center" src="./img/java-circle.png" width="128" height="128"/>
 	    	  			</a>
 	    			</td>
-	    			<td>
-	    	  			<a href="#" onclick="migrateDatabaseWizard()">
-	    					<img align="center" src="./img/database.png" width="128" height="128"/>
-	    	  			</a>
-	    			</td>
+				</tr>
+				<tr>
 	    			<td>
 	    	  			<a href="#" onclick="migrateSQLScriptWizard()">
-	    					<img align="center" src="./img/sql_script.png" width="128" height="128"/>
+	    					<img align="center" src="./img/sqlscript-circle.png" width="128" height="128"/>
 	    	  			</a>
 	    			</td>
-	   	  		</tr>
+					<td>
+					  <a href="#" onclick="innovateExistingModelWizard()">
+						<img align="center" src="./img/catalog-circle.png" width="128" height="128"/>
+					  </a>
+					</td>
+					<td>&nbsp</td>
+				</tr>
 	 		</table>
 		</div> <!-- modal-body -->
 
@@ -172,7 +180,7 @@ Start Wizard Dialog
  Innovate Diaog
 ------------------------------------------------------>
 
-	<div id="Innovate_Modal" class="modal fade hide" 
+	<div id="Innovate_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Innvoate_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -195,30 +203,38 @@ Start Wizard Dialog
 
 	  <div class="modal-body" style="background-color:white" id="wizard_body_id">
     	<span style="font-size:1.4em">
-    		Are you loading a new model from a JSON file, a UML file, an Eclipse model, or from a previously loaded/saved model?
+    		Are you loading a new model or using a previously published model?
     	</span>
     	<table style="width:100%">
 	  	  <tr>
 	        <td>
+	    	  <a href="#" onclick="innovateYAMLWizard()">
+	   			<img align="center" src="./img/yaml-circle.png" width="128" height="128"/>
+	    	  </a>
+	    	</td>
+	        <td>
 	    	  <a href="#" onclick="innovateJSONWizard()">
-	   			<img align="center" src="./img/json-logo.png" width="128" height="128"/>
+	   			<img align="center" src="./img/json-circle.png" width="128" height="128"/>
 	    	  </a>
 	    	</td>
 	        <td>
 	    	  <a href="#" onclick="innovateUMLWizard()">
-	   			<img align="center" src="./img/uml.png" width="128" height="128"/>
+	   			<img align="center" src="./img/uml-circle.png" width="128" height="128"/>
 	    	  </a>
 	    	</td>
+		  </tr>
+		  <tr>
 	    	<td>
 	    	  <a href="#" onclick="innovateEcoreWizard()">
-	    		<img align="center" src="./img/emf_logo.png" width="128" height="128"/>
+	    		<img align="center" src="./img/eclipse-circle.png" width="128" height="128"/>
 	    	  </a>
 	    	</td>
 	    	<td>
 	    	  <a href="#" onclick="innovateExistingModelWizard()">
-	    		<img align="center" src="./img/repository.png" width="128" height="128"/>
+	    		<img align="center" src="./img/catalog-circle.png" width="128" height="128"/>
 	    	  </a>
 	    	</td>
+			<td>&nbsp</td>
 	   	  </tr>
 	 	</table>
 	  </div> <!-- modal-body -->
@@ -317,7 +333,7 @@ Start Wizard Dialog
     </div> <!--TSP_Wizard_Modal -->
 
 <!-- MVC_Wizard_Modal dialog -->
-	<div id="MVC_Wizard_Modal" class="modal fade hide" 
+	<div id="MVC_Wizard_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="MVC_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -379,7 +395,7 @@ Start Wizard Dialog
     </div> <!--TSP_Wizard_Modal -->
 
 <!-- Delegate_Wizard_Modal dialog -->
-	<div id="Delegate_Wizard_Modal" class="modal fade hide" 
+	<div id="Delegate_Wizard_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Delegate_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -433,7 +449,7 @@ Start Wizard Dialog
     </div> <!--TSP_Wizard_Modal -->
 
 <!-- Persistence_Wizard_Modal dialog -->
-	<div id="Persistence_Wizard_Modal" class="modal fade hide" 
+	<div id="Persistence_Wizard_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Persistence_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -482,7 +498,7 @@ Start Wizard Dialog
     </div> <!--Persistence_Wizard_Modal -->
 
 <!-- Cache_Wizard_Modal dialog -->
-	<div id="Cache_Wizard_Modal" class="modal fade hide" 
+	<div id="Cache_Wizard_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Cache_Wizard_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -530,7 +546,7 @@ Start Wizard Dialog
     </div> <!--Persistence_Wizard_Modal -->
 
 <!-- factory dialog -->
-	<div id="Factory_Modal" class="modal fade hide" 
+	<div id="Factory_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Factory_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -561,7 +577,7 @@ Start Wizard Dialog
     </div> <!--Factory_Modal -->
 
 <!-- App_Options_Modal dialog -->
-	<div id="App_Options_Modal" class="modal fade hide" 
+	<div id="App_Options_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Option_Modal_Label_Id" 
 		aria-hidden="true" style="background:white;color:black">
 	<div class="modal-dialog modal-lg">
@@ -599,7 +615,7 @@ Start Wizard Dialog
     </div> <!--App_Options_Modal -->
 
 <!-- Wizard Done dialog -->
-	<div id="Wizard_Done_Modal" class="modal fade hide" 
+	<div id="Wizard_Done_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Wizard_Done_Label_Id" aria-hidden="true" style="background:white;color:black">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -622,7 +638,7 @@ Start Wizard Dialog
 	  <div class="modal-body">
 	    <span style="font-size:1.0em;padding-bottom:15px" >
 	    	The wizard session is complete.  You will now be directed to a screen allowing the setting of app options. Take note of
-	    	the GitHub options if you plan on directing cloudMigrate to push the app files to GitHub after app creation.
+	    	the GitHub options if you plan on directing realMethods to push the app files to GitHub after app creation.
 	    <span>
 	  </div> <!-- modal-body -->
 
@@ -635,7 +651,7 @@ Start Wizard Dialog
 
 
 <!-- Factory_TSP_Select_Modal dialog -->
-	<div id="Factory_TSP_Select_Modal" class="modal fade hide" 
+	<div id="Factory_TSP_Select_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 		role="dialog" aria-labelledby="Factory_TSP_Select_Label_Id" aria-hidden="true" style="background:white;color:black">
 
     <div class="modal-dialog">
@@ -659,14 +675,14 @@ Start Wizard Dialog
 	  <div class="modal-body">
 	  
 	    <span style="font-size:1.2em" >
-	      Choose the Tech Stack Package which best suits your target application
+	      Choose the Tech Stack Package which best suits your project
 	    <span>
 	    <p style="margin-top:15px">
-	    <div id="tspWizardGridId"></div>
+	    <div id="tspWizardGridId" class="tspWizardGridClass" ></div>
 	  </div> <!-- modal-body -->
 
 	  <div class="modal-footer">
-		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="wizardDone()">Next >></button>
+		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true" onclick="showMigrateInnovate()">Next >></button>
 		<button class="btn btn-dark" data-dismiss="modal" aria-hidden="true">Close</button>
 	  </div> <!-- modal-footer -->
 	 </div>

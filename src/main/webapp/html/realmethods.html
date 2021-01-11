@@ -1,19 +1,19 @@
-<!-- * Copyright (c) 2017 realMethods, Inc. All rights reserved.
- * This software is the proprietary information of cloudMigrate, Inc.
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
+ * This software is the proprietary information of realMethods, Inc.
  * Use is subject to license terms formally and mutually agreed to 
- * by cloudMigrate, Inc. and you.
+ * by realMethods, Inc. and you.
  * 
  * Contributor
  *     realMethods, Inc - initial API and implementation
 -->
 <head>
     <meta charset="utf-8">
-    <title>realMethods 1.1</title>
+    <title>KnowOps Project Generator</title>
     
 	<link rel="icon" href="./img/favicon-16x16.fw.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="realMethods platform, applies a tech stack package to a business model to create rich fully functional apps">
+    <meta name="description" content="KnowOps platform, applies a tech stack package to a business model to create rich fully functional projects">
     <meta name="author" content="realMethods">
      
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -285,6 +285,21 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
 	  }
 	});
 
+	// resources slider
+	resourcesSlideDiv = $("#resourcesSlideId").slideReveal(
+	{
+	  trigger: $("#resourcesTriggerId"),
+	  top: 40,
+	  push: false,
+	  overlay: false,
+	  position : "right",
+	  width: '90%',
+	  speed : 500,
+	  show: function(obj)
+	  {
+	  	closeOtherSlideDivs( resourcesSlideDiv );
+	  }
+	});
 	// user options slider
 	userOptionsSlideDiv = $("#userOptionsSlideId").slideReveal(
 	{
@@ -365,6 +380,9 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
 	if ( notThisDiv != librarySlideDiv )
 		librarySlideDiv.slideReveal("hide", false);
 
+	if ( notThisDiv != resourcesSlideDiv )
+		resourcesSlideDiv.slideReveal("hide", false);
+
 	if ( notThisDiv != userOptionsSlideDiv )
 		userOptionsSlideDiv.slideReveal("hide", false);				
 
@@ -393,58 +411,89 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
 
 <div "headerId">
 
-	<table id="headerTableId" class="statusTableClass">
-    	<tr>  	  
-      		<td style="width:200px;text-align:left;vertical-align:center;color:white;">
-
-		<!--		<div id="wizardDivId">
-		  			<a href="#" onclick="showTSPWizard()">
-						<img src="./img/wizard.hat.png" class="theToolTip" title="Get started with the App Creation Wizard" 
-	        				style="float:left;margin:4px;width:24;height:24;padding-right:10px"/>
+	<div  id="headerTableId" class="container-fluid statusTableClass">
+		<div class="row align-items-center">
+			<div class="col-4 align-self-center" style="vertical-align:middle">
+			<!--
+				<div id="wizardDivId">
+		  			<a href="#" onclick="wizard()">
+						<img src="./img/wizard.hat.png" class="theToolTip leftImageClass" title="Get started with the Creation Wizard"/>
 		  			</a>
-		-->		  			
-		  			</div> <!-- wizardDivId -->
-	  
-<!-- help button and slider-->
+							
+		  		</div>-->	  
+				<!-- wizardDivId -->
 
+				<div id="newProjectDivId">
+		  			<a href="#" onclick="showNewProjectDialog()">
+						<img src="./img/new-circle.png" class="theToolTip leftImageClass" title="New project"/>
+		  			</a>
+		  		</div> <!-- saveProjectDivId -->
+
+				<div id="saveProjectDivId">
+		  			<a href="#" onclick="saveProject()">
+						<img src="./img/save-disk.png" class="theToolTip leftImageClass" title="Save project"/>
+		  			</a>	
+		  		</div> <!-- saveProjectDivId -->
+
+				<div id="openProjectDivId">
+		  			<a href="#" onclick="openProject()">
+						<img src="./img/open-folder.png" class="theToolTip leftImageClass" title="open project"/>
+		  			</a>	
+		  		</div> <!-- openProjectDivId -->
+
+				<div class="container-fluid ">
+					<div class="row justify-content-start">
+						<div class="col-4 align-self-center" style="color:black;vertical-align:middle;text-align:right">
+							<div id="project_div_id">
+							</div> <!-- project_div_id -->
+						</div>
+						<div class="col-4 align-self-center" id="project_buttons_div_id" style="display:none;vertical-align:middle;text-align:left">
+							<a href="#" onclick="showBuilds()">
+								<img src="./img/useroptions.png" class="theToolTip leftImageClass" title="Show builds for project"/>
+							</a>
+							<a href="#" onclick="showGitParamsModal()">
+								<img src="./img/git-menu.png" class="theToolTip leftImageClass" title="Set Git parameters"/>
+							</a>
+
+						</div> <!-- project_buttons_div_id -->
+					</div>
+				</div>
+	  		</div>
+
+	  		<div class="col-6" style="vertical-align:middle;text-align:center">		    
+			    <div class="container">
+				    <div class="row align-items-center">
+						<div id="package_fd_model_div_id" style="vertical-align:middle;text-align:center">
+							&nbsp
+						</div> <!-- package_fd_model_div_id -->
+					</div>
+				</div>
+			</div>
+			
+	  		<div class="col" style="vertical-align:middle">
 				<a href="#" id="helpTriggerId">
-	      			<img src="./img/help.png" class="theToolTip" title="Launch the User's Guide" 
-	        			style="float:left;margin:4px;width:32;height:32;padding-right:10px"/>
-      			</a> <!-- helpTriggerId -->
-	
-      			<div id="helpSlideId" class="slideClass">
-	      			<iframe src="http://www.realmethods.com/users.guide/7.1/" height=500 width=1300 scrolling="auto"></iframe>
-        			</div> <!-- helpSlideId -->
+					<img src="./img/help.png" class="theToolTip leftImageClass" title="Launch the User's Guide"/>
+				</a> <!-- helpTriggerId -->
+		
+				<div id="helpSlideId" class="slideClass">
+					<iframe src="https://realmethods.com/home/usersguide/" height=500 width=1300 scrolling="auto"></iframe>
+				</div>
+						<!-- helpSlideId -->
 
 				<div id="supportImageDivId">
-		  			<a href="#" data-toggle="modal" data-target="#Submit_Request_Modal">
-						<img src="./img/support.png" 
-	        				style="float:left;margin:4px;width:32;height:32;padding-right:10px"/>
-		  			</a>
+					<a href="#" data-toggle="modal" data-target="#Submit_Request_Modal">
+						<img src="./img/support.png" class="leftImageClass"/>
+					</a>
 				</div> <!-- supportImageDivId -->
 
 				<div id="logoutDivId">
-		  			<a href="#" onclick="logout()">
-						<img src="./img/powerdown.png" 
-	        				style="float:left;margin:4px;width:32;height:32;padding-right:10px"/>
-		  			</a>
+					<a href="#" onclick="logout()">
+						<img src="./img/powerdown.png" class="leftImageClass"/>
+					</a>
 				</div> <!-- logoutDivId -->
-
-        		      
-	  		</td>
-
-	  		<td style="vertical-align:center;width:60%;text-align:center">		    
-       			<div id="package_fd_model_div_id" style="padding-top:6px">
-	     				&nbsp
-       			</div> <!-- package_fd_model_div_id -->
- 			</td>	  
-	  
-	  		<td style="vertical-align:left;width:30%;text-align:center">
-	    		<div id="titleDivId">
-	    		</div> <!-- titleDivId -->
-	  		</td> 
-    	</tr>
-  	</table> <!-- headerTableId --> 
+			</div>
+    	</div>
+  	</div> <!-- headerTableId --> 
 
 </div> <!-- headerId -->
 
@@ -457,7 +506,7 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
         
 <!-- navbar for tech stack package -->        
         
-          			<tr class="sideNavImageTableRowClass"  id="id="">          
+          			<tr class="sideNavImageTableRowClass"  id="techStackSideNavRowId">          
             			<td class="sideNavBarImageClass">
             				<!-- load techstackpage.html -->
             				<div w3-include-html="techstackpackage.html" id="techStackPageDivId">
@@ -499,16 +548,28 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
             			</td>
           			</tr> <!-- appOptionsSideNavRowId -->
 
-<!-- navbar for app archive -->
+<!-- navbar for resources -->
          
+          			<tr class="sideNavImageTableRowClass" id="resourcesSideNavRowId">
+						<td class="sideNavBarImageClass">
+			  				<!-- load the resources.html -->
+			  				<div w3-include-html="resources.html" id="resourcesPageId"/>
+			  					<script>$.include("./html/resources.html");</script>
+			  				</div>
+            			</td>
+          			</tr> <!-- resourcesSideNavRowId -->
+
+<!-- navbar for app archive -->
+<!--         
           			<tr class="sideNavImageTableRowClass" id="appArchiveSideNavRowId">
 						<td class="sideNavBarImageClass">
-			  				<!-- load the apparchive.html -->
 			  				<div w3-include-html="apparchive.html" id="appArchivePageId"/>
 			  					<script>$.include("./html/apparchive.html");</script>
 			  				</div>
             			</td>
-          			</tr> <!-- appArchiveSideNavRowId -->
+          			</tr> 
+-->
+<!-- appArchiveSideNavRowId -->
           
 <!-- navbar for app generation -->
           
@@ -566,5 +627,3 @@ var navBarDiv, packageSlideDiv, modelSlideDiv, reverseSlideDiv, optionsSlideDiv,
 
 
 </html>
-
-

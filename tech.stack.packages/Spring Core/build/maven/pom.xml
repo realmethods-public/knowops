@@ -25,12 +25,11 @@
   </properties>
 
   <build>
-
+        
     <plugins>
 
 #springBootPluginDecl()    
 #standardMavenWarPlugin()      
-#eclipseJettyMavenPluginDecl()
 #testPluginDecl()
 #jfrogPluginDecl()
 #xebiaLabsPlugin()

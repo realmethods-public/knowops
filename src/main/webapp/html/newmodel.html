@@ -1,10 +1,10 @@
-<!-- * Copyright (c) 2017 cloudMigrate, Inc. All rights reserved.
- * This software is the proprietary information of cloudMigrate, Inc.
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
+ * This software is the proprietary information of realMethods, Inc.
  * Use is subject to license terms formally and mutually agreed to 
- * by cloudMigrate, Inc. and you.
+ * by realMethods, Inc. and you.
  * 
  * Contributor
- *     cloudMigrate, Inc - initial API and implementation
+ *     realMethods, Inc - initial API and implementation
 -->
 
 <div id="newModelDivId">
@@ -14,43 +14,59 @@
         	src="./img/model-2.png" title="Display options to use a model for a new `app"/>                	
   </a>
   
+
   <div class="container-fluid slideClass 2" id="modelSlideId">
 
-    <div class="row 3">
+  <h3 class="sectionHeaderClass">Load entity model</h3>
 
-      <div class="col col-lg-8 4">
+    <div class="row 3" style="background:white">
+
+      <div class="col col-lg-7 4">
 
 <!-- file related columns -->
 
         <div class="container 5">
           
-          <h3>Load model from file</h3>
-          
+		  <div class="row">
+		      <div class="col">
+			      <span style="font-size:1.5em;color:black">For Cloud Native & Net New App Scenarios</span>
+			  </div>
+		  </div>
+		  
           <div class="row modelContainerRow">
+
+<!-- YAML column -->
+            <div class="col col-lg-2 7">
+              <a href="#" class="toggle-json-panel" onclick="showLocalModelModal('yaml')">
+                <img class="modelImageClass theToolTip" src="./img/yaml-circle.png"
+              	  title="Load model from an appropriately formed YAML file"/>
+              </a>
+            </div> <!-- class="col col-lg-4 7" -->
+
 		  
 <!-- JSON column -->
-            <div class="col col-lg-3 7">
+            <div class="col col-lg-2 7">
               <a href="#" class="toggle-json-panel" onclick="showLocalModelModal('json')">
                 <img class="modelImageClass theToolTip" src="./img/json-circle.png"
               	  title="Load model from an appropriately formed JSON file"/>
               </a>
-            </div> <!-- class="col col-lg-3 7" -->
+            </div> <!-- class="col col-lg-4 7" -->
 
 <!-- UML column -->                       
-            <div class="col col-lg-3 7">
+            <div class="col col-lg-2 7">
               <a href="#" class="toggle-uml-panel" onclick="showLocalModelModal('xmi')">
                 <img class="modelImageClass theToolTip" src="./img/uml-circle.png"
                 	title="Load model from an XMI 1.x file(.xmi) or UML 2.x file (.uml)"/>
               </a>
-            </div> <!-- class="col col-lg-3 7" -->
+            </div> <!-- class="col col-lg-4 7" -->
               
 <!-- Ecore column -->                      
-            <div class="col col-lg-3 7">
+            <div class="col col-lg-2 7">
               <a href="#" class="toggle-ecore-panel" onclick="showLocalModelModal('ecore')">
                 <img class="modelImageClass theToolTip" src="./img/eclipse-circle.png"
                 	title="Load an Eclipse Modeling Framework file (.core or .ecore)"/>
               </a>
-            </div> <!-- class="col col-lg-3 7" -->
+            </div> <!-- class="col col-lg-4 7" -->
                
           </div> <!-- class="row 6" -->
       
@@ -60,33 +76,48 @@
 
         <div class="container 5">
 
-          <div class="row modelContainerRow 6" id="modelLibraryDivId" style="vertical-align:top">
-          
-<!-- J2EE column -->
+		  <div class="row">
+		      <div class="col">
+			      <span style="font-size:1.5em;color:black">For Refactoring Scenarios</span>
+			  </div>
+		  </div>
+
+          <div class="row modelContainerRow" id="modelLibraryDivId" style="vertical-align:top">
+
+<!-- Git column -->
 			
-            <div class="col col-lg-3 7">
+            <div class="col col-lg-2 7">
+              <a href="#" class="toggle-j2ee-jar-panel" onclick="showLocalModelModal('git')">
+                <img class="modelImageClass theToolTip" src="./img/git-circle.png"
+                  	title="Load bean classes from a Git repository"/>
+              </a>
+            </div> <!-- class="col col-lg-2 7" -->
+              
+          
+<!-- J2EE column -->			
+            <div class="col col-lg-2 7">
               <a href="#" class="toggle-j2ee-jar-panel" onclick="showLocalModelModal('jar')">
                 <img class="modelImageClass theToolTip" src="./img/ejb-circle.png"
                   	title="Load bean classes stored in an EJB Module's .jar file"/>
               </a>
-            </div> <!-- class="col col-lg-3 7" -->
+            </div> <!-- class="col col-lg-2 7" -->
               
 <!-- POJO column -->
 
-            <div class="col col-lg-3 7">
+            <div class="col col-lg-2 7">
               <a href="#" class="toggle-java-jar-panel" onclick="showLocalModelModal('jar')">
                 <img class="modelImageClass theToolTipe" src="./img/java-circle.png"
                 	title="Load POJOs from a .jar file"/>
               </a>
-            </div> <!-- class="col col-lg-3 7" -->				
+            </div> <!-- class="col col-lg-2 7" -->				
 
 <!-- SQL script column -->
-            <div class="col col-lg-3 7">                
+            <div class="col col-lg-2 7">                
               <a href="#" class="toggle-sql-script-panel" onclick="showLocalModelModal('sql')">
                 <img class="modelImageClass theToolTip" src="./img/sqlscript-circle.png"
                 	title="Load mode from a SQL script file (.sql)"/>
               </a>
-            </div> <!-- class="col col-lg-3 7"-->
+            </div> <!-- class="col col-lg-2 7"-->
 
           </div> <!-- class="row 6" -->
       
@@ -95,8 +126,6 @@
 <!-- library related column -->
 
         <div class="container 5">
-
-          <h3>Model Repository</h3>
 
           <div class="row 6 modelContainerRow" style="vertical-align:top">
       
@@ -117,7 +146,7 @@
 
 <!-- model tree column -->              
 
-    <div class="col col-lg-3 4">
+    <div class="col col-lg-4 4">
   
       <div id="modelTreeDivId" class="modelTreeDivClass">
         <div id="modelTreeId" class="modelTreeClass" style="background:white">

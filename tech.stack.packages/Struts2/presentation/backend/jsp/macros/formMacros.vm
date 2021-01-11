@@ -1,15 +1,15 @@
-#macro( generateFormFields $attributes $parentPrefix )
+#macro( generateStrutsFormFields $attributes $parentPrefix )
 <table class="formTableClass">
 #foreach( $attribute in $attributes )
 	<tr class="formTRClass">
 	  <td class="formTDClass">${attribute.getDisplayName()}</td>
-	  <td class="formTDClass">#outputFormField( $attribute $parentPrefix )</td>
+	  <td class="formTDClass">#outputStrutsFormField( $attribute $parentPrefix )</td>
 	</tr>
 #end 
 </table>
 #end
 
-#macro( outputFormField $attribute $parentPrefix )
+#macro( outputStrutsFormField $attribute $parentPrefix )
 #set( $lowercaseClassName 		= ${Utils.lowercaseFirstLetter( ${classObject.getName()} )} )
 #set( $attributeName 	= ${Utils.lowercaseFirstLetter( ${attribute.getName()} )} )
 #set( $type 			= $attribute.getType() )
@@ -47,7 +47,8 @@
 <input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="maskedTextField form-control" />
 
 	#else
-<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="form-control" />	
+<input type='text' id="${id}" name="${name}" placeHolder="${displayName}" required="${required}" validate="${required}" class="form-control" />
+	
 	#end
 #end
 

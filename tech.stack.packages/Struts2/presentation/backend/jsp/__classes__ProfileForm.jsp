@@ -13,7 +13,6 @@
 #set( $jQueryLoadingDivId = "${jQueryClassName}FormLoadingDivId")
 #set( $jQueryProfileFormId = "${jQueryClassName}ProfileFormId")
 #set( $jQueryAssociationDivId = "${jQueryClassName}AssociationDivId")
-
 <%
   String parentId	= null;
   String parentUrl	= null;
@@ -21,12 +20,9 @@
   String deleteUrl 	= null;
   String modelUrl 	= null;
 %>	              
-
 <link href="${pageContext.request.contextPath}/css/toggle.checkbox.css" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/dom.selectizing.css">
 <link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/dom.selectizing.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-mask-as-number.js"></script>
 
@@ -87,7 +83,7 @@
 				// save the ${roleName}
 				var parentId = document.getElementById( '${pkExpression}' ).value;
 		 		var childId = this.options[this.selectedIndex].value;
-		 		var url 	= '/${className}/save${roleName}.?${pkExpression}=' + parentId + "&childId=" + childId;
+		 		var url 	= '${pageContext.request.contextPath}/${className}/save${roleName}.?${pkExpression}=' + parentId + "&childId=" + childId;
 	
 				jQuery.ajax(
 				{
@@ -105,7 +101,7 @@
 	 	$( document ).on('refresh${roleName}For${className}', function() 
 	 	{			
 	 		// reload ${className} and apply the ${roleName}
-	 		var url 	= '/${classObject.getName()}/load?${pkExpression}=' + id;
+	 		var url 	= '${pageContext.request.contextPath}/${classObject.getName()}/load?${pkExpression}=' + id;
 	 		var element = document.getElementById( '${roleName}InputId' );
 	 		var field 	= '${Utils.lowercaseFirstLetter( ${roleName} )}.${childFirstAttribName}';
 	 		
@@ -135,7 +131,7 @@
 			
 			jQuery.ajax(
 			{
-		  		url: '/${classObject.getName()}/load?${pkExpression}=' + id,
+		  		url: '${pageContext.request.contextPath}/${classObject.getName()}/load?${pkExpression}=' + id,
 		  		dataType: 'json',
 			}).always(function( data ) 
 			{
@@ -196,13 +192,13 @@
     			$(this).val('true');
   		});
 
-		var url 		= '/${classObject.getName()}/save';		
+		var url 		= '${pageContext.request.contextPath}/${classObject.getName()}/save';		
 		var parentUrl 	= '<%=request.getParameter("parentUrl")%>';
 		var formData 	= $('${jQueryProfileFormId}').serialize();
 		var action 		= '<%=request.getParameter("action")%>';
 		
 		if ( action == 'create' ) 
-			'/${classObject.getName()}/create';
+			url = '${pageContext.request.contextPath}/${classObject.getName()}/create';
 			
 		jQuery.ajax(
 		{
@@ -214,7 +210,6 @@
 			if ( parentUrl != 'null' )
 			{
 				parentUrl = parentUrl + '&childId=' + data['${pk.getName()}'];
-				console.log( 'parentUrl is ' + parentUrl );
 				jQuery.ajax(
 				{
 			  		url: parentUrl,
@@ -226,11 +221,12 @@
 
 			if ( action == 'create' )
 				$( '${jQueryAssociationDivId}' ).show();
+
+		    $('${jQueryLoadingDivId}').hide();			
 				
 			doneSaving${className}();
 		});
 		
-		$('${jQueryLoadingDivId}').hide();			
 	
 	}
 #foreach( $singleAssociation in $classObject.getSingleAssociationsWithoutSourceRole() )
@@ -259,7 +255,7 @@
 
 		jQuery.ajax(
 		{
-		    url: "/${associationClassType}/viewAll",
+		    url: "${pageContext.request.contextPath}/${associationClassType}/viewAll",
 		    dataType: 'json',
 		}).always(function( data ) 
 		{
@@ -306,8 +302,8 @@
 	{    
 		var title = "Add New " + associationClassType + " for ${className} " + roleName;
 		var parentId = document.getElementById("${pkExpression}").value;
-		parentUrl = '/${className}/save' + roleName + '?${pkExpression}=' + parentId;
-		var url = '/jsp/' + associationClassType + 'ProfileForm.jsp?action=create&parentUrl=' + parentUrl + '&parentName=${lowercaseClassName}&roleName=' + roleName;
+		parentUrl = '${pageContext.request.contextPath}/${className}/save' + roleName + '?${pkExpression}=' + parentId;
+		var url = '${pageContext.request.contextPath}/jsp/' + associationClassType + 'ProfileForm.jsp?action=create&parentUrl=' + parentUrl + '&parentName=${lowercaseClassName}&roleName=' + roleName;
 		var eventToFire = 'refresh' + roleName + 'For${className}';
 		inspectionDialog( title, url, eventToFire );
     }
@@ -327,7 +323,7 @@
             {
 				var elementName = "${lowercaseClassName}." + nameOfRole.toLowerCase() + "." + keyFieldName;
 				var element 	= document.getElementsByName(elementName)[0];
-				var url 		= '/${classObject.getName()}/delete' + nameOfRole + '';
+				var url 		= '${pageContext.request.contextPath}/${classObject.getName()}/delete' + nameOfRole + '';
 				
 				url = url + '?childIds=' + ids;
 				
@@ -355,7 +351,7 @@
 ########################################################
 <!-- Direct Attributes -->          	
 #set( $parentPrefix = "" )
-#generateFormFields( $directAttributes $parentPrefix )
+#generateStrutsFormFields( $directAttributes $parentPrefix )
 
 ##################################################################
 ## Next, output the composites from single associations as fields
@@ -370,7 +366,7 @@
 		  <b><font color="#fffff+f">${composite.getDisplayName()}</font></b>
 		 </td>
 		    #set( $parentPrefix = "${Utils.lowercaseFirstLetter( ${composite.getName()} )}" )
-		    #generateFormFields( $composite.getAttributes() $parentPrefix )
+		    #generateStrutsFormFields( $composite.getAttributes() $parentPrefix )
 	  </tr>
 	#end ##if ( $composite.isFromAssociation() == true )
 #end  		  	
@@ -378,19 +374,20 @@
   	<br>
 	<div>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="save ${classObject.getName()}" onclick="save${className}()">
-		    <button type="button" class="btn btn-info">
-		      <span class="glyphicon glyphicon--save">
+		    <button type="button" class="btn btn-outline-primary">
 		      	Save
-		      </span>
 			</button>
 		</a>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="reset" onclick="reset${className}()">
-		    <button type="button" class="btn btn-info">
-		      <span class="glyphicon glyphicon-refresh">
+		    <button type="button" class="btn btn-outline-primary">
 		      	Reset
-		      </span>
 			</button>
 		</a>
+		<div id="${className}FormLoadingDivId" style="display:none;color:black">
+  			saving $className...<image src="${pageContext.request.contextPath}/img/load_new.gif" width=48 height=48/>
+		</div>				  				  
+		<div id="${className}FormStatusDivId">
+		</div>	
 	</div> 
   </form>
 </div>
@@ -428,18 +425,18 @@
 	                <div id="multiSelectFor${roleName}DivId" style="display:none">
 	                  <select id="multiSelectFor${roleName}" />
 	                  <a href="#" onclick="$('#multiSelectFor${roleName}DivId').hide();">
-				        <button type="button" class="btn btn-default btn-sm">
+				        <button type="button" class="btn btn-outline-primary">
 				          <span class="glyphicon glyphicon-remove"/>
 				 	    </button>
 				      </a>
 	                </div>
 				    <a href="#" data-toggle="tooltip" data-placement="below" title="create ${associationClassType}" onclick="add${roleName}()">
-  				      <button type="button" class="btn btn-default btn-sm">
+  				      <button type="button" class="btn btn-outline-primary">
 				        <span class="glyphicon glyphicon-plus"/>
 					  </button>
 				    </a>
 				    <a href="#" data-toggle="tooltip" data-placement="below" title="add ${associationClassType} from list" onclick="add${roleName}FromList()">
-				      <button type="button" class="btn btn-default btn-sm">
+				      <button type="button" class="btn btn-outline-primary">
 				        <span class="glyphicon glyphicon-th-list"/>
 					  </button>
 				    </a>
@@ -485,7 +482,7 @@
   parentId	= "${pkExpression}=" + request.getParameter("${pkExpression}");
   parentUrl	= "/${className}/save${roleName}?" + parentId;
   addUrl 	= "/jsp/${associationClassType}ProfileForm.jsp?action=create&parentUrl=" + parentUrl;
-  deleteUrl 	= "/${className}/delete${roleName}?" + parentId;
+  deleteUrl = "/${className}/delete${roleName}?" + parentId;
   modelUrl 	= "/${className}/load${roleName}?" + parentId;
 %>	              
 	                <jsp:include page="${associationClassType}ViewAllList.jsp">
@@ -508,10 +505,6 @@
 
   </div>
 </div>
-<div id="${className}FormLoadingDivId" style="display:none;color:black">
-  saving $className...<image src="../img/load_new.gif" width=48 height=48/>
-</div>				  				  
-<div id="${className}FormStatusDivId">
-</div>				  				  
+			  				  
 
 

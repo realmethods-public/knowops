@@ -2,7 +2,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -17,7 +17,7 @@
 	
 <hibernate-mapping default-cascade="all" default-lazy="false"> 
 
-   	<class name="com.cloudmigrate.entity.User" table="user" abstract="false">         
+   	<class name="com.realmethods.entity.User" table="user" abstract="false">         
 
 		<id name="id" type="long" >
       		<generator class="native"/>    
@@ -31,8 +31,14 @@
 		<property name="password" column="password" not-null="false"/>
 		<property name="internalIdentifier" column="internalIdentifier" not-null="false"/>
 		<property name="notifyFlag" column="notifyFlag" not-null="false"/>
-		<property name="userType" column="userType" type="com.cloudmigrate.entity.UserTypeEnumType" not-null="false"/>
 		
+		<property name="userType" column="userType">
+    		<type name="org.hibernate.type.EnumType">
+        		<param name="enumClass">com.realmethods.entity.UserType</param>
+            	<param name="useNamed">true</param>
+			</type>
+		</property>
+			
 	</class>
 
 </hibernate-mapping>

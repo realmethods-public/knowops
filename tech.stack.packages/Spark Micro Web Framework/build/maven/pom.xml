@@ -42,7 +42,7 @@
 #set( $exclusion = "" )
 #apacheMavenAntRunPluginDecl( $exclusion )
 #sparkWebMicroframeworkPluginDecl()
-
+#apacheMavenAssemblyPluginDecl()
     	</plugins>
 
   	</build>

@@ -1,14 +1,11 @@
 // global declarations
-var containers, subsystems, components, classes, relations, attributes;
+var globalFolderOpen, containers, subsystems, components, classes, enums, relations, attributes;
 
 
 function buildModelTreeUsingModelData( modelData ) {
 	// reset the global folder open indicator for the tree
 	globalFolderOpen =  false;
 	
-	// update the package, fd, and model div
-	updateTechStackModelStatusDiv();
-
 	// reset counters
 	containers = 0;
 	subsystems = 0;
@@ -16,6 +13,7 @@ function buildModelTreeUsingModelData( modelData ) {
 	classes = 0;
 	relations = 0;
 	attributes = 0;
+	enums = 0;
 	
 	// load the tree  
 	var content = '<ul >';
@@ -41,13 +39,14 @@ function buildModelTreeUsingModelData( modelData ) {
 	$('#modelTreeId').jstree(true).refresh();
 
 	var results;
-	results = "<span style='font-size:0.9em'>Totals: Containers(" + containers + ")"
+	results = "<span style='font-size:1.1em;color:black'>Containers(" + containers + ")"
 		+ ", Classes(" + classes + ")"
+		+ ", Enums(" + enums + ")"
 		+ ", Relations(" + relations + ")"
 		+ ", Attributes(" + attributes + ')</span><br>'
 		/*+ '<label for="primaryKeyId" style="color:black;font-size:0.8em">primary key type, leave blank for default:</label>'
-		+ "<input type='text' size='80' id='primaryKeyId'/>"*/
-		+ "<button class='btn'  aria-hidden='true' onclick='viewModelAsJson()'>View as JSON</button>";
+		+ "<input type='text' size='80' id='primaryKeyId'/>"
+		+ "<button class='btn'  aria-hidden='true' onclick='viewModelAsJson()'>View as JSON</button>"*/;
 		
 	document.getElementById("modelTreeResultsId").innerHTML = results;
 	
@@ -76,7 +75,7 @@ function treeContainersOutput( modelData ) {
 		content = content + " data-jstree='{\"icon\":\"img/container.png\"}'  style='color:black'>Containers";
 		content = content + "<ul>";				
 
-		for( counterB = 0; counterB < modelData.containers.length; counterB++ )
+		for( var counterB = 0; counterB < modelData.containers.length; counterB++ )
 		{
 			containers = containers + 1;
 		
@@ -111,7 +110,7 @@ function treeSubsystemsOutput( modelData ) {
 		content = content + " data-jstree='{\"icon\":\"img/subsystem.png\"}'  style='color:black'>Subsystems";
 		content = content + "<ul>";				
 
-		for( counter = 0; counter < modelData.subsystems.length; counter++ )
+		for( var counter = 0; counter < modelData.subsystems.length; counter++ )
 		{
 			subsystems = subsystems + 1;
 		
@@ -143,7 +142,7 @@ function treeComponentsOutput( modelData ) {
 		content = content + " data-jstree='{\"icon\":\"img/component.png\"}' style='color:black'>Components";
 		content = content + "<ul>";				
 
-		for( index_99 = 0; index_99 < modelData.components.length; index_99++ )
+		for( var index_99 = 0; index_99 < modelData.components.length; index_99++ )
 		{
 			components = components + 1;
 			content = content + applyComponentData( modelData.components[index_99], 'component_'  );			
@@ -174,8 +173,11 @@ function treeClassesOutput( modelData )
 		content = content + " data-jstree='{\"icon\":\"img/classes.png\"}'>Classes";				
 		content = content + "<ul>";
 		
-		for( i = 0; i < modelData.classes.length; i++ )
+		for( var i = 0; i < modelData.classes.length; i++ )
 		{
+			// increment
+			classes = classes + 1;
+
 			content = content + applyClassData( modelData.classes[i], 'class_'  );			
 		}
 		content = content + "</ul></li>";
@@ -199,7 +201,7 @@ function treeServicesOutput( modelData )
 		
 		components = 0;						// reset the global service count
 		
-		for( j = 0; j < modelData.serviceClasses.length; j++ )
+		for( var j = 0; j < modelData.serviceClasses.length; j++ )
 		{
 			content = content + applyClassData( modelData.serviceClasses[j], 'serviceClass_'  );			
 		}
@@ -221,7 +223,7 @@ function treeInterfacesOutput( modelData )
 	{								
 		content = content + "<li data-jstree='{\"icon\":\"img/interface.png\"}'>Interfaces";
 		content = content + "<ul>";				
-		for( k = 0; k < modelData.interfaces.length; k++ )
+		for( var k = 0; k < modelData.interfaces.length; k++ )
 		{
 			content = content + applyClassData( modelData.interfaces[k], 'interfaces_'  );			
 		}
@@ -242,8 +244,9 @@ function treeEnumsOutput( modelData )
 	{									
 		content = content + "<li data-jstree='{\"icon\":\"img/enum.png\"}'>Enums";
 		content = content + "<ul>";				
-		for( l = 0; l < modelData.enums.length; l++ )
+		for( var l = 0; l < modelData.enums.length; l++ )
 		{
+			 enums = enums + 1;
 			 content = content + applyClassData( modelData.enums[l], 'enumClass_' );			
 		}
 		content = content + "</ul></li>";
@@ -262,7 +265,7 @@ function treeUserInterfacesOutput( modelData )
 	{									
 		content = content + "<li data-jstree='{\"icon\":\"img/userinterface.png\"}'>User Interfaces";
 		content = content + "<ul>";				
-		for( m = 0; m < modelData.userInterfaces.length; m++ )
+		for( var m = 0; m < modelData.userInterfaces.length; m++ )
 		{
 			content = content + applyClassData( modelData.userInterfaces[m], 'uiClass_' );			
 		}
@@ -295,7 +298,7 @@ function applyContainerData( the_container, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/classes.png\"}'>Classes";
 		content = content 	  + "<ul>";				
 	
-		for( indx2 = 0; indx2 < the_classes.length; indx2++ )
+		for( var indx2 = 0; indx2 < the_classes.length; indx2++ )
 		{
 			content = content + applyClassData( the_classes[indx2], typePrefix + the_classes[indx2].name + "_component_" );
 		}
@@ -310,7 +313,7 @@ function applyContainerData( the_container, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/enum.png\"}'>Enums";
 		content = content 	  + "<ul>";				
 	
-		for( indx223 = 0; indx223 < the_classes.length; indx223++ )
+		for( var indx223 = 0; indx223 < the_classes.length; indx223++ )
 		{
 			content = content + applyClassData( the_classes[indx223], typePrefix + the_classes[indx223].name + "_component_" );
 		}
@@ -327,7 +330,7 @@ function applyContainerData( the_container, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/services.png\"}'>Services";
 		content = content 	  + "<ul>";				
 	
-		for( indx22 = 0; indx22 < the_classes.length; indx22++ )
+		for( var indx22 = 0; indx22 < the_classes.length; indx22++ )
 		{
 			content = content + applyServiceData( the_classes[indx22], typePrefix + the_classes[indx22].name + "_component_" );
 		}
@@ -344,7 +347,7 @@ function applyContainerData( the_container, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/services.png\"}'>DTOs";
 		content = content 	  + "<ul>";				
 	
-		for( indx222 = 0; indx222 < the_classes.length; indx222++ )
+		for( var indx222 = 0; indx222 < the_classes.length; indx222++ )
 		{
 			content = content + applyDtoData( the_classes[indx222], typePrefix + the_classes[indx222].name + "_component_" );
 		}
@@ -381,7 +384,7 @@ function applySubsystemData( the_subsystem, typePrefix )
 		content = content + "<li data-jstree='{\"icon\":\"img/container.png\"}'>Contained Subsystems";
 		content = content   + "<ul>";				
 	
-		for( indx = 0; indx < the_subsystems.length; indx++ )
+		for( var indx = 0; indx < the_subsystems.length; indx++ )
 		{
 			content = content + applySubsystemData( the_subsystems[indx], typePrefix + the_subsystems[indx].name + "_subsystem_" );
 		}
@@ -396,7 +399,7 @@ function applySubsystemData( the_subsystem, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/container.png\"}'>Contained Components";
 		content = content 	  + "<ul>";				
 	
-		for( indx1 = 0; indx1 < the_components.length; indx1++ )
+		for( var indx1 = 0; indx1 < the_components.length; indx1++ )
 		{
 			content = content + applyComponentData( the_components[indx1], typePrefix + the_components[indx1].name + "_component_" );
 		}
@@ -413,7 +416,7 @@ function applySubsystemData( the_subsystem, typePrefix )
 		content = content 	+ "<li data-jstree='{\"icon\":\"img/container.png\"}'>Contained Classes";
 		content = content 	  + "<ul>";				
 	
-		for( indx2 = 0; indx2 < the_classes.length; indx2++ )
+		for( var indx2 = 0; indx2 < the_classes.length; indx2++ )
 		{
 			content = content + applyClassData( the_classes[indx2], typePrefix + the_classes[indx2].name + "_component_" );
 		}
@@ -450,7 +453,7 @@ function applyComponentData( the_component, typePrefix )
 		content = content + "<li data-jstree='{\"icon\":\"img/container.png\"}'>Contained Components";
 		content = content   + "<ul>";				
 	
-		for( indx6 = 0; indx6 < the_component.components.length; indx6++ )
+		for( var indx6 = 0; indx6 < the_component.components.length; indx6++ )
 		{
 			content = content + applyComponentData( the_component.components[indx6], typePrefix + the_component.components[indx6].name + "_class_" );
 		}
@@ -465,7 +468,7 @@ function applyComponentData( the_component, typePrefix )
 		content = content + "<ul>";				
 	
 		var the_class;
-		for( ind_x = 0; ind_x < the_component.classes.length; ind_x++ )
+		for( var ind_x = 0; ind_x < the_component.classes.length; ind_x++ )
 		{
 			the_class = the_component.classes[ind_x];
 			content = content + applyClassData( the_class, typePrefix + the_component.name + "_class_" );
@@ -489,9 +492,6 @@ function applyClassData( the_class, typePrefix )
 	var content = "<li data-jstree='{\"icon\":\"img/folder.png\"}'" +  'id="' + typePrefix + the_class.name + '">' + the_class.name;
 	var parent = forDisplay( the_class.parentName, 'none' );
 	var realizations = forDisplay( the_class.interfaces, 'none' );
-
-	// increment
-	classes = classes + 1;
 		
 	// create children as attributes, associations, and methods data
 	content = content 
@@ -595,7 +595,7 @@ function applyClassAssociations( the_class )
 		content = "<ul>"
 			+	    "<li data-jstree='{\"icon\":\"img/associations.png\"}'>Associations";
 
-		for( a = 0; a < the_class.associations.length; a++ )
+		for( var a = 0; a < the_class.associations.length; a++ )
 		{
 			multiplicity = forDisplay( the_class.associations[a].multiplicity );
 			

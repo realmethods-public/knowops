@@ -61,7 +61,7 @@ html {
 .sideNavBarClass {
 	height : 100%;
 	width : 96px;
-	background: #d7dee8;
+	background: #cccccc;
 	padding-top : 15px;
 }
 
@@ -126,17 +126,17 @@ html {
 .glyphicon.glyphicon-chevron-right{
     font-size: 28px;
     color: #F0F4F5;
-    background: #515254;
+    background: #000000;
     padding: 4px;
-    border : 6px solid #F0F4F5; 
+    border : 4px solid #ffffff; 
 }
 
 .glyphicon.glyphicon-chevron-left{
     font-size: 28px;
     color: #F0F4F5;
-    background: #515254;
+    background: #000000;
     padding: 4px;
-    border : 6px solid #F0F4F5;
+    border : 4px solid #ffffff;
 }
 
 /*input:focus{
@@ -152,11 +152,11 @@ body, .statusTableClass .mainTableClass, mainDivClass,
 .nav-tabs > li.active > a, 
 .nav-tabs > li.active > a:focus,  
 .nav-tabs > li.active > a:hover {
-    background : white; 
+    background : #ffffff; 
 }
 
 .mainNavTabClass, .statusTableClass {
-    background:#d7dee8;
+    background:#cccccc;
     border:0px;
 }
 
@@ -200,7 +200,7 @@ body {
 }
 
 .packageDivClass  {
-	height: 250px;
+	height: 450px;
 	width: 1000px;
 	overflow : hidden;
 }
@@ -211,12 +211,8 @@ body {
 	border : 2px solid black;
 }
 
-.modelTreeDivClass  {
-	height : 500px;
-}
-
 .modelTreeClass {
-  height : 400px;
+  height : 460px;
   border : 2px solid #cdcdcd;
   background : white;
 }
@@ -241,13 +237,13 @@ padding:0px 10px 0px 0px;
 }
 
 .packageRowClass, .sharedModelRowClass{
-  	border : 2px solid white;
+  	border : 10px solid white;
 }
 
 .packageColumnClass {
-	padding : 2px;
+	padding : 4px;
 	text-align: center;
-	font-size: 1.1em;
+	font-size: 1.4em;
 }
   
 
@@ -262,11 +258,20 @@ padding:0px 10px 0px 0px;
     width : 100%;
 }
 
+.genResultsTable {
+	font-size: 1.6em;
+/*	border: 2px solid black;*/
+	width: 50%;
+	cell-padding: 6px;
+	background: #efefef;
+}
+
 .modelTreeDivClass {
 	overflow-y:auto;
-	padding:0px 10px 0px 0px;
+	padding:10px 10px 0px 0px;
 	display : none;
 	background : white;
+	height : 520px;
 }
 
 .sharedModelTableClass
@@ -336,7 +341,7 @@ tr th:last-child {
 }
 */
 
- tr {
+tr {
     color: black;
     font-size : 12;
 }
@@ -350,47 +355,45 @@ thead th {
 
 .packageRowClass, .sharedModelRowClass{
   	border : 2px solid white;
-  }
-        
-.modal-body {
- color : black
 }
         
-  .modal-header {
+.modal-body {
+	color : black
+}
+        
+.modal-header {
   	background : #eaecef;
-  }
+}
 
-  .modal-footer {
+.modal-footer {
 	background : white;
-  }
+}
 	
-  .appGenTabClass, .packageTabClass, .optionsTabClass, .modelTabClass {
+.appGenTabClass, .packageTabClass, .optionsTabClass, .modelTabClass {
     padding : 2px;
     background : white;
 }
   
-  .componentLibraryTabClass {
-    padding : 2px;
+.componentLibraryTabClass, .componentLibraryRowClass1, .componentLibraryRowClass2 {
+  	padding : 10px;
+    font-size : 16px;
+}
+.componentLibraryTabClass {
     background : white;
     color : black;
     width : 100%;
-    font-size : 12px
-  }
+}
  
- .componentLibraryRowClass1 {
-  background : #546474;
-  color : white;
-  padding : 2px;
-  border : 2px solid white;
-  font-size : 12px;
+.componentLibraryRowClass1 {
+	background : #ffffff;
+  	color : black;
+  	border : 2px solid white;
 }
   
-  componentLibraryRowClass2 {
-  background : #cccccc;
-  color : black;
-  padding : 2px;
-  border : 2px solid white;
-  font-size : 12px;
+.componentLibraryRowClass2 {
+	background : #cccccc;
+  	color : black;
+  	border : 2px solid white;
 }
 
 .appGenResultsClass {
@@ -398,18 +401,18 @@ thead th {
     color : black;
     font-size : 12;
   	border:1px solid black; 
-  }
+}
   
 .genOutputClass {
-  padding:4px;
-  font-size:0.9em;
-  background : #333333;
-  color : #ffffff;
-  overflow-y : auto;
-  height : 200px;
-  width : 100%;
-  border:4px solid blue;
-  }
+  	padding:4px;
+  	font-size:0.9em;
+  	background : #333333;
+  	color : #ffffff;
+  	overflow-y : auto;
+  	height : 200px;
+  	width : 100%;
+  	border:4px solid blue;
+}
 
 .modelOptionsTableClass {
   	overflow-y : auto;
@@ -417,7 +420,7 @@ thead th {
     padding : 4px;
     font-size : 11;
     color : white;
-  }
+}
   
 .modelOptionsTDClass .optionsInputClass .optionsSelectClass .optionsCheckboxClass{
     color : white;
@@ -477,7 +480,6 @@ thead th {
 
 .sectionHeaderClass {
   	background : black;
-  	padding : 4px;
   	color : white;
   	text-align : center;
 }
@@ -601,3 +603,22 @@ thead th {
 	.tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
 	.tab a.active { font-weight: bold; }
 	.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+
+.modal-header{
+     background-color:#cdcdcd;
+}
+.modal-content {
+    overflow:hidden;
+}
+
+.tspWizardGridClass {
+	overflow-y : auto;
+}
+
+.leftImageClass {
+	float:left;
+	margin:4px;
+	width:24;
+	height:24;
+	padding-right:10px;
+}

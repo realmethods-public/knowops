@@ -13,7 +13,7 @@
 #set( $colNames = "" )
 #set( $colModels = "" )
 <link href="http://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<link href="../css/ui.jqgrid.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/css/ui.jqgrid.css" rel="stylesheet" type="text/css"/>
 
 <style>
 	.ui-jqgrid tr.jqgrow td,
@@ -22,9 +22,9 @@
 	}
 </style> 
 
-<script type="text/javascript" src="../js/jquery.jqGrid.min.js"/>
-<script type="text/javascript" src="../js/jquery.jqGrid.src.js"/>
-<script type="text/javascript" src="../js/dual-list-box.min.js"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jqGrid.min.js"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jqGrid.src.js"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/dual-list-box.min.js"/>
 <script type="text/javascript" src="http://trirand.com/blog/jqgrid/js/i18n/grid.locale-en.js"></script>
 
 <script type="text/javascript">
@@ -44,7 +44,7 @@
 		if (  modelUrl == 'null' )
 		{
 			caption 	= '${className} List';
-			modelUrl 	= '/${className}/viewAll';
+			modelUrl 	= '${pageContext.request.contextPath}/${className}/viewAll';
 			rowNum		= 20;
 			height		= 280; 
 		}
@@ -66,7 +66,7 @@
 				#set( $colModels = "${colModels}{name:'${pk.getName()}',index:'${pk.getName()}',hidden:true}," )
 			#end
 			#foreach( $attribute in $directAttributes )
-				#if ( $attribute.isUserViewable() == true && $attribute.isFromAssociation() == false )
+				#if ( $attribute.isUserViewable() == true && $attribute.isFromAssociation() == false && $velocityCount <= 4 ) ## only show 4 cols max
 				#set( $modifiedName = ${Utils.noWhiteSpaceNoDots( ${attribute.getName()} )} )
 				#set( $modifiedName = $Utils.lowercaseFirstLetter( $modifiedName ) )
 				#set( $phrase = ${Utils.turnIntoPhrase( ${attribute.getName()} )} )
@@ -109,7 +109,7 @@
 		var eventToFire = "refresh${className}Grid";
 		
 		if( url == 'null' )
-			url = "/jsp/${className}ProfileForm.jsp?action=create"
+			url = "${pageContext.request.contextPath}/jsp/${className}ProfileForm.jsp?action=create"
 			
 		inspectionDialog( title, url, eventToFire );
 	}
@@ -121,7 +121,7 @@
 		if ( id != null )
 		{
 			var title = "Edit ${className}";
-			var url = '/jsp/${className}ProfileForm.jsp?action=edit&${lowercaseName}.${pkName}=' + id;
+			var url = '${pageContext.request.contextPath}/jsp/${className}ProfileForm.jsp?action=edit&${lowercaseName}.${pkName}=' + id;
 			
 			var eventToFire = "refresh${className}Grid";
 			
@@ -160,7 +160,7 @@
 	                	var url = '<%=request.getParameter( "deleteUrl" )%>';
 	                	
 	                	if ( url == 'null' )
-	                		url = '/${classObject.getName()}/delete?a=a';
+	                		url = '${pageContext.request.contextPath}/${classObject.getName()}/delete?a=a';
 	                	
 	                	for (i = 0; i < ids.length; i++)
 	                	{
@@ -183,7 +183,7 @@
 
 	function add${className}FromAllList()
 	{
-		var sourceUrl	= '/${className}/viewAll';
+		var sourceUrl	= '${pageContext.request.contextPath}/${className}/viewAll';
 		var modelUrl 	= '<%=request.getParameter( "modelUrl" )%>';
 		var value 		= '${pkName}';
 		var text 		= '${firstAttribName}';
@@ -230,25 +230,25 @@
   <tr>
     <td>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="refresh" onclick="populate${className}Grid()" >
-		    <button type="button" class="btn btn-info btn-xs">
+		    <button type="button" class="btn btn-outline-primary">
 		      <span class="glyphicon glyphicon-refresh">
 		      </span>
 			</button>
 		</a>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="add ${classObject.getName()}" onclick="add${className}()">
-		    <button type="button" class="btn btn-info btn-xs">
+		    <button type="button" class="btn btn-outline-primary">
 		      <span class="glyphicon glyphicon-plus">
 		      </span>
 			</button>
 		</a>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="edit ${classObject.getName()}" onclick="edit${className}()" >
-		    <button type="button" class="btn btn-info btn-xs">
+		    <button type="button" class="btn btn-outline-primary">
 		      <span class="glyphicon glyphicon-pencil">
 		      </span>
 			</button>
 		</a>
 		<a href="#" data-toggle="tooltip" data-placement="below" title="delete ${classObject.getName()}" onclick="delete${className}()">
-		    <button type="button" class="btn btn-info btn-xs">
+		    <button type="button" class="btn btn-outline-primary">
 		      <span class="glyphicon glyphicon-trash">
 		      </span>
 			</button>
@@ -257,7 +257,7 @@
 	  <td>
 		<div id="dualListButtonFor${className}DivId" style="display:none">
 		  <a href="#" data-toggle="tooltip" data-placement="below" title="add ${classObject.getName()} From List" onclick="add${className}FromAllList()">
-		    <button type="button" class="btn btn-info btn-xs">
+		    <button type="button" class="btn btn-outline-primary">
 		      <span class="glyphicon glyphicon-th-list">
 		      </span>
 			</button>
@@ -268,6 +268,6 @@
 </table>
 
 <div id="loadingDivId" style="display:none;color:black">
-  loading all ${className} entities...<image src="../img/load_new.gif" width=48 height=48/>
+  loading all ${className} entities...<image src="${pageContext.request.contextPath}/img/load_new.gif" width=48 height=48/>
 </div>				  				  
 

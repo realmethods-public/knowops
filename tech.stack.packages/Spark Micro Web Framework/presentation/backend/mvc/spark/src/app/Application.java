@@ -3,6 +3,7 @@ package ${aib.getRootPackageName()};
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import spark.ModelAndView;
@@ -18,11 +19,12 @@ import static spark.Spark.post;
 
 import spark.servlet.SparkApplication;
 
-import ${aib.getRootPackageName(true)}.bo.*;
+import $
+import main.java.com.realmethods.server.action.GenerateAppAction;
 import ${aib.getRootPackageName(true)}.common.JsonTransformer;
 import ${aib.getRootPackageName(true)}.exception.ProcessingException;
+import ${aib.getRootPackageName(true)}.persistent.*;
 import ${aib.getRootPackageName(true)}.service.*;
-
 
 /**
  * Main Spark Application controller
@@ -41,6 +43,8 @@ public class Application //implements SparkApplication
 		Spark.staticFileLocation("/public");
 #if( ${containerObject} )		
 		Spark.port( ${containerObject.getPort()} );
+#else
+	    Spark.port( 8000 );
 #end		
 		get("/", (request, response) -> 
     	{
@@ -103,13 +107,13 @@ public class Application //implements SparkApplication
     		{
     			exc.printStackTrace();
     		}    	
-    		Spark.stop();
+    		//Spark.stop();
 			return val;    	
     	});
 
     	get("/html/*", (request, response) -> 
     	{
-    		System.out.println( "\n\napplication-->html routing on " + request.splat()[0] );
+    		LOGGER.info( "application-->html routing on " + request.splat()[0] );
     		
 			Map<String, Object> model = new HashMap<>();
 			String parentId = request.queryParams( "parentId" );
@@ -136,7 +140,7 @@ public class Application //implements SparkApplication
 			
     		try
     		{
-    			System.out.println( "\n\nquery param model is " + model );
+    			LOGGER.info( "query param model is " + model );
     			// apply the necessary query params
     			
     		}
@@ -182,8 +186,7 @@ public class Application //implements SparkApplication
     			}
 	    		else
 	    		{    			
-	    			String msg = "\n\n*** Application.main() - failed to located package " + pkg + " in registry";
-	    			System.out.println( msg );
+	    			LOGGER.warn( "Application.main() - failed to located package " + pkg + " in registry" );
 		    		return( msg );
 	    		}    		
 			}
@@ -220,6 +223,8 @@ public class Application //implements SparkApplication
     	
     	private void registerServices()
     	{
+    		// kick the ORM layer which is slow to start when cold...
+    		FrameworkPersistenceHelper.self();
 ## add TestRestService manually    		
     		services.put( "test", new TestRestService() );    		    		
 #if( ${containerObject} )
@@ -235,4 +240,6 @@ public class Application //implements SparkApplication
     	
     	private Map<String, BaseRestService> services = new HashMap<String, BaseRestService>();
     }
+    
+	private static final Logger LOGGER 				= Logger.getLogger(Application.class.getName());
 }

@@ -22,4 +22,5 @@ urlpatterns = [
     path('${class.getName()}/', include('${lowercaseAppName}.urls.${class.getName()}Urls')),
 #end
     path('admin/', admin.site.urls),
+    path('', admin.site.urls),
 ]

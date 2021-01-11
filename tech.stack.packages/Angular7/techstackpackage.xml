@@ -1,7 +1,7 @@
 <tech-stack-package 
-	name="Angular7" 
-	shortName="Angular7MongoDB"
-	description="Uses Angular7 with MongoDb" 
+	name="Angular7 MongoDB" 
+	shortName="Angular7"
+	description="Uses Angular7 with MongoDB and Mongoose" 
 	icon-url="./img/angular.png" 	
 	info-page-url="http://www.realmethods.com/infopages/angularjs-mongodb-info-page.html"
     version="1.0"

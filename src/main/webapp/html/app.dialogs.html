@@ -1,7 +1,7 @@
-<!-- * Copyright (c) 2017 realMethods, Inc. All rights reserved.
- * This software is the proprietary information of cloudMigrate, Inc.
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
+ * This software is the proprietary information of realMethods, Inc.
  * Use is subject to license terms formally and mutually agreed to 
- * by cloudMigrate, Inc. and you.
+ * by realMethods, Inc. and you.
  * 
  * Contributor
  *     realMethods, Inc - initial API and implementation
@@ -12,7 +12,7 @@
 ================================================== 
 -->
     
-<div id="load_Shared_Model_Modal" class="modal fade" 
+<div id="load_Shared_Model_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="loadModelLabelId" aria-hidden="true" style="background:white;color:black;">
 
 	<div class="modal-dialog modal-lg">
@@ -33,10 +33,10 @@
 							  All Available To Me
 						    </option>
 							<option value="PUBLIC">
-							  Public Models
+							  My Public Models
 						    </option>
 							<option value="PRIVATE">
-							  Private Models
+							  My Private Models
 						    </option>
 							<option value="COMMUNITY">
 							  Available Community Models
@@ -61,7 +61,7 @@
 				  </div> <!-- row -->
 				  <div class="row">
 					<div class="col-lg-10 text-left">
-						<div id="sharedModelBodyDivId">
+						<div id="sharedModelBodyDivId">		
 						</div> <!-- sharedModelBodyDivId -->
 					</div> <!-- col -->
 				  </div> <!-- row -->
@@ -91,7 +91,7 @@
 ================================================== 
 -->
     
-<div id="load_Local_Model_Modal" class="modal fade" 
+<div id="load_Local_Model_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="loadLocalModelLabelId" aria-hidden="true" style="background:white;color:black">
 	
     <div class="modal-dialog">
@@ -99,7 +99,7 @@
     	<div class="modal-content">
 	
 	  		<div class="modal-header">
-	    		<h3 id="loadLocalModelLabelId">Model File Upload</h3>
+	    		<h3 id="loadLocalModelLabelId">Load Model File</h3>
 	  		</div> <!-- modal-header -->
 
 	  		<div class="modal-body">
@@ -111,51 +111,67 @@
 						  <label for="shareModelNameId" style="color:black">
 							Model Name
 						  </label>
-            			  <input id="shareModelNameId" type="text" 
+            			  <input id="shareModelNameId" type="text" required name="name"
             				 class="form-control" placeholder="Enter Name"/>
 						</div>
 				        <div class="col-10 text-left">
 						  <label for="shareModelDescriptionId" style="color:black">
 							Description
 						  </label>
-  	            		  <textarea id="shareModelDescriptionId" class="form-control" rows="4" cols="25" 
+  	            		  <textarea id="shareModelDescriptionId" class="form-control" rows="4" cols="25" required name="description"
   	            			placeholder="Enter Description"></textarea>
 						</div>
 					  </div>
 					  <p/>
 					  <div class="row">
 					    <div class="col-10 text-left">
-	          				<div class="checkbox">
+	          				<div class="checkbox" style="display:none">
                 				<div class="checkbox checkbox-slider--b">
 	    	   	   					<label>
 	    	        					<input id="appendModelCheckboxId" type="checkbox" value="" class="theToolTip" 
 	    	        						title="Add this model to an already loaded model"/>
-	    	        					<span class="checkSpanClass">Append To Loaded Model</span> 
+	    	        					<span class="checkSpanClass">Append to loaded model...</span> 
 	    	       					</label>
 	    	    				</div>
 	    	   				</div>
+	    	   				<div class="checkbox">
+								<div class="checkbox checkbox-slider--b">
+	    	   	   					<label>
+	    	        					<input id="shareModelCheckboxId" type="checkbox" value="" checked class="theToolTip" 
+	    	        						title="Save model"/>
+	    	        					<span class="checkSpanClass">Save model after loading...</span> 
+	    	       					</label>
+	    	    				</div>	    	  				
+	          				</div>
 	    	   			</div>
 	    	   		  </div>
+	    	   		  
 	    	   		  <p/>
 	    	   		  <div class="row">
 	    	   		    <div class="col-10 text-left">		
 	    	   				<div id="rootPackageNameDivId" style="display:none">
-  	             				<input id="rootPackageNameId" type="text" class="form-control" 
-  	             				placeholder="Enter root package name"/>
+  	             				<input id="rootPackageNameId" type="text" class="form-control" name="rootPackageNames" required
+  	             				placeholder="Enter bean package names"/>
+  	             				<input id="primaryKeyPatternId" type="text" value="_pojoName_Id" class="form-control" name="primaryKeyPattern" 
+  	             				placeholder="primarykey pattern to search on"/>
   	           				</div> <!-- rootPackageNameDivId --> 	   
 					    </div>
 					  </div>
 					  <p/>
 					  <div class="row">
 					    <div class="col-10 text-left">
-	    	  				<div id="shareModelInfoDivId">
-	          				</div>
-	          			</div>
-	          		  </div>
-	          		</div>
+						    <div id="gitUrlDivId" style="display:none;">
+						      <input id="gitUrlId" type="text" class="form-control" required name="Git repo URL"
+  	             				  placeholder="Enter the Git URL to pull"/>
+								  <a href="#" onclick="cloneGitRepo();">
+					  			    <img src="./img/submit.button.png" style="padding-top:4px" align="center" width="120" height="30"/>
+					  			  </a>
+							</div>
+						</div>
+					</div>
 				  </fieldset>
 				</form>
-	    		<div style="padding-left:3px;background-color:#6BA9C8;color:white">
+	    		<div id="fileUploadDivId" style="padding-left:3px;background-color:#6BA9C8;color:white">
 		  			<label for="model_upload_id">Click here to select a model file...</label>	    
 	      			<input id="model_upload_id" style="display:none;" type="file" name="files" title=" " single/>	      
 	    		</div>
@@ -183,7 +199,7 @@
 ================================================== 
 -->
 
-<div id="file_Tree_Modal" class="modal fade hide" 
+<div id="file_Tree_Modal" class="modal fade hide" data-keyboard="false" data-backdrop="static"
 	role="dialog" aria-labelledby="file_Tree_Label_Id" aria-hidden="true" style="background:white;color:black;width:900px">
 
 	<div class="modal-dialog">
@@ -230,19 +246,19 @@
     	
     	<div class="modal-content">
 
-	  		<div class="modal-body" style="padding-left:3px;background-color:#dddddd;color:white">
+	  		<div class="modal-body" style="padding-left:3px;background-color:white;color:black;border:2px solid black">
 				<center>
 					<table border="0">
 				    	<tr>
 				      		<td align="center">        
-				        		<img src="./img/realMethods-Logo.gif" width="280" height="116" />
+				        		<img src="./img/realMethods-Logo.png" width="280" height="116" />
 					  		</td>
 						</tr>
 						<tr>
 					  		<td>        
 								<form id="logonFormId" method="post">
 									<label for="logonUserNameId" style="color:black">
-										UserName
+										User Id
 									</label>
 									<input 
 										type="text" 
@@ -276,7 +292,8 @@
 				<div id="logonStatusDivId">				
 				</div>
 				
-				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" onclick="displayRegisterUserDialog()">Register</button>
+				<button id="registerUserBttnId" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" onclick="displayRegisterUserDialog()">Register</button>
+				<button id="subscriptionBttnId" style="display:none" class="btn btn-warning" data-dismiss="modal" aria-hidden="true" onclick="displaySubscriptionDialog()">Subscribe</button>
 				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" onclick="displayForgotPasswordDialog()">Forgot Password</button>
 				<button class="btn" data-dismiss="modal" aria-hidden="true" onclick="javascript:window.location.replace('https://www.realmethods.com');">Quit</button>
 				
@@ -286,7 +303,7 @@
 	 	
 	</div>	<!-- modal-dialog -->
 	
-</div> <!--upload_Framework_Package_Modal -->
+</div> <!--Logon_Modal -->
   
   
 <!--- Forgot Password Dialog -->
@@ -351,6 +368,45 @@
 	
 </div> <!--Forgot_Password_Modal -->
 
+<!-- Subscription Modal -->
+
+<div id="Subscription_Modal" class="modal fade" 
+	role="dialog" aria-labelledby="Subscription_Modal_Label_Id" data-keyboard="false" 
+	data-backdrop="static" aria-hidden="true" style="background:white;color:black">
+
+	<div class="modal-dialog">
+    	
+    	<div class="modal-content">
+
+	  		<div class="modal-header">
+	    		<h3 id="Subscription_Modal_Label_Id">Subscription Notification</h3>
+	  		</div> <!-- modal-header -->
+
+	  		<div class="modal-body" style="padding-left:3px;background-color:#dddddd;color:black;padding-left:30px">
+	          Use the <i>Subscribe</i> button below to purchase a monthly subscription.
+	          <p>
+	          Once completed, you will be redirected to continue to register as a new user.
+	          <center>
+			    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+			    <input type="hidden" name="cmd" value="_s-xclick">
+			    <input type="hidden" name="hosted_button_id" value="LNFZQ3ZCMX7ZS">
+			    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+			    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			    </form>
+              </center>
+	  		</div> <!-- modal-body -->
+
+	  		<div class="modal-footer" style="background-color:#333333;color:white">
+				<button class="btn" aria-hidden="true" data-dismiss="modal" onclick="checkLogon(true)">Cancel</button>
+	  		</div> <!-- modal-footer -->
+	  		
+	 	</div> <!-- modal-content -->
+	 	
+	</div>	<!-- modal-dialog -->
+	
+</div> <!-- Git_Modal -->
+
+<!-- Git Modal -->
 <div id="Git_Modal" class="modal fade" 
 	role="dialog" aria-labelledby="Git_Modal_Label_Id" data-keyboard="false" 
 	data-backdrop="static" aria-hidden="true" style="background:white;color:black">
@@ -664,7 +720,7 @@
 	  		<div class="modal-footer" style="background-color:#333333;color:white">
 
 				<button class="btn btn-primary" aria-hidden="true" onclick="registerUserData()">Register New Account</button>
-				<button class="btn btn-primary" aria-hidden="true" data-dismiss="modal" onclick="checkLogon()">Close</button>
+				<button class="btn btn-primary" aria-hidden="true" data-dismiss="modal" onclick="checkLogon(true)">Close</button>
 				
 	  		</div> <!-- modal-footer -->
 	  		
@@ -782,7 +838,199 @@
 	</div>	<!-- modal-dialog -->
 	
 </div> <!--Submit_Request_Modal -->
-			 
+			
+<div id="new_Project_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
+	role="dialog" aria-labelledby="newProjectLabelId" aria-hidden="true" style="background:white;color:black">
+	
+    <div class="modal-dialog">
+    
+    	<div class="modal-content">
+	
+	  		<div class="modal-header">
+	    		<h3 id="newProjectLabelId">New Project</h3>
+	  		</div> <!-- modal-header -->
+
+	  		<div class="modal-body">
+				<form class="pure-form" id="projectFormId">
+				  <fieldset>
+				    <div class="container col-lg-12">
+				      <div class="row">
+				        <div class="col-10 text-left">
+						  <label for="newProjectNameId" style="color:black">
+							Name
+						  </label>
+            			  <input id="newProjectNameId" type="text" maxlength="16" required name="name"
+            				 class="form-control" placeholder="Enter Name"/>
+						</div>
+				        <div class="col-10 text-left">
+						  <label for="newProjectDescriptionId" style="color:black">
+							Description
+						  </label>
+  	            		  <textarea id="newrojectDescriptionId" class="form-control" rows="4" cols="25" required name="description"
+  	            			placeholder="Enter Description"></textarea>
+						</div>
+					  </div>
+					  <p/>
+						<div class="row">
+							<div class="col-10 text-left">
+								<select class="form-control" id="newProjectScopeTypeSelectId">
+									<option value="PUBLIC">
+									  Public
+									</option>
+									<option value="PRIVATE" selected="selected">
+									  Private
+									</option>
+									<option value="COMMUNITY">
+									  Community
+									</option>		
+								<select>
+							</div>
+						</div>
+					</div>
+				  </fieldset>
+				</form>
+	  		</div> <!-- modal-body -->
+
+	  		<div class="modal-footer">
+				<div id="newProjectStatusDivId" style="display:none">
+					please wait while the project is created...
+					<image src="./img/load_new.gif" width="48" height="48"/>
+				</div> <!-- newProjectStatusDivId -->			
+				<button class="btn btn-primary" aria-hidden="true" onclick="createProject()">Create Project</button>
+				<button class="btn btn-primary" aria-hidden="true" data-dismiss="modal">Close</button>				
+	  		</div> <!-- modal-footer -->
+	
+		</div> <!-- modal-content -->
+	
+	</div> <!-- modal-dialog -->
+
+</div> <!--load_Model_Modal -->
+			
+<div id="load_Project_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
+	role="dialog" aria-labelledby="loadProjectLabelId" aria-hidden="true" style="background:white;color:black">
+	
+    <div class="modal-dialog">
+    
+    	<div class="modal-content">
+	
+	  		<div class="modal-header">
+	    		<h3 id="loadProjectLabelId">Projects</h3>
+	  		</div> <!-- modal-header -->
+
+	  		<div class="modal-body">
+				<div id="projectListDivId">
+				    <form class="pure-form">
+						<div class="container col-lg-12">					
+							<div class="row">
+								<div class="col-lg-6">
+									<select class="form-control" id="projectSelectId">
+									<select>
+								</div>
+								<div class="col-lg-1">
+									<button type="button" class="btn btn-primary btn-lg" onclick="loadSelectedProject()">
+										Load
+									</button>
+								</div>
+								<div class="col-lg-1">
+									<button type="button" class="btn btn-primary btn-lg" onclick="deleteSelectedProject()">
+										Delete
+									</button>
+								</div>
+							</div>
+					   </div>
+					</form>
+			    </div>
+<!--	    		<div id="projectUploadDivId" style="padding-left:3px;background-color:#6BA9C8;color:white">
+		  			<label for="project_upload_id">Click here to select a project file...</label>	    
+	      			<input id="project_upload_id" style="display:none;" type="file" name="files" title=" " single/>	      
+	    		</div>
+	    		<span style="font-size:0.8em;text-align:left">Note: Upload has a 1MB file size limit</span>
+-->	    
+	  		</div> <!-- modal-body -->
+	
+	  		<div class="modal-footer">
+				<div id="projectLoadingDivId" style="display:none">
+					<span id="projectProceesingTextId">please wait while loading...</span>
+					<image src="./img/load_new.gif" width="48" height="48"/>
+				</div> <!-- projectLoadingDivId -->
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  		</div> <!-- modal-footer -->
+	 
+		</div> <!-- modal-content -->
+	
+	</div> <!-- modal-dialog -->
+
+</div> <!--load_Model_Modal -->
+<div id="load_Builds_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
+	role="dialog" aria-labelledby="loadBuildsLabelId" aria-hidden="true" style="background:white;color:black;">
+
+	<div class="modal-dialog modal-lg">
+
+  		<div class="modal-content">
+
+   			<div class="modal-header">
+    			<h3 id="loadBuildsLabelId">Build History</h3>
+   			</div> <!-- modal-header -->
+
+	  		<div class="modal-body" >
+	  			<div class="container col-lg-12">
+				  <div class="row">
+					<div class="col-lg-10 text-left">
+						<div id="buildsDivId">		
+						</div> <!-- buildsDivId-->
+					</div> <!-- col -->
+				  </div> <!-- row -->
+				</div><!-- container-->
+					  		
+  			</div> <!-- modal-body -->
+
+  			<div class="modal-footer">
+				<div id="buildsLoadingDivId" style="font-size:0.9em;display:none">
+					loading builds...
+						<image src="./img/load_new.gif" width="24" height="24"/>
+				</div>
+				<button class="btn btn-primary" aria-hidden="true" onclick="viewBuildSummary()">View Summary</button>
+				<button class="btn btn-primary" aria-hidden="true" onclick="viewBuildLog()">View Log</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true" >Close</button>
+  			</div> <!-- modal-footer -->
+
+  		</div> <!-- modal-content -->
+
+ 	</div> <!-- modal-dialog -->
+
+</div> <!--load_Builds_Modal -->
+
+
+<div id="upload_Framework_Package_Modal" class="modal fade" data-keyboard="false" data-backdrop="static"
+		role="dialog" aria-labelledby="upload_Framework_Package_Label_Id" aria-hidden="true" style="background:white;color:black">
+		
+	<div class="modal-dialog">
+	
+    	<div class="modal-content">
+
+			<div class="modal-header">
+		    	<h3 id="upload_Framework_Package_Label_Id">Upload Technology Stack Package</h3>
+		  	</div> <!-- modal-header -->
+	
+		  	<div class="modal-body" style="padding-left:3px;background-color:#6BA9C8;color:white">
+				<label for="framework_package_upload" >Click here to select a .zip file...</label>
+				<input id="framework_package_upload" type="file" title=" " style="display:none;" name="files" single/>
+		  	</div> <!-- modal-body -->
+	
+		  	<div class="modal-footer">
+				<div id="frameworkPackageLoadingDivId" style="display:none">
+					tech stack package is being uploaded, unpacked and validated...<image src="./img/load_new.gif" width=32 height=32/>
+				</div> <!-- frameworkPackageLoadingDivId -->			
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		  	</div> <!-- modal-footer -->
+		  	
+	 	</div> <!-- modal-content -->
+	 	
+	</div> <!-- modal-dialog -->
+	  
+</div> <!--upload_Framework_Package_Modal -->
+
+
 <script>
 
 function submitRequest() {
@@ -802,8 +1050,7 @@ function submitRequest() {
 	
 	var url = 'sendEmail.action?subject=' + $('#subjectInputId').val()
 			+ '&message=' + $('#messageInputId').val()
-			+ '&topic=' + $('#topicSelectId option:selected').text();
-	console.log(url);
+			+ '&topic=' + $('#topicSelectId option:selected').text();console.log(url);
 	$.ajax(
 	{
   		url: url,

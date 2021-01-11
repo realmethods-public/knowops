@@ -3,7 +3,7 @@
 
 <head>
 
-		<meta charset="utf-8"/>
+	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 	<!-- 3rd party style sheets -->
@@ -70,10 +70,11 @@ function logOn()
   	  	    </td>
   	  	  </tr>
   	    </table>
-  	    <button id="appGenBttnId' type="submit" class="btn btn-default btn-sm">
-	      <span style="color:black">Log On</span>
-	    </button>
   	  </div>  	
+  	  <button id="appGenBttnId' type="submit" class="btn btn-outline-primary">
+	      <span style="color:black">Log On</span>
+	  </button>
+
   	</form>
   </center>
 	

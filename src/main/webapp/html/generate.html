@@ -1,4 +1,4 @@
-<!-- * Copyright (c) 2017 realMethods, Inc. All rights reserved.
+<!-- * Copyright (c) 2021 realMethods, Inc. All rights reserved.
  * This software is the proprietary information of realMethods, Inc.
  * Use is subject to license terms formally and mutually agreed to 
  * by realMethods, Inc. and you.
@@ -18,39 +18,42 @@
 
 <div id="createAppSlideId" class="slideClass">
 
-  	<h3 style="text-align:left">Code Generation</h3>
+  	<h3 class="sectionHeaderClass">Project Generation</h3>
     
-    <p>
+    <p style="padding-top:20px">
 	
 	<div class="container col-lg-12" id="createAppSlideWellId">
     	<div class="row">
         	<div col="col-2">
         	</div>
         	<div class="col-4 text-left">
-          		<div class="checkbox checkbox-slider--b checkbox-slider-sm" id="buildDivId">
+          		<div class="checkbox checkbox-slider--b checkbox-slider-md" id="buildDivId">
     	    		<label>
       	      			<input id="gitCheckboxId" type="checkbox" checked
       	        			class="checkSpanClass theToolTip" 
       	        			style="text-align:right"
       	        			title="Commit app files to a Git Host"/>
       	      			<span style="text-align:left">&nbspCommit to a Git Host</span>
-      	      			<button onclick="showGitParamsModal()">...</button>
+      	      			<button type="button" class="btn btn-warning btn-lg" onclick="showGitParamsModal()">Git Params...</button>
     	    		</label>    	    
     	  		</div> <!-- buildDivId -->
-          		<div class="checkbox checkbox-slider--b checkbox-slider-sm" id="scopeTypedDivId">
+				<!--
+          		<div class="checkbox checkbox-slider--b checkbox-slider-lg" id="scopeTypedDivId">
     	    		<label>
       	      			<input id="scopeTypeCheckboxId" type="checkbox" checked
       	        			class="checkSpanClass theToolTip" style="text-align:right"
       	        			title="Make public and available to community"/>
       	      			<span style="text-align:left">&nbspMake available to community</span>
     	    		</label>
-    	  		</div> <!-- scopeTypedDivId -->
+    	  		</div> -->
+				<!-- scopeTypedDivId 
     	  		<label for="nameToPersistAppGenerationId" style="color:black">
     	    		Name to Save As
     	  		</label>
 		  		<input type="text" class="form-control" id="nameToPersistAppGenerationId" 
-       				placeholder="uses app name if empty"/>	    	    	  
-    		</div>    		
+       				placeholder="uses app name if empty"/>	   --> 	    	  
+    		</div>  
+<!--			
 	        <div class="col-4 text-left">
 		        <label for="persistAppGenerationDescriptionId" style="color:black">
 					Description
@@ -60,30 +63,47 @@
 				  	placeholder="Enter Description">
 				</textarea>
 	  		</div>
+-->			
 		</div>
 	</div>	
 	
 	<div class="container" id="generateAppBttnDivId" style="padding-top:20px;text-align:left">	
 	    <div class="row">
-	        <div class="col-1" style="vertical-align:middle">
-				<button id="appGenBttnId" type="button" class="btn btn-outline-success btn-lg  theToolTip" 
-					title="Click to create all the files related of the application" onclick="appCreate()">
+	        <div class="col-3" style="vertical-align:left">
+				<button id="appGenBttnId" type="button" class="btn btn-success btn-lg theToolTip" 
+					title="Click to create, build, and commit project files" onclick="appCreate()">
 	      			<span class="theToolTip">
-		        		Generate
+		        		Generate Project
 	    	 		</span>
 	    		</button>
 	    	</div>
-	    	<div class="col-1 text-left" id="appGenRunningDivId" style="display:none;">
-				<image src="./img/load_new.gif" width=48 height=48/>
+	    	<div class="col-2  id="appGenRunningDivId" style="display:none;">
+				<image src="./img/load_new.gif" width=24 height=24/>
 			</div> <!-- appGenRunningDivId -->		  		          		    	 
-	    	<div class="col-10 text-left" id="resultsDivId" style="display:none">
+			
+		</div>
+		<div class="row">
+	    	<div class="col-10 text-left" id="resultsDivId" style="display:none;padding-top:10px">
 				<div id="stepperDivId" class="step-container" style="vertical-align:middle;width:600px;margin: 0 auto;display:none">
   		  		</div> <!-- stepperDivId -->
 	    	</div>
 	    </div>
 		<div class="row" style="padding-top:20px;">
-			<div class="col-4 text-left" id="appGenResultsDivId" style="appGenResultsClass;padding-top:20px">
+			<div class="col-10 text-left" id="appGenResultsDivId" style="appGenResultsClass;padding-top:20px">
 			</div> <!-- appGenResultsDivId -->
+		</div>
+		
+		<div class="row" id="gitCloneDivId" style="padding-top:10px;display:none"> 
+			<div class="col-8 text-left">
+			    <input type="text" class="form-control" readOnly id="gitCloneInputId"/>
+			</div>	
+			<div class="col f5text-left">
+				<a href="#" class="theToolTip" title="Copy Clone URL" onclick="copyGitCloneUrl()" >
+					<button type="button" class="btn btn-info">
+						<span class="glyphicon glyphicon-copy"></span> Copy to clone Git repo
+					</button>
+				</a>
+			</div>
 		</div>
 	</div> <!-- generateAppBttnDivId -->
 

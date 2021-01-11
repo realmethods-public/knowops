@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2021 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -35,7 +35,6 @@
 	<constant name="struts.multipart.parser" value="jakarta" />
 
 <!-- =============== Global Results ==================== -->
-
 <!-- =============== Default Package ==================== -->
 
     <package name="default" extends="struts-default, json-default" namespace="/" >
@@ -81,11 +80,16 @@
 
         <default-interceptor-ref name="interceptorStack"/>          
 
-        <action name="" class="com.cloudmigrate.server.action.StartupAction" method="noOp">
+        <action name="" class="com.realmethods.server.action.StartupAction" method="startUp">
 	    	<result name="success">./html/realmethods.html</result>
+	    	<result name="SAAS_SUCCESS">./jsp/SaaSLogin.jsp</result>	    	
+        </action>	    	
+
+        <action name="checkoutSuccess" class="com.realmethods.server.action.UserAction" method="execute">
+			<result name="success">./html/realmethods.html</result>
         </action>
 
-        <action name="logoff" class="com.cloudmigrate.server.action.StartupAction" method="logoff">
+        <action name="logoff" class="com.realmethods.server.action.StartupAction" method="logoff">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -100,7 +104,7 @@
 
         </action>
 
-        <action name="logon" class="com.cloudmigrate.server.action.StartupAction" method="logon">
+        <action name="logon" class="com.realmethods.server.action.StartupAction" method="logon">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -114,7 +118,7 @@
 	    	</result>    
         </action>
 
-        <action name="sendEmail" class="com.cloudmigrate.server.action.EmailAction" method="sendEmail">
+        <action name="sendEmail" class="com.realmethods.server.action.EmailAction" method="sendEmail">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -127,7 +131,7 @@
 	    	</result>  
         </action>
 
-        <action name="sendPassword" class="com.cloudmigrate.server.action.UserAction" method="sendPassword">
+        <action name="sendPassword" class="com.realmethods.server.action.UserAction" method="sendPassword">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -140,7 +144,7 @@
 	    	</result>  
         </action>
 
-        <action name="userInfo" class="com.cloudmigrate.server.action.UserAction" method="userInfo">
+        <action name="userInfo" class="com.realmethods.server.action.UserAction" method="userInfo">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -153,7 +157,7 @@
 	    	</result>  
         </action>
 
-        <action name="generateToken" class="com.cloudmigrate.server.action.UserAction" method="generateToken">
+        <action name="generateToken" class="com.realmethods.server.action.UserAction" method="generateToken">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -166,7 +170,7 @@
 	    	</result>  
         </action>
 
-        <action name="saveUserOptions" class="com.cloudmigrate.server.action.UserAction" method="save">
+        <action name="saveUserOptions" class="com.realmethods.server.action.UserAction" method="save">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -179,7 +183,7 @@
 	    	</result>  
         </action>
 
-        <action name="registerUser" class="com.cloudmigrate.server.action.UserAction" method="register">
+        <action name="registerUser" class="com.realmethods.server.action.UserAction" method="register">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -192,7 +196,7 @@
 	    	</result>  
         </action>
 
-        <action name="resetPassword" class="com.cloudmigrate.server.action.UserAction" method="resetPassword">
+        <action name="resetPassword" class="com.realmethods.server.action.UserAction" method="resetPassword">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -205,7 +209,7 @@
 	    	</result>  	    	
         </action>
 
-        <action name="service" class="com.cloudmigrate.server.action.api.GoFrameworkAPIAction" method="execute">
+        <action name="service" class="com.realmethods.server.action.api.RealMethodsAPIAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -218,7 +222,7 @@
 	    	</result>    
         </action> 
 
-       	<action name="checkStatus" class="com.cloudmigrate.server.action.BaseStrutsAction" method="checkStatus">
+       	<action name="checkStatus" class="com.realmethods.server.action.BaseStrutsAction" method="checkStatus">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -226,7 +230,7 @@
 	    	</result>    
         </action> 
 
-		<action name="stages" class="com.cloudmigrate.server.action.BaseStrutsAction" method="stages">
+		<action name="stages" class="com.realmethods.server.action.BaseStrutsAction" method="stages">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -234,7 +238,7 @@
 	    	</result>    
         </action> 
 
-        <action name="loadGeneratedAppDetails" class="com.cloudmigrate.server.action.GenerateAppAction" method="loadGeneratedAppDetails">
+        <action name="loadGeneratedAppDetails" class="com.realmethods.server.action.GenerateAppAction" method="loadGeneratedAppDetails">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -243,7 +247,7 @@
 	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
         </action> 
                 
-        <action name="generateApp" class="com.cloudmigrate.server.action.GenerateAppAction" method="exec">
+        <action name="generateApp" class="com.realmethods.server.action.GenerateAppAction" method="exec">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -256,7 +260,7 @@
 	    	</result>    
         </action> 
 
-        <action name="findPackage" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="findPackage">
+        <action name="findPackage" class="com.realmethods.server.action.PackageFileHandlerAction" method="findPackage">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -266,7 +270,7 @@
         </action> 
 
 
-        <action name="loadAllPackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadAllPackages">
+        <action name="loadAllPackages" class="com.realmethods.server.action.PackageFileHandlerAction" method="loadAllPackages">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -275,7 +279,7 @@
 	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
         </action> 
 
-        <action name="loadAllPackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadAllPackages">
+        <action name="loadAllPackages" class="com.realmethods.server.action.PackageFileHandlerAction" method="loadAllPackages">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -284,7 +288,7 @@
 	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
         </action> 
 
-        <action name="retrievePackages" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="retrievePackages">
+        <action name="retrievePackages" class="com.realmethods.server.action.PackageFileHandlerAction" method="retrievePackages">
 			<result name="success" type="stream">
 		        <param name="contentType">text/plain</param>
 		        <param name="inputName">fileStream</param>
@@ -292,15 +296,15 @@
 	    	</result>    
         </action> 
 
-        <action name="uploadPackage" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="uploadPackage">
+        <action name="uploadPackage" class="com.realmethods.server.action.PackageFileHandlerAction" method="uploadPackage">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
 	    	    <param name="root">status</param>
-	    	</result>    
+	    	</result>    			
         </action> 
         
-        <action name="uploadFile" class="com.cloudmigrate.server.action.FileHandlerAction" method="uploadFile">
+        <action name="uploadFile" class="com.realmethods.server.action.FileHandlerAction" method="uploadFile">
 			<result name="success" type="stream">
 		        <param name="contentType">text/plain</param>
 		        <param name="inputName">fileStream</param>
@@ -309,7 +313,7 @@
 	    	</result>    
         </action> 
 
-        <action name="retrieveOptions" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="retrieveOptions">
+        <action name="retrieveOptions" class="com.realmethods.server.action.PackageFileHandlerAction" method="retrieveOptions">
 			<result name="success" type="stream">
 		        <param name="contentType">text/plain</param>
 		        <param name="inputName">fileStream</param>
@@ -317,7 +321,7 @@
 	    	</result>    
 		</action>
 
-        <action name="loadDirMappings" class="com.cloudmigrate.server.action.PackageFileHandlerAction" method="loadDirMappings">
+        <action name="loadDirMappings" class="com.realmethods.server.action.PackageFileHandlerAction" method="loadDirMappings">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -325,7 +329,7 @@
 			</result>
 		</action>
 				
-        <action name="uploadSqlScript" class="com.cloudmigrate.server.action.model.SqlScriptHandlerAction" method="execute">
+        <action name="uploadSqlScript" class="com.realmethods.server.action.model.SqlScriptHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -338,7 +342,7 @@
 	    	</result>    
 		</action>
 
-        <action name="uploadPojo" class="com.cloudmigrate.server.action.model.PojoHandlerAction" method="execute">
+        <action name="uploadGit" class="com.realmethods.server.action.model.GitHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -351,7 +355,7 @@
 	    	</result>    
 		</action>
 
-        <action name="uploadXMI" class="com.cloudmigrate.server.action.model.XMIHandlerAction" method="execute">
+        <action name="uploadPojo" class="com.realmethods.server.action.model.PojoHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -364,7 +368,7 @@
 	    	</result>    
 		</action>
 
-        <action name="uploadJson" class="com.cloudmigrate.server.action.model.JsonHandlerAction" method="execute">
+        <action name="uploadXMI" class="com.realmethods.server.action.model.XMIHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -377,7 +381,7 @@
 	    	</result>    
 		</action>
 
-        <action name="uploadEMF" class="com.cloudmigrate.server.action.model.EMFHandlerAction" method="execute">
+        <action name="uploadYaml" class="com.realmethods.server.action.model.YamlHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -390,7 +394,59 @@
 	    	</result>    
 		</action>
 
-        <action name="findUMLModel" class="com.cloudmigrate.server.action.model.XMIHandlerAction" method="findModel">
+        <action name="uploadJson" class="com.realmethods.server.action.model.JsonHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="uploadEMF" class="com.realmethods.server.action.model.EMFHandlerAction" method="execute">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>    
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+
+        <action name="findYAMLModel" class="com.realmethods.server.action.model.YamlHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>
+		
+        <action name="findGITModel" class="com.realmethods.server.action.model.GitHandlerAction" method="findModel">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">model</param>
+	    	</result>
+	    	<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    
+		</action>		
+		
+        <action name="findUMLModel" class="com.realmethods.server.action.model.XMIHandlerAction" method="findModel">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -403,7 +459,7 @@
 	    	</result>    
 		</action>
 
-        <action name="findECOREModel" class="com.cloudmigrate.server.action.model.EMFHandlerAction" method="findModel">
+        <action name="findECOREModel" class="com.realmethods.server.action.model.EMFHandlerAction" method="findModel">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -416,7 +472,7 @@
 	    	</result>    
 		</action>
 
-        <action name="findPOJOModel" class="com.cloudmigrate.server.action.model.PojoHandlerAction" method="findModel">
+        <action name="findPOJOModel" class="com.realmethods.server.action.model.PojoHandlerAction" method="findModel">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -429,7 +485,7 @@
 	    	</result>    
 		</action>
 
-        <action name="findSQL_SCRIPTModel" class="com.cloudmigrate.server.action.model.SqlScriptHandlerAction" method="findModel">
+        <action name="findSQL_SCRIPTModel" class="com.realmethods.server.action.model.SqlScriptHandlerAction" method="findModel">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -442,7 +498,7 @@
 	    	</result>    
 		</action>
 
-        <action name="findJSONModel" class="com.cloudmigrate.server.action.model.JsonHandlerAction" method="findModel">
+        <action name="findJSONModel" class="com.realmethods.server.action.model.JsonHandlerAction" method="findModel">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -455,7 +511,7 @@
 	    	</result>    
 		</action>
 
-        <action name="loadAllModels" class="com.cloudmigrate.server.action.model.ModelFileHandlerAction" method="loadAllModels">
+        <action name="loadAllModels" class="com.realmethods.server.action.model.ModelFileHandlerAction" method="loadAllModels">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -464,7 +520,7 @@
 	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
         </action>
         
-        <action name="reverseEngineer" class="com.cloudmigrate.server.action.model.DBSchemaHandlerAction" method="execute">
+        <action name="reverseEngineer" class="com.realmethods.server.action.model.DBSchemaHandlerAction" method="execute">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -477,7 +533,7 @@
 	    	</result>    
 		</action>
 
-        <action name="determineSchema" class="com.cloudmigrate.server.action.model.DBSchemaHandlerAction" method="determineSchema">
+        <action name="determineSchema" class="com.realmethods.server.action.model.DBSchemaHandlerAction" method="determineSchema">
 			<result name="success" type="json">
 		        <param name="noCache">true</param>
 		        <param name="excludeNullProperties">true</param>
@@ -491,8 +547,80 @@
 	    	</result>    
 		</action>
 
-         
+        <action name="saveProject" class="com.realmethods.server.action.ProjectHandlerAction" method="saveProject">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">project</param>
+	    	</result>
+			<result name="error" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">result</param>
+	    	</result>  		
+	    </action>
+
+        <action name="findProject" class="com.realmethods.server.action.ProjectHandlerAction" method="findProject">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">project</param>
+	    	</result>
+			<result name="error">/jsp/common/resultsHandler.jsp</result>	    
+		</action>
+
+        <action name="loadAllProjectsForUser" class="com.realmethods.server.action.ProjectHandlerAction" method="loadAllProjectsForUser">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">projectsForUser</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action>
+
+        <action name="loadAllProjects" class="com.realmethods.server.action.ProjectHandlerAction" method="loadAllProjects">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">projects</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action>
+
+        <action name="loadBuilds" class="com.realmethods.server.action.ProjectHandlerAction" method="loadBuilds">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">builds</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action>
+
+        <action name="deleteProject" class="com.realmethods.server.action.ProjectHandlerAction" method="deleteProject">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+	    	    <param name="root">status</param>
+	    	</result>    			
+        </action> 
+
+        <action name="loadBuildSummary" class="com.realmethods.server.action.BuildHandlerAction" method="loadBuildSummary">
+			<result name="success" type="json">
+		        <param name="noCache">true</param>
+		        <param name="excludeNullProperties">true</param>
+		        <param name="ignoreHierarchy">false</param>
+	    	    <param name="root">buildSummary</param>
+	    	</result>    
+	    	<result name="error">/jsp/common/resultsHandler.jsp</result>
+        </action>
+
     </package>	
+
 
                 
 </struts>

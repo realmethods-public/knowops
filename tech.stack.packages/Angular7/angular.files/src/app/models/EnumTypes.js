@@ -1,7 +1,7 @@
 #foreach ( $enum in $aib.getEnumClassesToGenerate() )
 #set( $enumName = $enum.getName() )
 
-// enum type ${$enumName}
+// enum type ${enumName}
 export let $enumName = {
 #set( $attributes = $enum.getAttributes() )
 #foreach ( $attribute in $attributes )

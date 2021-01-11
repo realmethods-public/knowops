@@ -1,7 +1,7 @@
 <!--
   realMethods Confidential
   
-  2018 realMethods, Inc.
+  2019 realMethods, Inc.
   All Rights Reserved.
   
   This file is subject to the terms and conditions defined in
@@ -25,7 +25,11 @@
 		description="your company name" type="input"/>
 	<option value="1.0.0" required="true" name="version"
 		description="app version" type="input"/>		
-	<option value="" required="true" name="email"
+	<option value="admin" required="true" name="adminUserId"
+		description="admin user Id" type="input"/>		
+	<option value="letmein2" required="true" name="adminPassword"
+		description="admin password" type="input"/>		
+	<option value="me@example.com" required="true" name="email"
 		description="email address" type="input"/>		
 	<option value="" required="true" name="url"
 		description="application url" type="input"/>		
@@ -33,8 +37,16 @@
 		description="license type" type="input"/>		
 
 </options>
-
 <options name="Heroku">
 	<option name="auto deploy"  value="true" required="true" description="auto deploy to heroku" type="boolean"/>	
 	<option name="app name" value="demo" required="true" description="heroku app name" type="input"/>
+</options>
+<options name="nexus">
+	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
+	<option name="userName"  value="" required="true" description="nexus user name" type="input"/>
+	<option name="password"  value="" required="true" description="nexus password" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+	<option name="repoUrl" value="http://127.0.0.1/repository/npm-repo" 
+		required="true" description="nexus server url" type="input"/>
 </options>

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * realMethods Confidential
  * 
- * 2018 realMethods, Inc.
+ * 2021 realMethods, Inc.
  * All Rights Reserved.
  * 
  * This file is subject to the terms and conditions defined in
@@ -25,23 +25,22 @@ public class HxttXMLDialect extends HxttDialect {
         registerColumnType( Types.BIT, "boolean" );
         registerColumnType( Types.CHAR, "varchar($l)" );
         registerColumnType( Types.VARCHAR, "varchar($l)" );
-        registerColumnType(Types.LONGVARCHAR, "longvarchar");
-        registerColumnType(Types.NUMERIC, "numeric($p,$s)");
-        registerColumnType(Types.BOOLEAN, "boolean");
+        registerColumnType( Types.LONGVARCHAR, "longvarchar");
+        registerColumnType( Types.NUMERIC, "numeric($p,$s)");
+        registerColumnType( Types.BOOLEAN, "boolean");
         registerColumnType( Types.BIGINT, "bigint" );
         registerColumnType( Types.SMALLINT, "numeric(5,0)" ); // HXTT XML DON'T SUPPORT SMALLINT
         registerColumnType( Types.TINYINT, "numeric(3,0)" );   // HXTT XML DON'T SUPPORT TINYINT
-        registerColumnType(Types.INTEGER, "integer");
-        registerColumnType(Types.REAL, "real");
+        registerColumnType( Types.INTEGER, "integer");
+        registerColumnType( Types.REAL, "real");
         registerColumnType( Types.FLOAT, "float" );           // HXTT XML DON'T SUPPORT FLOAT ,it will be a double type
-        registerColumnType(Types.DOUBLE, "double");
+        registerColumnType( Types.DOUBLE, "double");
         registerColumnType( Types.BINARY, "binary" );
-        registerColumnType(Types.VARBINARY, "varbinary");
+        registerColumnType( Types.VARBINARY, "varbinary");
         registerColumnType( Types.LONGVARBINARY, "longvarbinary");
-
         registerColumnType( Types.DATE, "date" );
         registerColumnType( Types.TIME, "time" );
-        registerColumnType(Types.TIMESTAMP, "timestamp");
+        registerColumnType( Types.TIMESTAMP, "timestamp");
         registerColumnType( Types.BLOB, "blob" ); // BLOB COLUMN WILL CHANGE TO  JAVA_OBJECT TYPE COLUMN
         registerColumnType( Types.CLOB, "clob" ); // CLOB COLUMN WILL CHANGE TO  LONGVARCHAR TYPE COLUMN
         registerColumnType( Types.JAVA_OBJECT, "longvarchar" );//2011-06-02 changed for copy data to other database

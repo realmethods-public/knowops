@@ -4,14 +4,17 @@
     
 	<mat-sidenav #sidenav mode="side" opened class="app-sidenav">
 	
-	#foreach( $class in $aib.getClassesToGenerate() )
-	#set( $className = $class.getName() )   
+#foreach( $class in $aib.getClassesToGenerate() )
+#if( $class.isNotEmpty() == true )
+#set( $className = $class.getName() )   
 	  <button mat-menu-item [matMenuTriggerFor]="${className}Menu">${className}</button>
-	#end
+#end##if( $class.isNotEmpty() == true )
+#end
 	
-	#foreach( $class in $aib.getClassesToGenerate() )
-	#set( $className = $class.getName() )   
-	#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} ) 
+#foreach( $class in $aib.getClassesToGenerate() )
+#if( $class.isNotEmpty() == true )
+#set( $className = $class.getName() )   
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} ) 
 	<mat-menu ${esc.hash}${className}Menu="matMenu">
 	  	<a routerLink="create${className}">
 	  		<button mat-menu-item>Add</button>
@@ -20,7 +23,8 @@
 	  		<button mat-menu-item>Show All</button>
 	  	</a>
 	</mat-menu>
-	#end##foreach( $class in $aib.getClassesToGenerate() )
+#end##if( $class.isNotEmpty() == true )
+#end##foreach( $class in $aib.getClassesToGenerate() )
 
     </mat-sidenav>
 	
