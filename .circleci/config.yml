@@ -22,7 +22,7 @@ save_repo: &save_repo
 jobs: 
 
   # core job
-  build_test_project:
+  build_contain_project:
 
     # assign the working directory
     working_directory: *working_directory
@@ -95,26 +95,13 @@ jobs:
           name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
           command: |
             docker login --username tylertravismya --password 69cutlass
-            docker build -t /knowops:latest .
-            docker push /knowops:latest
+            docker build -t realmethods/knowops:latest .
+            docker push realmethods/knowops:latest
 
-  terraform:
-    <<: *terraform_config
-    steps:
-      - *restore_repo
-      - *terraform_init
-      - add_ssh_keys: # fingerprint is returned when the private SSH key is applied to this CircleCI project
-          fingerprints:
-            - ""
-      - run:
-          name: terraform plan
-          command: |
-            cd /home/circleci/gitRoot/terraform
-            terraform plan -out=terraform.plan -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
-            terraform apply -auto-approve "terraform.plan"
+            
 # simple workflow to build out the environment
 workflows:
   version: 2
-  build_test_deploy_workflow:
+  build_contain_workflow:
     jobs:
-      - build_test_project
+      - build_contain_project
