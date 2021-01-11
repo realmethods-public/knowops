@@ -11,5 +11,4 @@ gitpush*
 *bin/
 *.sh
 .pydevproject
-catalina.properties
 .settings/
