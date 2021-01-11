@@ -1,6 +1,6 @@
-# realMethods : DevOps Project Generator
+# realMethods-KnowOps : DevOps Project Generator
 
-Use realMethods to generate DevOps project for both new application and app refactoring scenarios.
+Use KnowOps to generate DevOps project for both new application and app refactoring scenarios.
 
 Save time and get started with all the code and configuration you need but don't want to have to write.  
 
