@@ -4,13 +4,15 @@ RUN apt-get update --fix-missing && \
 apt-get install -y dos2unix && \
 apt-get install -y nano
 
+ARG tomcatRoot = /usr/local/tomcat
+
 COPY catalina.properties ${tomcatRoot}/conf
 COPY server.xml ${tomcatRoot}/conf
-COPY /target/*.war /usr/local/tomcat/webapps
+COPY /target/*.war ${tomcatRoot}/webapps
 
 # make the app war the root war so all default requests are directed to it
-RUN mv /usr/local/tomcat/webapps/realmethods-1.2.war /usr/local/tomcat/webapps/ROOT.war
-# RUN mv /usr/local/tomcat/webapps/ROOT /usr/local/tomcat/webapps/ROOT_OLD
+RUN mv ${tomcatRoot}/webapps/realmethods-1.2.war ${tomcatRoot}/webapps/ROOT.war
+# RUN mv ${tomcatRoot}/webapps/ROOT ${tomcatRoot}/webapps/ROOT_OLD
 
 # run tomcat
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD ["${tomcatRoot}/bin/catalina.sh", "run"]
