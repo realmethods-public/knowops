@@ -102,7 +102,7 @@ jobs:
           name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
           command: |
             docker login --username tylertravismya --password 69cutlass
-            docker build -t realmethods/knowops:latest . -f ./DockerfileForCircleCI
+            docker build -t realmethods/knowops:latest .
             docker push realmethods/knowops:latest
 
             
