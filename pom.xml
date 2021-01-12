@@ -73,6 +73,7 @@
           <httpConnector>
             <port>8888</port>
           </httpConnector>  
+          <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
 -->      
