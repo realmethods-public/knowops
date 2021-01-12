@@ -10,6 +10,7 @@ COPY catalina.properties ${tomcatRoot}/conf
 # COPY server.xml ${tomcatRoot}/conf
 COPY /target/*.war ${tomcatRoot}/webapps
 
+
 # make the app war the root war so all default requests are directed to it
 RUN mv ${tomcatRoot}/webapps/realmethods-1.2.war ${tomcatRoot}/webapps/ROOT.war
 # RUN mv ${tomcatRoot}/webapps/ROOT ${tomcatRoot}/webapps/ROOT_OLD
