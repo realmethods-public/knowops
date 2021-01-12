@@ -102,32 +102,60 @@ public class FrameworkPersistenceHelper
 	    try {
             // up front, create the SessionFactory from providided hibernate configuraetion file since it takes a bit to load
 	    	StandardServiceRegistryBuilder standardRegistryBuilder = new StandardServiceRegistryBuilder().configure(FrameworkNameSpace.getHibernateCfgFile());
+            String envVar = null;
             
 	    	LOGGER.log(Level.INFO, "Using hibernate file {0}", FrameworkNameSpace.getHibernateCfgFile() );
 	    	
-            if ( System.getenv(DATABASE_URL) != null ) {
-            	LOGGER.log(Level.INFO, "Using Database Url  {0}", System.getenv(DATABASE_URL) );
-            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.url", System.getenv(DATABASE_URL) );
+	    	// handle DATABASE_URL
+	    	envVar = System.getenv(DATABASE_URL);
+            if ( envVar != null ) {
+            	LOGGER.log(Level.INFO, "Using Database Url {0}", envVar );
+            	
+            	//////////////////////////////////////////////////
+            	// try to fix-it up into a JDBC format for MySQL
+            	//////////////////////////////////////////////////
+            	            	
+            	// only touch if the URL is not intentionally JDBC formatted
+            	if ( envVar.startsWith("jdbc") == false ) {
+            		// this assumes only the MySQL server IP Address is provided
+            		
+            		// check for 3306
+            		if ( envVar.endsWith( MYSQL_PORT ) == false )
+            			envVar = envVar + MYSQL_PORT;
+            		
+            		// envVar is now simply the URL with port to a MySQL server instance
+            		envVar = "jdbc:mysql://" + envVar + REALMETHODS_TABLENAME + "?" +  MYSQL_ARGS;            		
+            	}
+            	
+            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.url", envVar );
             }
             
-            if ( System.getenv(DATABASE_USERNAME) != null ) {
-            	LOGGER.log(Level.INFO, "Using Database Name {0}", System.getenv(DATABASE_USERNAME) );
-            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.username", System.getenv(DATABASE_USERNAME) );
+            // handle DATABASE_USERNAME
+            envVar = System.getenv(DATABASE_USERNAME); 
+            if ( envVar != null ) {
+            	LOGGER.log(Level.INFO, "Using Database Name {0}", envVar );
+            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.username", envVar );
             }
             
-            if ( System.getenv(DATABASE_PW) != null ) {
-            	LOGGER.log(Level.INFO, "Using Database Password {0}", System.getenv(DATABASE_PW) );
-            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.password", System.getenv(DATABASE_PW) );
+            // handle DATABASE_PASSWORD
+            envVar = System.getenv(DATABASE_PASSWORD);             
+            if ( envVar != null ) {
+            	LOGGER.log(Level.INFO, "Using Database Password {0}", envVar );
+            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.password", envVar );
             }
             
-            if ( System.getenv(DATABASE_DIALECT) != null ) {
-            	LOGGER.log(Level.INFO, "Using Database Dialet{0}", System.getenv(DATABASE_DIALECT) );
-            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.dialect", System.getenv(DATABASE_DIALECT) );
+            // handle DATABASE_DIALECT
+            envVar = System.getenv(DATABASE_DIALECT);
+            if ( envVar != null ) {
+            	LOGGER.log(Level.INFO, "Using Database Dialet{0}", envVar );
+            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.dialect", envVar );
             }
             
-            if ( System.getenv(DATABASE_DRIVER) != null ) {
-            	LOGGER.log(Level.INFO, "Using Database Driver {0}", System.getenv(DATABASE_DRIVER) );
-            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.driver_class", System.getenv(DATABASE_DRIVER) );
+            // handle DATABASE_DRIVER
+            envVar = System.getenv(DATABASE_DRIVER);
+            if ( envVar != null ) {
+            	LOGGER.log(Level.INFO, "Using Database Driver {0}", envVar );
+            	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.driver_class", envVar );
             }
             
             StandardServiceRegistry standardRegistry = standardRegistryBuilder.build();
@@ -148,9 +176,12 @@ public class FrameworkPersistenceHelper
     private static SessionFactory sessionFactory	= null;
     private static final String DATABASE_URL		= "DATABASE_URL";
     private static final String DATABASE_USERNAME	= "DATABASE_USERNAME";
-    private static final String DATABASE_PW	= "DATABASE_PASSWORD";
+    private static final String DATABASE_PASSWORD	= "DATABASE_PASSWORD";
     private static final String DATABASE_DIALECT	= "DATABASE_DIALECT";
     private static final String DATABASE_DRIVER		= "DATABASE_DRIVER";
+    private static final String MYSQL_ARGS			= "createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
+    private static final String MYSQL_PORT			= ":3306";
+    private static final String REALMETHODS_TABLENAME = System.getProperty("realmethods.tablename");
 	private static final Logger LOGGER = Logger.getLogger(FrameworkPersistenceHelper.class.getName());
 	
 }
