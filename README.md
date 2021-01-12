@@ -1,10 +1,10 @@
-# realMethods-KnowOps : DevOps Project Generator
+# KnowOps is the only DevOps Project Generator
 
 Use KnowOps to generate DevOps project for both new application and app refactoring scenarios.
 
 Save time and get started with all the code and configuration you need but don't want to have to write.  
 
-Generation includes
+With support for many of today's popular tech stacks and toolchains, generation includes
 - all tech stack specific source code (UI, MVC, Serverless, Persistence, Caching, etc...)
 - build file
 - auto commit to your Git repository
@@ -64,9 +64,11 @@ If you would like to store data to a separate MySQL-8 instance, you need to prov
 docker run -it -d -p 8080:8080 
 -e DATABASE_URL=THE-MYSQL-URL
 -e DATABASE_USERNAME=THE-MYSQL-USER-NAME
--e DATABASE_PW=THE-MYSQL-PASSWORD
+-e DATABASE_PASSWORD=THE-MYSQL-PASSWORD
 realmethods/realmethods:latest
 ```
+When assigning the DATABASE_URL, it is only necessary to assign the IP address of a MySQL  instance.  The default port of 3306 is assumed.  
+
 ### Access The Installation
 
 The application should be running and accessible on the exposed port.  For example:
@@ -79,7 +81,7 @@ where xxx.xxx.xxx.xxx is the IP address to the host server of the application.
 
 Only required when connecting to a separate MySQL-8 instance.
 
-* `DATABASE_URL` - URL where the MySQL instance is located.  Likely of the form http://xxx.xxx.xxx:3306
+* `DATABASE_URL` - URL where the MySQL instance is located.  Likely of the form xxx.xxx.xxx:3306
 * `DATABASE_USERNAME` - User name with read/write privileges
 * `DATABASE_PW` - Password for the user name
 
