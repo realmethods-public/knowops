@@ -1,4 +1,4 @@
-# KnowOps is the only DevOps Project Generator
+# KnowOps : The First DevOps Project Generator
 
 Use KnowOps to generate DevOps project for both new application and app refactoring scenarios.
 
@@ -29,7 +29,7 @@ In order to run this container you'll need docker installed.
 Before using the realMethods image, it has to first be pulled by issuing the following command:
 
 ```
-docker pull realmethods/realmethods:latest
+docker pull realmethods/knowops:latest
 ```
 
 ### Usage
@@ -39,7 +39,7 @@ docker pull realmethods/realmethods:latest
 To run the image with its defaults, issue the following command:
 
 ```
-docker run -it -d -p 8080:8080 realmethods/realmethods:latest
+docker run -it -d -p 8080:8080 realmethods/knowops:latest
 
 ```
 
@@ -48,7 +48,7 @@ docker run -it -d -p 8080:8080 realmethods/realmethods:latest
 To run the image using a local volume on the hosting server, issue the following command:
 
 ```
-docker run -it -d -p 8080:8080 -v /usr/realmethods-data:/realmethods-data realmethods/realmethods:latest
+docker run -it -d -p 8080:8080 -v /usr/realmethods-data:/realmethods-data realmethods/knowops:latest
 ```
 
 Directory /usr/realmethods-data must exist for this command to execute successfully.  
@@ -65,7 +65,7 @@ docker run -it -d -p 8080:8080
 -e DATABASE_URL=THE-MYSQL-URL
 -e DATABASE_USERNAME=THE-MYSQL-USER-NAME
 -e DATABASE_PASSWORD=THE-MYSQL-PASSWORD
-realmethods/realmethods:latest
+realmethods/knowops:latest
 ```
 When assigning the DATABASE_URL, it is only necessary to assign the IP address of a MySQL  instance.  The default port of 3306 is assumed.  
 
