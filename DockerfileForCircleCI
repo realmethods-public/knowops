@@ -7,9 +7,11 @@ apt-get install -y nano
 ARG tomcatRoot=/usr/local/tomcat
 
 COPY catalina.properties ${tomcatRoot}/conf
-# COPY server.xml ${tomcatRoot}/conf
+COPY server.xml ${tomcatRoot}/conf
 COPY /target/*.war ${tomcatRoot}/webapps
 
+RUN dos2unix ${tomcatRoot}/conf/catalina.properties
+RUN dos2unix ${tomcatRoot}/conf/server/xml
 
 # make the app war the root war so all default requests are directed to it
 RUN mv ${tomcatRoot}/webapps/realmethods-1.2.war ${tomcatRoot}/webapps/ROOT.war
