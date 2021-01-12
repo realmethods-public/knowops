@@ -124,7 +124,9 @@ public class FrameworkPersistenceHelper
             			envVar = envVar + MYSQL_PORT;
             		
             		// envVar is now simply the URL with port to a MySQL server instance
-            		envVar = "jdbc:mysql://" + envVar + REALMETHODS_TABLENAME + "?" +  MYSQL_ARGS;            		
+            		envVar = "jdbc:mysql://" + envVar + "/" + REALMETHODS_TABLENAME + "?" +  MYSQL_ARGS;
+            		
+                	LOGGER.log(Level.INFO, "Transformed Database Url to {0}", envVar );
             	}
             	
             	standardRegistryBuilder = standardRegistryBuilder.applySetting("hibernate.connection.url", envVar );
